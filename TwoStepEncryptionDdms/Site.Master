@@ -1,0 +1,188 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="TwoStepEncryptionDdms.Site" %>
+
+<!DOCTYPE html>
+<html lang="tr">
+<head runat="server">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Şifreli Dinamik Veri Kayıt Sistemi</title>
+
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="Content/Site.css" rel="stylesheet" />
+
+    <script src="Scripts/jquery-3.3.1.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <script src="Themes/js/toast.min.js"></script>
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body class="app-body">
+    <form id="form1" runat="server">
+        <a class="skip-link" href="#mainContent">İçeriğe geç</a>
+
+        <div class="app-shell">
+            <aside class="app-sidebar" id="appSidebar">
+                <a class="brand" href="Anasayfa.aspx">
+                    <span class="brand-mark" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="10" width="16" height="10" rx="2"></rect>
+                            <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+                        </svg>
+                    </span>
+                    <span class="brand-text">
+                        <span class="brand-name">Veri Kayıt Sistemi</span>
+                        <span class="brand-note">İki adımlı şifreleme</span>
+                    </span>
+                </a>
+
+                <nav class="app-nav" aria-label="Ana menü">
+                    <div class="nav-label">Çalışma Alanı</div>
+                    <ul>
+                        <li runat="server" id="liAnasayfa">
+                            <a href="Anasayfa.aspx">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <rect x="4" y="4" width="7" height="7" rx="1"></rect>
+                                    <rect x="13" y="4" width="7" height="7" rx="1"></rect>
+                                    <rect x="4" y="13" width="7" height="7" rx="1"></rect>
+                                    <rect x="13" y="13" width="7" height="7" rx="1"></rect>
+                                </svg>
+                                Genel Bakış
+                            </a>
+                        </li>
+                        <li runat="server" id="liTablolar" visible="false">
+                            <a href="TabloSchemaList.aspx">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M12 3 3 8l9 5 9-5-9-5Z"></path>
+                                    <path d="m3 12 9 5 9-5"></path>
+                                    <path d="m3 16 9 5 9-5"></path>
+                                </svg>
+                                Veri Kümeleri
+                            </a>
+                        </li>
+                        <li runat="server" id="liTabloOlustur" visible="false">
+                            <a href="TabloNew.aspx">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+                                    <path d="M12 8v8"></path>
+                                    <path d="M8 12h8"></path>
+                                </svg>
+                                Yeni Veri Kümesi
+                            </a>
+                        </li>
+                        <li runat="server" id="liKayitlar" visible="false">
+                            <a href="TabloDataList.aspx">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                                    <path d="M3 9h18"></path>
+                                    <path d="M3 14h18"></path>
+                                    <path d="M8 4v16"></path>
+                                </svg>
+                                Kayıtlar
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="sidebar-foot">
+                    <span class="status-dot" aria-hidden="true"></span>
+                    <span>AES-256 / RSA-2048</span>
+                </div>
+            </aside>
+
+            <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+            <div class="app-main">
+                <header class="app-topbar">
+                    <div class="topbar-inner">
+                        <button type="button" class="nav-toggle" id="sidebarToggle" aria-label="Menüyü aç" aria-controls="appSidebar" aria-expanded="false">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+
+                        <span class="topbar-kicker">Şifreli Dinamik Veri Kayıt Sistemi</span>
+
+                        <div class="user-menu">
+                            <span class="user-chip">
+                                <span class="user-avatar" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="8" r="3.5"></circle>
+                                        <path d="M5 20a7 7 0 0 1 14 0"></path>
+                                    </svg>
+                                </span>
+                                <asp:Label ID="lblSession" runat="server" CssClass="user-name" Text=""></asp:Label>
+                            </span>
+                            <a id="linkHesap" runat="server" class="btn btn-default btn-sm" href="Personel.aspx">Hesabım</a>
+                            <a href="#" class="btn btn-default btn-sm" data-toggle="modal" data-target="#oturumu-kapat">Çıkış</a>
+                        </div>
+                    </div>
+                </header>
+
+                <main class="app-content" id="mainContent">
+                    <div class="page-toolbar" id="divUst2">
+                        <asp:ContentPlaceHolder ID="cphButon" runat="server">
+                        </asp:ContentPlaceHolder>
+                        <asp:Label ID="lblErrorMsg" runat="server" CssClass="form-alert" Text=""></asp:Label>
+                    </div>
+
+                    <div class="page-body">
+                        <asp:ContentPlaceHolder ID="cphSagIcerik" runat="server">
+                        </asp:ContentPlaceHolder>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <div class="modal fade" id="oturumu-kapat" tabindex="-1" role="dialog" aria-labelledby="cikisBaslik">
+            <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="cikisBaslik">Oturumu kapat</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-0 text-muted">Oturumu kapatmak istediğinizden emin misiniz?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Vazgeç</button>
+                        <asp:Button ID="btnCikisYap" runat="server" CssClass="btn btn-danger" Text="Çıkış Yap" ClientIDMode="Static" OnClick="btnCikisYap_Click" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <script type="text/javascript">
+        (function () {
+            var sidebar = document.getElementById("appSidebar");
+            var overlay = document.getElementById("sidebarOverlay");
+            var toggle = document.getElementById("sidebarToggle");
+
+            if (!sidebar || !overlay || !toggle) {
+                return;
+            }
+
+            function setOpen(open) {
+                sidebar.classList.toggle("is-open", open);
+                overlay.classList.toggle("is-visible", open);
+                toggle.setAttribute("aria-expanded", open ? "true" : "false");
+            }
+
+            toggle.addEventListener("click", function () {
+                setOpen(!sidebar.classList.contains("is-open"));
+            });
+
+            overlay.addEventListener("click", function () {
+                setOpen(false);
+            });
+
+            window.addEventListener("resize", function () {
+                if (window.innerWidth > 991) {
+                    setOpen(false);
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
