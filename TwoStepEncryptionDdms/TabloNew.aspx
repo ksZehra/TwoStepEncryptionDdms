@@ -1,151 +1,137 @@
 ﻿<%@ Page Title="Tablo Oluştur" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TabloNew.aspx.cs" Inherits="TwoStepEncryptionDdms.TabloNew" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <style type="text/css">
-        .lblDuzenle {
-            margin: 5px;
-        }
-
-        .btnSil {
-            border-color: #ba1f1f !important;
-        }
-
-        table td, table th {
-            height: 30px !important;
-        }
-    </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="cphButon" runat="server">
-    <style>
-        #divUst2 {
-            display: none !important;
-        }
-
-        .sagAltIcerik {
-            margin-top: 0 !important;
-        }
-
-        .cls-font {
-            font: 12px Tahoma, Geneva, sans-serif !important;
-        }
-
-        td, th {
-            font: 13px Tahoma, Geneva, sans-serif !important;
-            padding: 3px !important;
-        }
-
-        th {
-            font-weight: bold !important;
-        }
-    </style>
+    <div class="page-heading">
+        <div>
+            <h1 class="page-title">Yeni Veri Kümesi</h1>
+            <p class="page-subtitle">Sütunları tanımlayın ve şifreleme anahtarını belirleyin.</p>
+        </div>
+    </div>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="cphSagIcerik" runat="server">
 
-    <div class="col-md-12 col-lg-12 col-sm-12" style="margin: 0 !important; padding: 0px !important;">
-        <div class="cls-divCerceve">
-            <div class="cls-divHeader">
-                <h4>Veri Kümesi Oluştur</h4>
+    <div class="notice notice-info">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M12 11v5"></path>
+            <path d="M12 8h.01"></path>
+        </svg>
+        <div>
+            <strong>Adlandırma kuralları</strong>
+            <ul class="notice-list">
+                <li>Veri kümesi ve sütun adlarında yalnızca harf, rakam ve alt çizgi (_) kullanılabilir.</li>
+                <li>Boşluklar otomatik olarak alt çizgiye dönüştürülür.</li>
+                <li>Şifrelenecek sütun varsa 32 karakterlik anahtar zorunludur.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Veri kümesi bilgileri</h2>
+        </div>
+        <div class="card-body">
+            <div class="form-grid">
+                <div class="form-field">
+                    <asp:Label runat="server" AssociatedControlID="txtTabloAdi" CssClass="field-label">Veri Kümesi Adı</asp:Label>
+                    <asp:TextBox class="form-control" ID="txtTabloAdi" MaxLength="120" placeholder="Örn. PERSONEL" runat="server" ClientIDMode="Static" autocomplete="off"></asp:TextBox>
+                </div>
+                <div class="form-field">
+                    <asp:Label runat="server" AssociatedControlID="txtKey" CssClass="field-label">Anahtar (Key)</asp:Label>
+                    <asp:TextBox class="form-control" ID="txtKey" MaxLength="32" placeholder="32 karakterlik anahtar" runat="server" ClientIDMode="Static" autocomplete="off"></asp:TextBox>
+                    <span class="field-hint">Yalnızca şifrelenecek sütun varsa kullanılır.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Sütunlar</h2>
+            <span class="card-note">Önce sütunu ekleyin, sonra veri kümesini oluşturun.</span>
+        </div>
+        <div class="card-body">
+            <div class="form-grid">
+                <div class="form-field">
+                    <asp:Label ID="lblKolonAdi" runat="server" Text="Sütun Adı" AssociatedControlID="txtKolonAdi" CssClass="field-label"></asp:Label>
+                    <asp:TextBox class="form-control" ID="txtKolonAdi" MaxLength="50" placeholder="Örn. AD" runat="server" ClientIDMode="Static" autocomplete="off"></asp:TextBox>
+                </div>
+                <div class="form-field">
+                    <label class="checkbox-inline" for="cbSifrele">
+                        <asp:CheckBox ID="cbSifrele" runat="server" ClientIDMode="Static" />
+                        Şifrelensin mi?
+                    </label>
+                    <span class="field-hint">Şifreli sütunlar AES-256 ve RSA-2048 ile korunur.</span>
+                </div>
             </div>
 
-            <div class="alert alert-danger cls-font" role="alert" style="padding: 10px; line-height: 2">
-                <p>Veri kümesi ve sütun isimlerini aşağıdaki yönergelere uygun olarak doldurunuz:</p>
-                <p>- Veri kümesi ve sütun isimlerinde "_" ifadesi dışında özel karakter kullanılmamalıdır. Kullanılan özel karakterler geçersiz sayılarak işlem devam edecektir.</p>
-                <p>- Veri kümsei veya sütun isimlerinde boşluk bırakılmamalıdır. Bırakılan boşluklar "_" karakteri ile değiştirilerek işlem devam edecektir.</p>
-            </div>
+            <asp:Button ID="btnEkle" CssClass="btn btn-primary" runat="server" Text="Sütun Ekle" ClientIDMode="Static" OnClick="btnEkle_Click" />
 
-            <div class="form-group row">
-                <asp:Label runat="server" class="col-sm-2 col-form-label col-form-label-sm" Style="width: 10%; padding-top: 6px; font: 13px Tahoma, Geneva, sans-serif !important;">Veri Kümesi Adı :</asp:Label>
-                <div class="col-sm-10" style="width: 90%; padding-left: 0px;">
-                    <asp:TextBox class="form-control cls-font" ID="txtTabloAdi" MaxLength="120" Height="28px" placeholder="Veri kümesi adını giriniz..." runat="server" ClientIDMode="Static"></asp:TextBox>
-                </div>
-            </div>
-            <div class="form-group row">
-                <asp:Label runat="server" class="col-sm-2 col-form-label col-form-label-sm" Style="width: 10%; padding-top: 6px; font: 13px Tahoma, Geneva, sans-serif !important;">Anahtar (Key) :</asp:Label>
-                <div class="col-sm-10" style="width: 90%; padding-left: 0px;">
-                    <asp:TextBox class="form-control cls-font" ID="txtKey" MaxLength="32" Height="28px" placeholder="Anahtarı (key) 32 karakter olacak şekilde giriniz..." runat="server" ClientIDMode="Static"></asp:TextBox>
-                </div>
-            </div>
-            <div class="form-group row">
-                <asp:Label ID="lblKolonAdi" runat="server" Text="Sütun Adı :" class="col-sm-2 col-form-label" Style="width: 10%; padding-top: 6px; padding-right: 0px; font: 13px Tahoma, Geneva, sans-serif !important;"></asp:Label>
-                <div class="col-sm-10" style="width: 90%; padding-left: 0px;">
-                    <asp:TextBox class="form-control cls-font" ID="txtKolonAdi" MaxLength="50" Height="28px" placeholder="Sütun adını giriniz..." runat="server" ClientIDMode="Static"></asp:TextBox>
-                </div>
-            </div>
-            <div class="form-group row">
-                <asp:Label runat="server" class="col-sm-2 col-form-label" Style="width: 10%; padding-right: 0px; padding-top: 2px; font: 13px Tahoma, Geneva, sans-serif !important;">Şifrelensin Mi ?</asp:Label>
-                <div class="col-sm-10" style="width: 90%; padding-left: 0px;">
-                    <asp:CheckBox class="form-check-input" type="checkbox" ID="cbSifrele" runat="server" ClientIDMode="Static" Style="margin-top: 9px;" />
-                </div>
-            </div>
-            <asp:Button ID="btnEkle" CssClass="btn btn-warning" Width="8%" runat="server" Text="Kolon Ekle" ClientIDMode="Static" OnClick="btnEkle_Click" />
-
-            <div class="col-md-12 col-lg-12 col-sm-12" style="margin: 20px 0 20px 0 !important; padding: 0px !important; width: 100%;">
-                <asp:ListView ID="listVwTblOlustur" runat="server" GroupPlaceholderID="gphListView" ItemPlaceholderID="iphListView"
+            <div class="table-responsive" style="margin-top: 16px;">
+                <asp:ListView ID="listVwTblOlustur" runat="server" ItemPlaceholderID="iphListView"
                     OnItemDeleting="listVwTblOlustur_ItemDeleting"
                     OnItemEditing="listVwTblOlustur_ItemEditing" OnItemUpdating="listVwTblOlustur_ItemUpdating" OnItemCanceling="listVwTblOlustur_ItemCanceling">
 
                     <LayoutTemplate>
-                        <table style="width: 100% !important;">
-                            <tr style="background-color: lightgray;">
-                                <th style="width: 65% !important; padding-bottom: 5px !important; padding-top: 5px !important; border: 1px solid gray; text-align: center;">Sütun Adı</th>
-                                <th style="width: 15% !important; padding-bottom: 5px !important; padding-top: 5px !important; border: 1px solid gray; text-align: center;">Şifrelensin Mi</th>
-                                <th style="width: 10% !important; padding-bottom: 5px !important; padding-top: 5px !important; border: 1px solid gray; text-align: center;">Sil</th>
-                                <th style="width: 10% !important; padding-bottom: 5px !important; padding-top: 5px !important; border: 1px solid gray; text-align: center;">Düzenle</th>
-                            </tr>
-                            <asp:PlaceHolder runat="server" ID="gphListView"></asp:PlaceHolder>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Sütun Adı</th>
+                                    <th>Şifrelensin Mi</th>
+                                    <th class="col-actions">Sil</th>
+                                    <th class="col-actions">Düzenle</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <asp:PlaceHolder runat="server" ID="iphListView"></asp:PlaceHolder>
+                            </tbody>
                         </table>
                     </LayoutTemplate>
-                    <GroupTemplate>
-                        <tr>
-                            <asp:PlaceHolder runat="server" ID="iphListView"></asp:PlaceHolder>
-                        </tr>
-                    </GroupTemplate>
                     <ItemTemplate>
                         <tr>
-                            <td style="border: solid 1px; border-color: gray; border-radius: 4px; height: 10px; padding-left: 5px !important; text-align: center;">
+                            <td>
                                 <asp:Label ID="lblKolonAdi" Text='<%# Eval("KolonAdi") %>' runat="server" />
                             </td>
-                            <td style="border: solid 1px; border-color: gray; border-radius: 4px; height: 10px; padding-left: 5px !important; text-align: center;">
-                                <asp:Label ID="lbIsEncrypted" Text='<%# Eval("IsEncrypted") %>' runat="server" />
+                            <td>
+                                <asp:Label ID="lbIsEncrypted" Text='<%# Eval("IsEncrypted") %>' runat="server" CssClass='<%# Convert.ToString(Eval("IsEncrypted")) == "Evet" ? "badge badge-encrypted" : "badge badge-plain" %>' />
                             </td>
-                            <td style="border: solid 1px; border-color: gray; padding: 1px 3px 1px 5px; text-align: center;">
-                                <asp:Button ID="btnSil" CssClass="btn btn-danger btn-xs btnSil" runat="server" Text="Sil" CommandName="Delete" />
+                            <td class="col-actions">
+                                <asp:Button ID="btnSil" CssClass="btn btn-xs btn-danger-outline" runat="server" Text="Sil" CommandName="Delete" />
                             </td>
-                            <td style="border: solid 1px; border-color: gray; padding: 1px 3px 1px 0; text-align: center;">
-                                <asp:Button ID="btnDüzenle" CssClass="btn btn-success btn-xs" runat="server" Text="Düzenle" CommandName="Edit" />
+                            <td class="col-actions">
+                                <asp:Button ID="btnDüzenle" CssClass="btn btn-xs btn-default" runat="server" Text="Düzenle" CommandName="Edit" />
                             </td>
-                            <td></td>
                         </tr>
                     </ItemTemplate>
 
                     <EditItemTemplate>
-                        <tr style="width: 100% !important;">
-                            <td style="width: 65%; border: solid 1px gray;">
-                                <asp:TextBox ID="txtEmpKolonAdi" runat="server" Height="25px" Width="99%" MaxLength="200" CssClass="lblDuzenle" Text='<%# Bind("KolonAdi") %>' />
+                        <tr class="is-editing">
+                            <td>
+                                <asp:TextBox ID="txtEmpKolonAdi" runat="server" MaxLength="200" CssClass="form-control input-sm" Text='<%# Bind("KolonAdi") %>' />
                             </td>
-                            <td style="width: 15%; border: solid 1px gray; text-align: center;">
+                            <td>
                                 <asp:Label ID="lbIsEncrypted" runat="server" Text='<%# Bind("IsEncrypted") %>'></asp:Label>
                             </td>
-                            <td style="width: 10%; border: solid 1px gray; text-align: center;">
-                                <asp:Button ID="btnGuncelle" CssClass="btn btn-info btn-xs" runat="server" Text="Güncelle" CommandName="Update" />
+                            <td class="col-actions">
+                                <asp:Button ID="btnGuncelle" CssClass="btn btn-xs btn-primary" runat="server" Text="Kaydet" CommandName="Update" />
                             </td>
-                            <td style="width: 10%; border: solid 1px gray; text-align: center;">
-                                <asp:Button ID="btnIptal" CssClass="btn btn-warning btn-xs" runat="server" Text="İptal" CommandName="Cancel" />
+                            <td class="col-actions">
+                                <asp:Button ID="btnIptal" CssClass="btn btn-xs btn-default" runat="server" Text="Vazgeç" CommandName="Cancel" />
                             </td>
                         </tr>
                     </EditItemTemplate>
                 </asp:ListView>
             </div>
 
-            <div class="form-group" style="margin-bottom: 20px; margin-top: 20px; padding: 0px !important; display: none;" id="divButtons" runat="server">
-                <center>
-                    <asp:Button ID="btnTblOlustur" runat="server" Text="Oluştur" Width="8%" CssClass="btn btn-success" ClientIDMode="Static" float="left" OnClick="btnTblOlustur_Click" />
-                    <asp:Button ID="btnTemizle" runat="server" Text="Temizle" Width="8%" CssClass="btn btn-info" float="left" OnClick="btnTemizle_Click" />
-                </center>
+            <div class="form-actions" id="divButtons" runat="server" style="display: none;">
+                <asp:Button ID="btnTemizle" runat="server" Text="Temizle" CssClass="btn btn-default" OnClick="btnTemizle_Click" />
+                <asp:Button ID="btnTblOlustur" runat="server" Text="Oluştur" CssClass="btn btn-primary" ClientIDMode="Static" OnClick="btnTblOlustur_Click" />
             </div>
-
         </div>
     </div>
+
     <script type="text/javascript">
         $('#btnTblOlustur').click(function () {
             if (document.getElementById("txtTabloAdi").value == "") {

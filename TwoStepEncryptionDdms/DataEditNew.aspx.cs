@@ -98,32 +98,31 @@ namespace TwoStepEncryptionDdms
 
             bool editing = !string.IsNullOrWhiteSpace(satirId);
             var html = new StringBuilder();
-            html.Append("<table style='font-family: Lato, sans-serif;'>");
-            html.Append("<tr>");
-            html.Append("</tr>");
-            html.Append("<tr>");
+            html.Append("<div class=\"field-grid\">");
+
             foreach (EditField field in fields)
             {
-                html.Append("<td style='padding-right:10px;'>");
-                html.Append(@"<div class=""form-group""> <label class=""form-label"" style='height:30px; padding-top:5px; font-size:14px; ");
-                html.Append(field.IsEncrypted ? " color:#3a87ad;' " : "' ");
-                html.Append(@" ' for=""simpleinput"">").Append(HttpUtility.HtmlEncode(field.Name)).Append(@"</label> </div>");
-                html.Append(" </td>");
+                string encodedName = HttpUtility.HtmlAttributeEncode(field.Name);
 
-                html.Append("<td style='padding-right:10px;'>");
-                html.Append(@"<div class=""form-group"">");
-                html.Append(@"<input type='text' maxlength='200' style='height:30px; width:600px; font-size:14px;' id=""").Append(HttpUtility.HtmlAttributeEncode(field.Name)).Append(@""" ");
+                html.Append("<div class=\"field\">");
+                html.Append("<label class=\"field-label\" for=\"").Append(encodedName).Append("\">");
+                html.Append(HttpUtility.HtmlEncode(field.Name));
+                if (field.IsEncrypted)
+                {
+                    html.Append(" <span class=\"badge badge-encrypted\">Şifreli</span>");
+                }
+                html.Append("</label>");
+
+                html.Append("<input type=\"text\" maxlength=\"200\" autocomplete=\"off\" id=\"").Append(encodedName).Append("\" class=\"form-control cst-lbl\"");
                 if (editing)
                 {
-                    html.Append(@" value=""").Append(HttpUtility.HtmlAttributeEncode(field.Value)).Append(@""" ");
+                    html.Append(" value=\"").Append(HttpUtility.HtmlAttributeEncode(field.Value)).Append("\"");
                 }
-                html.Append(@" class=""form-control cst-lbl"" runat=""server"" />
-                                     </div>");
-                html.Append("</td>");
-
-                html.Append("</tr>");
+                html.Append(" />");
+                html.Append("</div>");
             }
-            html.Append("</table>");
+
+            html.Append("</div>");
 
             ltList.Text = html.ToString();
         }

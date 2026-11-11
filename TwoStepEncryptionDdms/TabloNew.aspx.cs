@@ -74,6 +74,7 @@ namespace TwoStepEncryptionDdms
             DataTable dt = (DataTable)ViewState["Vs_Kolon"];
             dt.Rows.RemoveAt(e.ItemIndex);
             ViewState["Vs_Kolon"] = dt;
+            divButtons.Style["display"] = dt.Rows.Count > 0 ? "block" : "none";
             this.BindGrid();
         }
 
@@ -160,6 +161,7 @@ namespace TwoStepEncryptionDdms
 
             ViewState["Vs_Kolon"] = NewColumnTable();
             this.BindGrid();
+            divButtons.Style["display"] = "none";
 
             txtTabloAdi.Text = "";
             txtKolonAdi.Text = "";

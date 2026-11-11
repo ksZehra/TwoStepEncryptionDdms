@@ -3,52 +3,54 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="cphButon" runat="server">
-    <style type="text/css">
-        .lblSessionCss {
-            float: left !important;
-        }
-    </style>
+    <div class="page-heading">
+        <div>
+            <h1 class="page-title">Kayıt Formu</h1>
+            <p class="page-subtitle">Veri kümesine yeni kayıt ekleyin veya mevcut kaydı güncelleyin.</p>
+        </div>
+    </div>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="cphSagIcerik" runat="server">
-    <style type="text/css">
-        .alert-info {
-            background-color: #d9edf7;
-            border-color: #bce8f1;
-            color: #3a87ad;
-            padding: 7px 0 2px 0 !important;
-            margin: 0 0 20px 0;
-        }
-    </style>
-
-    <div style="width: 100%; border: 1px solid gray; padding: 10px 0 10px 0; margin-bottom: 10px;" runat="server" id="divKey">
-        <div class="form-group row" style="padding-left: 1% !important;">
-            <asp:Label runat="server" class="col-sm-2 col-form-label col-form-label-sm" Style="width: 4.5%; padding-top: 5px;">Anahtar:</asp:Label>
-            <div class="col-sm-10" style="width: 95%;">
-                <asp:TextBox class="form-control" ID="tbKey" MaxLength="32" placeholder="32 karakter olacak şekilde anahtarı giriniz..." Width="100%" Height="30px" runat="server" ClientIDMode="Static"></asp:TextBox>
+    <div class="key-card" id="divKey" runat="server">
+        <div class="key-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="10" width="16" height="10" rx="2"></rect>
+                <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+            </svg>
+        </div>
+        <div class="key-card-body">
+            <h2 class="key-card-title">Bu veri kümesi şifreli</h2>
+            <p class="key-card-text">Kayıt eklemek için 32 karakterlik anahtarı girin.</p>
+            <div class="key-form">
+                <asp:TextBox class="form-control" ID="tbKey" MaxLength="32" placeholder="32 karakterlik anahtar" runat="server" ClientIDMode="Static" autocomplete="off"></asp:TextBox>
+                <asp:Button ID="btnKey" CssClass="btn btn-primary" runat="server" Text="Kontrol Et" OnClick="btnKey_Click" ClientIDMode="Static" />
             </div>
         </div>
-        <center>
-            <asp:Button ID="btnKey" class="btn btn-success" runat="server" Text="Kontrol Et" Width="150px" OnClick="btnKey_Click" ClientIDMode="Static" />
-        </center>
     </div>
 
-    <div style="width: 100%;" runat="server" id="divTablo" visible="false">
-        <center>
-            <div class="panel-content" style="border: 1px solid gray; padding: 10px;">
+    <div class="card" runat="server" id="divTablo" visible="false">
+        <div class="card-header">
+            <h2 class="card-title" runat="server" id="tabloBaslik"></h2>
+            <span class="card-note">Şifreli alanlar mavi olarak işaretlenir</span>
+        </div>
+        <div class="card-body">
+            <div class="notice notice-info" runat="server" id="divAlert">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="9"></circle>
+                    <path d="M12 11v5"></path>
+                    <path d="M12 8h.01"></path>
+                </svg>
+                <div>Mavi renkli alanlara eklenen veriler şifrelenerek kaydedilecektir.</div>
+            </div>
 
-                <div class="alert alert-info" runat="server" id="divAlert" style="padding: 10px !important;">
-                    <label>Mavi renkli alanlara eklenen veriler şifrelenerek kaydedilecektir.</label>
-                </div>
+            <asp:HiddenField runat="server" ID="hfTable" ClientIDMode="Static"></asp:HiddenField>
+            <asp:Literal runat="server" ID="ltList"></asp:Literal>
 
-                <h4 style="font-weight: bold; margin-top: 0; margin-bottom: 10px;" runat="server" id="tabloBaslik"></h4>
-
-                <asp:HiddenField runat="server" ID="hfTable" ClientIDMode="Static"></asp:HiddenField>
-                <asp:Literal runat="server" ID="ltList"></asp:Literal>
-
-                <asp:Button ID="btnKayitGir" class="btn btn-info" runat="server" Text="Ekle" Width="150px" OnClick="btnKayitGir_Click" ClientIDMode="Static" />
+            <div class="form-actions">
+                <asp:Button ID="btnKayitGir" CssClass="btn btn-primary" runat="server" Text="Ekle" OnClick="btnKayitGir_Click" ClientIDMode="Static" />
                 <asp:HiddenField runat="server" ID="hfSaveData" ClientIDMode="Static" />
             </div>
-        </center>
+        </div>
     </div>
 
     <script type="text/javascript">

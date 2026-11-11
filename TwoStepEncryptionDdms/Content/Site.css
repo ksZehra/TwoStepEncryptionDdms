@@ -575,8 +575,7 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 500;
 }
 
-.form-alert:empty,
-.form-alert:blank {
+.form-alert:empty {
     display: none;
 }
 
@@ -680,12 +679,14 @@ select.form-control {
     gap: 7px;
     min-height: 36px;
     margin: 0;
+    padding-left: 0;
     color: var(--text-soft);
     font-size: 12.5px;
     font-weight: 500;
 }
 
 .checkbox-inline input[type="checkbox"] {
+    position: static;
     margin: 0;
 }
 
@@ -902,6 +903,7 @@ select.form-control {
     color: var(--text);
 }
 
+.data-table th,
 .data-table thead th {
     padding: 9px 12px;
     border-bottom: 1px solid var(--border);

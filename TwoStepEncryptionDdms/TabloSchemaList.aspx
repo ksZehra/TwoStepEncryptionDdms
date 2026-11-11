@@ -4,57 +4,43 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="cphButon" runat="server">
-    <style>
-        .Font {
-            height: 30px;
-            font: 12px Tahoma, Geneva, sans-serif;
-        }
-
-        .Ara {
-            width: 60% !important;
-            border: 0.5px solid grey;
-        }
-
-        .clsGrid {
-            font: 12px Tahoma, Geneva, sans-serif;
-            line-height: normal;
-            background-color: White;
-            border: 0.5px solid grey;
-            box-sizing: border-box;
-            border-spacing: 0;
-        }
-
-        input[type=text] {
-            width: 95%;
-        }
-
-        td, th {
-            padding: 3px !important;
-        }
-    </style>
-    <div style="width: 100%; float: left;">
-        <asp:TextBox ID="txtAra" CssClass="Font Ara" Width="65%" runat="server" MaxLength="200" placeholder=" Arama yapmak istediğiniz veri kümesinin adını giriniz..."></asp:TextBox>
-        <asp:Button ID="btnAra" class="btn btn-warning btn-sm" Width="4%" runat="server" Text="Ara" OnClick="btnAra_Click" />
-        <asp:Button ID="btnTabloEkle" class="btn btn-info btn-sm" ClientIDMode="Static" runat="server" Text="Tablo Ekle" Visible="false" Width="10%" />
+    <div class="page-heading">
+        <div>
+            <h1 class="page-title">Veri Kümeleri</h1>
+            <p class="page-subtitle">Kayıtlı veri kümelerini görüntüleyin, yeniden adlandırın veya silin.</p>
+        </div>
+        <div class="page-actions">
+            <div class="search-box">
+                <asp:TextBox ID="txtAra" CssClass="form-control" runat="server" MaxLength="200" placeholder="Veri kümesi adı ara..."></asp:TextBox>
+                <asp:Button ID="btnAra" CssClass="btn btn-primary" runat="server" Text="Ara" OnClick="btnAra_Click" />
+            </div>
+            <asp:Button ID="btnTabloEkle" CssClass="btn btn-default" ClientIDMode="Static" runat="server" Text="Tablo Ekle" Visible="false" />
+        </div>
     </div>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="cphSagIcerik" runat="server">
-    <asp:GridView ID="GridTbl" Style="text-align: center; margin-bottom: 10px;" runat="server" AutoGenerateColumns="False" AllowPaging="True" PageSize="10"
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Veri kümesi kayıtları</h2>
+            <span class="card-note">Sayfa boyutu: 10</span>
+        </div>
+        <div class="table-responsive">
+    <asp:GridView ID="GridTbl" runat="server" AutoGenerateColumns="False" AllowPaging="True" PageSize="10"
         OnRowDeleting="GridTbl_RowDeleting" DataKeyNames="TBLAD" OnRowEditing="GridTbl_RowEditing" OnRowUpdating="GridTbl_RowUpdating"
-        OnRowCancelingEdit="GridTbl_RowCancelingEdit" OnPageIndexChanging="GridTbl_PageIndexChanging" Width="100%" CssClass="clsGrid" HeaderStyle-BackColor="#DCDCDC"
-        EmptyDataText="Kayıt bulunamadı..." EmptyDataRowStyle-Height="25px" EmptyDataRowStyle-BackColor="#DCDCDC" PagerSettings-Position="Bottom" PagerStyle-Height="25px">
+        OnRowCancelingEdit="GridTbl_RowCancelingEdit" OnPageIndexChanging="GridTbl_PageIndexChanging" CssClass="data-table"
+        GridLines="None" EmptyDataText="Kayıt bulunamadı." PagerSettings-Position="Bottom" PagerStyle-CssClass="grid-pager">
         <Columns>
             <asp:TemplateField HeaderText="Id" ItemStyle-Width="6%" ItemStyle-Height="30px" HeaderStyle-Height="35px">
                 <ItemTemplate>
                     <asp:Label ID="lbTblId" runat="server" Text='<%# Eval("TBLID") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:CommandField ShowDeleteButton="true" ItemStyle-Width="8%" HeaderText="Sil" DeleteText="<img src='Themes/img/del5.png' style='width:21px;height:21px;' alt='Sil'" Visible="false" />
-            <asp:CommandField ShowEditButton="true" ItemStyle-Width="8%" HeaderText="Düzenle" EditText="<img src='Themes/img/edit16.jpg' style='width:21px;height:21px;' alt='Düzenle'" Visible="false" />
+            <asp:CommandField ShowDeleteButton="true" ButtonType="Link" ItemStyle-Width="8%" ItemStyle-CssClass="col-actions" HeaderText="Sil" DeleteText="Sil" Visible="false" ControlStyle-CssClass="action-link action-danger" />
+            <asp:CommandField ShowEditButton="true" ButtonType="Link" ItemStyle-Width="8%" ItemStyle-CssClass="col-actions" HeaderText="Düzenle" EditText="Düzenle" UpdateText="Kaydet" CancelText="Vazgeç" Visible="false" ControlStyle-CssClass="action-link" />
             <asp:BoundField DataField="TBLAD" HeaderText="Veri Kümesi"></asp:BoundField>
             <asp:TemplateField HeaderText="Şifreli Mi" ItemStyle-Width="10%">
                 <ItemTemplate>
-                    <asp:Label ID="lbSifreliMi" runat="server" Text='<%# Eval("ISENCRYPT") %>'></asp:Label>
+                    <asp:Label ID="lbSifreliMi" runat="server" CssClass='<%# Convert.ToString(Eval("ISENCRYPT")) == "Evet" ? "badge badge-encrypted" : "badge badge-plain" %>' Text='<%# Eval("ISENCRYPT") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Oluşturan" ItemStyle-Width="10%">
@@ -93,6 +79,8 @@
         <PagerSettings Mode="NumericFirstLast" FirstPageText="İlk" LastPageText="Son" />
         <%--        <PagerSettings Mode="NumericFirstLast" FirstPageText="İlk" LastPageText="Son"/>--%>
     </asp:GridView>
+        </div>
+    </div>
 
     <%-- ************Devexpress*************--%>
     <%--    <dx:ASPxGridView runat="server" ID="myGrid" ClientIDMode="Static" Width="100%" KeyFieldName="TBLID"

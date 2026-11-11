@@ -74,12 +74,13 @@ namespace TwoStepEncryptionDdms
         private static string BuildTable(RecordList list)
         {
             var html = new StringBuilder();
-            html.Append("<table style='border: 1px solid lightGray; margin-bottom:0px;' id= 'table-id' class='table table-striped table-class'>");
+            html.Append("<table id='table-id' class='data-table'>");
             html.Append(" <thead><tr>");
 
             foreach (RecordColumn column in list.Columns)
             {
-                html.Append("<th>").Append(HttpUtility.HtmlEncode(column.Name)).Append("</th>");
+                html.Append(column.IsEncrypted ? "<th class='col-encrypted' title='Şifrelenmiş sütun'>" : "<th>");
+                html.Append(HttpUtility.HtmlEncode(column.Name)).Append("</th>");
             }
             html.Append("</tr></thead><tbody>");
 
@@ -88,7 +89,7 @@ namespace TwoStepEncryptionDdms
                 html.Append("<tr>");
                 for (int j = 0; j < cells.Length; j++)
                 {
-                    html.Append("<td").Append(list.Columns[j].IsEncrypted ? " style='background-color:#e6f0f4;'" : "").Append(">");
+                    html.Append(list.Columns[j].IsEncrypted ? "<td class='cell-encrypted'>" : "<td>");
                     html.Append(HttpUtility.HtmlEncode(cells[j])).Append("</td>");
                 }
                 html.Append("</tr>");

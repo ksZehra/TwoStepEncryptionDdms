@@ -259,8 +259,8 @@
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Class\Aes256Encrypter.cs" />
     <Compile Include="Class\DataIslemleri.cs" />
-    <Compile Include="Class\ClsMessage.cs" />
-    <Compile Include="Class\ValidateControl.cs" />
+    <Compile Include="Common\ClsMessage.cs" />
+    <Compile Include="Security\ValidateControl.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

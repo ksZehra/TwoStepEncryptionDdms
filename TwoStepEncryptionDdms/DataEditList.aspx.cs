@@ -116,13 +116,14 @@ namespace TwoStepEncryptionDdms
         private string BuildTable(RecordList list)
         {
             var html = new StringBuilder();
-            html.Append("<table style='border: 1px solid lightGray; margin-bottom:0px;' id= 'table-id' class='table table-striped table-class'>");
+            html.Append("<table id='table-id' class='data-table'>");
             html.Append("<thead><tr>");
-            html.Append("<th>").Append(type == "edit" ? "GÜNCELLE" : "SİL").Append("</th>");
+            html.Append("<th class='col-actions'>").Append(type == "edit" ? "Düzenle" : "Sil").Append("</th>");
 
             foreach (RecordColumn column in list.Columns)
             {
-                html.Append("<th>").Append(HttpUtility.HtmlEncode(column.Name)).Append("</th>");
+                html.Append(column.IsEncrypted ? "<th class='col-encrypted' title='Şifrelenmiş sütun'>" : "<th>");
+                html.Append(HttpUtility.HtmlEncode(column.Name)).Append("</th>");
             }
             html.Append("</tr></thead><tbody>");
 
@@ -135,19 +136,19 @@ namespace TwoStepEncryptionDdms
 
                 if (type == "edit")
                 {
-                    actionButton = "<Button type='button' style='border:transparent;' class='redirect' redirect='" + "DataEditNew.aspx?" + urlString + "'><img src='Themes/img/edit2.png' alt style='width:18px; height:18px;'/></Button>";
+                    actionButton = "<button type='button' class='btn btn-xs btn-default redirect' redirect='" + HttpUtility.HtmlAttributeEncode("DataEditNew.aspx?" + urlString) + "'>Düzenle</button>";
                 }
                 else if (type == "delete" || type == "delBtn")
                 {
                     urlString += "&type=delBtn&csrf=" + AuthService.GetCsrfToken(Context);
-                    actionButton = "<Button type='button' style='border:transparent;' class='redirect' redirect='" + "DataEditList.aspx?" + urlString + "'><img src='Themes/img/del8.png' alt style='width:18px; height:18px;'/></Button>";
+                    actionButton = "<button type='button' class='btn btn-xs btn-danger-outline redirect' redirect='" + HttpUtility.HtmlAttributeEncode("DataEditList.aspx?" + urlString) + "'>Sil</button>";
                 }
 
-                html.Append("<td>").Append(actionButton).Append("</td>");
+                html.Append("<td class='col-actions'>").Append(actionButton).Append("</td>");
 
                 for (int j = 0; j < cells.Length; j++)
                 {
-                    html.Append("<td").Append(list.Columns[j].IsEncrypted ? " style='background-color:#e6f0f4;'" : "").Append(">");
+                    html.Append(list.Columns[j].IsEncrypted ? "<td class='cell-encrypted'>" : "<td>");
                     html.Append(HttpUtility.HtmlEncode(cells[j])).Append("</td>");
                 }
 

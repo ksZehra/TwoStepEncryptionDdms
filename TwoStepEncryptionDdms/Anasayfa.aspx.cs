@@ -64,10 +64,13 @@ namespace TwoStepEncryptionDdms
             }
         }
 
-        #region Sadece performans testi yapmak amacıyla oluşturulan metottur. Bu nedenle metot yorum satırında bırakıldı.
-        /// <summary>
-        /// AES algoritmasının farklı modlarda performans testi için kullanılmıştır!!!
-        /// </summary>
+        #region Performans testi (yorum satırında)
+        // Tez çalışmasında AES modlarının (ECB, CBC, CFB), tek ve çift adımlı şifrelemenin okuma/çözme sürelerini
+        // ayrı test tablolarında ölçmek için yazılmıştı. Sonuçlar tezde yayımlandı ve son kullanıcının bu ölçümü
+        // görmesi gerekmediği için kod yorum satırına alındı.
+        // Ölçümü yeniden yapmak için: test tablolarını oluşturun, bu bloğu ve Page_Load içindeki PeformansTesti()
+        // çağrısını açın, <AES_KEY_32_CHARS> ve <ASYM_KEY_*> yer tutucularını kendi anahtarlarınızla değiştirin,
+        // Anasayfa.aspx içindeki yorumlanmış sonuç etiketlerini (lbSifresiz, lbEcbTek vb.) geri açın.
         //private void PeformansTesti()
         //{
         //    try

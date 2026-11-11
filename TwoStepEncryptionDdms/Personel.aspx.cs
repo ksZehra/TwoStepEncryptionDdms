@@ -37,7 +37,7 @@ namespace TwoStepEncryptionDdms
 
         protected void btnKaydet_Click(object sender, EventArgs e)
         {
-            const string showDialogScript = "$('#fadeContent').fadeIn(); $('#fade').fadeIn();";
+            const string showDialogScript = "$('#sifreModal').modal('show');";
             try
             {
                 accounts.ChangePassword(CurrentUser.Id, txtMevcutSifre.Text, txtYeniSifre.Text);

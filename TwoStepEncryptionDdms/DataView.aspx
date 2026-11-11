@@ -3,119 +3,97 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="cphButon" runat="server">
-    <style>
-        .lblSessionCss {
-            float: left !important;
-        }
-    </style>
+    <div class="page-heading">
+        <div>
+            <h1 class="page-title">Kayıt Görüntüle</h1>
+            <p class="page-subtitle">Veri kümesi kayıtlarını görüntüleyin.</p>
+        </div>
+    </div>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="cphSagIcerik" runat="server">
-    <style type="text/css">
-        body {
-            background-color: #eee;
-        }
-
-        table th {
-            font-weight: bold !important;
-        }
-
-        table th, table td {
-            text-align: center;
-            font: 12px Tahoma, Geneva, sans-serif;
-            height: 20px !important;
-            border: 1px solid lightGray;
-        }
-
-        table tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        .pagination li:hover {
-            cursor: pointer;
-        }
-
-        table tbody tr {
-            display: none;
-        }
-    </style>
-    <div style="width: 100%; border: 1px solid gray; padding: 10px 0 10px 0; margin-bottom: 10px;" runat="server" id="divKey">
-        <div class="form-group row" style="padding-left: 1% !important;">
-            <asp:Label runat="server" class="col-sm-2 col-form-label col-form-label-sm" Style="width: 4.5%; padding-top: 5px;">Anahtar: </asp:Label>
-            <div class="col-sm-10" style="width: 95%;">
-                <asp:TextBox class="form-control" ID="tbKey" MaxLength="32" placeholder="32 karakter olacak şekilde anahtarı giriniz..." Width="100%" Height="30px" runat="server" ClientIDMode="Static"></asp:TextBox>
+    <div class="key-card" id="divKey" runat="server">
+        <div class="key-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="10" width="16" height="10" rx="2"></rect>
+                <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+            </svg>
+        </div>
+        <div class="key-card-body">
+            <h2 class="key-card-title">Bu veri kümesi şifreli</h2>
+            <p class="key-card-text">Kayıtları görüntülemek için 32 karakterlik anahtarı girin.</p>
+            <div class="key-form">
+                <asp:TextBox class="form-control" ID="tbKey" MaxLength="32" placeholder="32 karakterlik anahtar" runat="server" ClientIDMode="Static" autocomplete="off"></asp:TextBox>
+                <asp:Button ID="btnKey" CssClass="btn btn-primary" runat="server" Text="Kontrol Et" OnClick="btnKey_Click" ClientIDMode="Static" />
             </div>
         </div>
-
-        <center>
-            <asp:Button ID="btnKey" class="btn btn-success" runat="server" Text="Kontrol Et" Width="150px" OnClick="btnKey_Click" ClientIDMode="Static" />
-        </center>
     </div>
 
-    <div class="alert alert-info" runat="server" id="divAlert" style="width: 100%; text-align: center; padding: 10px;" visible="false">
-        <label>Mavi renkli alanlar şifrelenerek kaydedilmiştir.</label>
+    <div class="notice notice-info" runat="server" id="divAlert" visible="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M12 11v5"></path>
+            <path d="M12 8h.01"></path>
+        </svg>
+        <div>Mavi renkli alanlar şifrelenerek kaydedilmiştir.</div>
     </div>
 
-    <h4 style="font-weight: bold; margin-top: 0; margin-bottom: 10px; text-align: center; margin-top: 20px;" runat="server" id="tabloBaslik"></h4>
-
-    <div id="divContainer" runat="server" visible="false">
-
-        <div style="margin-bottom: 20px; border: 1px solid Gray; padding: 10px; display: none;">
-
-            <label style="margin-bottom: 15px;">Arama Yapabilmek için Bilgileri Giriniz</label>
-
-            <div class="form-group row">
-                <asp:Label runat="server" class="col-sm-2 col-form-label col-form-label-sm" Style="width: 11%; padding-top: 6px; font: 13px Tahoma, Geneva, sans-serif !important;">Sütun Adı :</asp:Label>
-                <div class="col-sm-10" style="width: 30%; padding-left: 0px; font: 11px Tahoma, Geneva, sans-serif !important;">
-                    <asp:TextBox class="form-control cls-font" ID="tbSutunAdi" MaxLength="120" Height="26px" placeholder="Sütun adını giriniz..." runat="server" ClientIDMode="Static"></asp:TextBox>
+    <div class="card" id="divContainer" runat="server" visible="false">
+        <div class="card-header">
+            <h2 class="card-title" runat="server" id="tabloBaslik"></h2>
+            <span class="card-note">Şifreli sütunlar mavi olarak işaretlenir</span>
+        </div>
+        <div class="card-body">
+            <div style="display: none;">
+                <div class="form-grid">
+                    <div class="form-field">
+                        <asp:Label runat="server" CssClass="field-label" AssociatedControlID="tbSutunAdi">Sütun Adı</asp:Label>
+                        <asp:TextBox class="form-control" ID="tbSutunAdi" MaxLength="120" placeholder="Sütun adını giriniz..." runat="server" ClientIDMode="Static"></asp:TextBox>
+                    </div>
+                    <div class="form-field">
+                        <asp:Label runat="server" CssClass="field-label" AssociatedControlID="tbKelime">Aranacak Kelime</asp:Label>
+                        <asp:TextBox class="form-control" ID="tbKelime" MaxLength="120" placeholder="Aramak istediğiniz kelimeyi giriniz..." runat="server" ClientIDMode="Static"></asp:TextBox>
+                    </div>
                 </div>
+                <asp:Button ID="btnKelimeAra" CssClass="btn btn-default btn-sm" runat="server" Text="Ara" ClientIDMode="Static" OnClick="btnKelimeAra_Click" />
+                <asp:Button ID="btnTemizle" runat="server" Text="Temizle" CssClass="btn btn-default btn-sm" OnClick="btnTemizle_Click" />
             </div>
 
-            <div class="form-group row">
-                <asp:Label runat="server" class="col-sm-2 col-form-label col-form-label-sm" Style="width: 11%; padding-top: 6px; font: 13px Tahoma, Geneva, sans-serif !important;">Aranacak Kelime :</asp:Label>
-                <div class="col-sm-10" style="width: 30%; padding-left: 0px; font: 11px Tahoma, Geneva, sans-serif !important;">
-                    <asp:TextBox class="form-control cls-font" ID="tbKelime" MaxLength="120" Height="26px" placeholder="Aramak istediğiniz kelimeyi giriniz..." runat="server" ClientIDMode="Static"></asp:TextBox>
-                </div>
+            <div class="table-toolbar">
+                <label for="maxRows" class="table-toolbar-label">Kayıt sayısı</label>
+                <select class="form-control input-sm" name="state" id="maxRows">
+                    <option value="5000">Tüm Kayıtları Gör</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                    <option value="50">50</option>
+                    <option value="70">70</option>
+                    <option value="100">100</option>
+                </select>
             </div>
 
-            <asp:Button ID="btnKelimeAra" CssClass="btn btn-warning btn-sm" Width="8%" runat="server" Text="Ara" ClientIDMode="Static" OnClick="btnKelimeAra_Click" />
-            <asp:Button ID="btnTemizle" runat="server" Text="Temizle" Width="8%" CssClass="btn btn-info btn-sm" float="left" OnClick="btnTemizle_Click" />
-        </div>
+            <div class="table-responsive">
+                <asp:Literal ID="ltList" runat="server"></asp:Literal>
+            </div>
 
+            <!--		Start Pagination -->
+            <div class="pagination-container">
+                <nav>
+                    <ul class="pagination">
 
-        <div class="form-group" style="padding-bottom: 30px !important;">
-            <!--		Show Numbers Of Rows 		-->
-            <label style="float: left; margin-top: 5px;">Kayıt Sayısı:</label>
-            <select class="form-control" name="state" id="maxRows" style="width: 20%; float: left; margin: 0 0 0 5px; padding: 1px 6px; height: 28px !important;">
-                <option value="5000">Tüm Kayıtları Gör</option>
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="30">30</option>
-                <option value="40">40</option>
-                <option value="50">50</option>
-                <option value="70">70</option>
-                <option value="100">100</option>
-            </select>
-        </div>
-
-        <div style="font-size: 12px; width: 100%; overflow-x: scroll;">
-            <asp:Literal ID="ltList" runat="server"></asp:Literal>
-        </div>
-
-        <!--		Start Pagination -->
-        <div class='pagination-container'>
-            <nav>
-                <ul class="pagination" style="margin-top: 10px;">
-
-                    <li data-page="prev">
-                        <span style="font-size: 12px !important;">< <span class="sr-only">(current)</span></span>
-                    </li>
-                    <!--	Here the JS Function Will Add the Rows -->
-                    <li data-page="next" id="prev">
-                        <span style="font-size: 12px !important;">> <span class="sr-only">(current)</span></span>
-                    </li>
-                </ul>
-            </nav>
+                        <li data-page="prev">
+                            <span aria-hidden="true">‹</span>
+                            <span class="sr-only">Önceki sayfa</span>
+                        </li>
+                        <!--	Here the JS Function Will Add the Rows -->
+                        <li data-page="next" id="prev">
+                            <span aria-hidden="true">›</span>
+                            <span class="sr-only">Sonraki sayfa</span>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </div>
 
@@ -146,6 +124,7 @@
 
         function getPagination(table) {
             var lastPage = 1;
+            $(table).addClass('is-paginated');
 
             $('#maxRows')
                 .on('change', function (evt) {

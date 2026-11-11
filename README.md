@@ -2,6 +2,8 @@
 
 **İki Adımlı Şifreleme ile Dinamik Veri Kayıt Sistemi** (Dynamic Data Registration System with Two-Step Encryption)
 
+> **Proje durumu:** Uygulama 2023 yılında yüksek lisans tez çalışmasının parçası olarak tamamlanmıştır. Bu repodaki sonraki commit'ler tasarım, güvenlik ve kod düzeni iyileştirmeleridir; tezin deneysel yapısı değişmemiştir.
+
 Bu proje bir yüksek lisans tez çalışmasının uygulama bölümüdür. Kullanıcıların çalışma anında kendi veri kümelerini (tablolarını) tanımlayıp kayıt girebildiği bir web uygulamasıdır; seçilen kolonlar **iki ayrı katmanda** şifrelenerek saklanır.
 
 ## Tez ve yayın
