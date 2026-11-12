@@ -86,6 +86,7 @@
         </div>
     </div>
 
+    <script src="Scripts/table-sort.js"></script>
     <script type="text/javascript">
 
         $(function () {
@@ -103,6 +104,7 @@
         })
 
         getPagination('#table-id');
+        makeSortable('#table-id', function () { $('#maxRows').change(); });
 
         function getPagination(table) {
             var lastPage = 1;

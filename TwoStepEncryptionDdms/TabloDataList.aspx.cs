@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data;
+using System.Linq;
 using System.Web.UI.WebControls;
 using TwoStepEncryptionDdms.Common;
 using TwoStepEncryptionDdms.Security;
@@ -9,6 +11,20 @@ namespace TwoStepEncryptionDdms
     public partial class TabloDataList : TwoStepEncryptionDdms.Security.BasePage
     {
         readonly DatasetService datasets = new DatasetService();
+
+        static readonly string[] SortableColumns = { "TBLID", "TBLAD", "ISENCRYPT", "OLUSTURAN", "OLUSTURMATARIHI_SIRA" };
+
+        string SortColumn
+        {
+            get { return (string)ViewState["SortColumn"] ?? ""; }
+            set { ViewState["SortColumn"] = value; }
+        }
+
+        bool SortAscending
+        {
+            get { return ViewState["SortAscending"] == null || (bool)ViewState["SortAscending"]; }
+            set { ViewState["SortAscending"] = value; }
+        }
 
         protected void Page_Init(object sender, EventArgs e)
         {
@@ -46,12 +62,48 @@ namespace TwoStepEncryptionDdms
         {
             try
             {
-                GridTbl.DataSource = datasets.ListDatasets(aramaMetni);
+                DataTable table = datasets.ListDatasets(aramaMetni ?? txtAra.Text);
+                if (SortColumn.Length > 0)
+                {
+                    table.DefaultView.Sort = SortColumn + (SortAscending ? " ASC" : " DESC");
+                }
+
+                GridTbl.DataSource = table.DefaultView;
                 GridTbl.DataBind();
             }
             catch (Exception ex)
             {
                 ClsMessage.ShowError("Kayıtlar listelenirken hata oluştu!", ex, this.Form);
+            }
+        }
+
+        protected void GridTbl_Sorting(object sender, GridViewSortEventArgs e)
+        {
+            if (Array.IndexOf(SortableColumns, e.SortExpression) < 0)
+            {
+                return;
+            }
+
+            SortAscending = SortColumn != e.SortExpression || !SortAscending;
+            SortColumn = e.SortExpression;
+            GridTbl.PageIndex = 0;
+            BindGrid();
+        }
+
+        protected void GridTbl_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType != DataControlRowType.Header || SortColumn.Length == 0)
+            {
+                return;
+            }
+
+            foreach (TableCell cell in e.Row.Cells)
+            {
+                LinkButton link = cell.Controls.OfType<LinkButton>().FirstOrDefault();
+                if (link != null && link.CommandArgument == SortColumn)
+                {
+                    cell.CssClass += SortAscending ? " sorted-asc" : " sorted-desc";
+                }
             }
         }
 

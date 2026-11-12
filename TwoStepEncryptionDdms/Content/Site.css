@@ -1823,3 +1823,43 @@ select.form-control {
         padding: 20px;
     }
 }
+
+/* ---------- Tablo sıralama ---------- */
+
+.data-table th.sortable,
+.data-table th a {
+    cursor: pointer;
+    user-select: none;
+}
+
+.data-table th a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.data-table th.sortable:hover,
+.data-table th a:hover {
+    color: var(--accent);
+}
+
+.data-table th.sortable::after {
+    content: " \21C5";
+    color: var(--muted);
+    opacity: 0.5;
+}
+
+.data-table th[aria-sort="ascending"]::after,
+.data-table th.sorted-asc a::after {
+    content: " \25B2";
+    color: var(--accent);
+    opacity: 1;
+    font-size: 0.8em;
+}
+
+.data-table th[aria-sort="descending"]::after,
+.data-table th.sorted-desc a::after {
+    content: " \25BC";
+    color: var(--accent);
+    opacity: 1;
+    font-size: 0.8em;
+}
