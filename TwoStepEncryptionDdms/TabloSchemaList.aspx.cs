@@ -16,6 +16,7 @@ namespace TwoStepEncryptionDdms
             try
             {
                 GridTbl.Columns[1].Visible = CurrentUser.Has(Permission.Delete);
+                lnkYeniVeriKumesi.Visible = CurrentUser.Has(Permission.New);
                 GridTbl.Columns[2].Visible = CurrentUser.Has(Permission.Edit);
             }
             catch (Exception ex)
@@ -131,10 +132,6 @@ namespace TwoStepEncryptionDdms
         protected void btnAra_Click(object sender, EventArgs e)
         {
             BindGrid(txtAra.Text);
-        }
-
-        protected void btnTabloEkle_Click(object sender, EventArgs e)
-        {
         }
     }
 }

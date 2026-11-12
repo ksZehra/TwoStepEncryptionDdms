@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Web;
 using TwoStepEncryptionDdms.Data;
 using TwoStepEncryptionDdms.Repositories;
@@ -10,6 +11,8 @@ namespace TwoStepEncryptionDdms.Services
 {
     public class RecordService
     {
+        private static readonly CultureInfo TurkishCulture = new CultureInfo("tr-TR");
+
         public void EnsureRegistered(string tblAd)
         {
             using (var data = Open())
@@ -86,6 +89,7 @@ namespace TwoStepEncryptionDdms.Services
 
                 string whereSql = null;
                 object whereValue = null;
+                int memorySearchIndex = -1;
                 if (searchTarget != null && !string.IsNullOrWhiteSpace(searchTerm))
                 {
                     if (!datasets.IsEncryptedColumn(tblAd, searchTarget))
@@ -95,8 +99,8 @@ namespace TwoStepEncryptionDdms.Services
                     }
                     else
                     {
-                        whereValue = AppConfig.IsBackendEncryptionEnabled ? Aes256Encrypter.Encrypt(searchTerm, key) : searchTerm;
-                        whereSql = EncryptedSql.SelectColumn(searchTarget, true) + "=@ARANAN";
+                        // Encryption her seferinde farklı output ürettiği (random IV) için encrypted column database'de aranamaz; decrypt edilen değerler memory'de filtrelenir.
+                        memorySearchIndex = columns.FindIndex(c => string.Equals(c.Name, searchTarget, StringComparison.OrdinalIgnoreCase));
                     }
                 }
 
@@ -112,11 +116,22 @@ namespace TwoStepEncryptionDdms.Services
                         string value = row[j].ToString();
                         cells[j] = columns[j].IsEncrypted && decrypt ? Aes256Encrypter.Decrypt(value, key) : value;
                     }
+
+                    if (memorySearchIndex >= 0 && !ContainsIgnoreCase(cells[memorySearchIndex], searchTerm))
+                    {
+                        continue;
+                    }
+
                     rows.Add(cells);
                 }
 
                 return new RecordList(columns, rows);
             }
+        }
+
+        private static bool ContainsIgnoreCase(string text, string term)
+        {
+            return TurkishCulture.CompareInfo.IndexOf(text ?? "", term, CompareOptions.IgnoreCase) >= 0;
         }
 
         public void DeleteRecord(string tblAd, int recordId)

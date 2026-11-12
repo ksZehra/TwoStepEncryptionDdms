@@ -48,6 +48,7 @@ namespace TwoStepEncryptionDdms
             try
             {
                 records.EnsureRegistered(tblAd);
+                spnDataset.InnerText = tblAd + " - ";
 
                 if (!records.HasKey(tblAd))
                 {

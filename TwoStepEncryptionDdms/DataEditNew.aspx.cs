@@ -81,6 +81,7 @@ namespace TwoStepEncryptionDdms
         private void loadPageKeyControls()
         {
             records.EnsureRegistered(tblAd);
+            spnDataset.InnerText = tblAd + " - ";
 
             if (!records.HasKey(tblAd))
             {

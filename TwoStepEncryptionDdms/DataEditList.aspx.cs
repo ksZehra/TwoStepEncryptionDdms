@@ -87,6 +87,7 @@ namespace TwoStepEncryptionDdms
         private void loadPageKeyControls()
         {
             records.EnsureRegistered(tblAd);
+            spnDataset.InnerText = tblAd + " - ";
 
             if (!records.HasKey(tblAd))
             {
@@ -138,12 +139,12 @@ namespace TwoStepEncryptionDdms
 
                 if (type == "edit")
                 {
-                    actionButton = "<button type='button' class='btn btn-xs btn-default action-icon icon-edit' title='Düzenle' aria-label='Düzenle' redirect='" + HttpUtility.HtmlAttributeEncode("DataEditNew.aspx?" + urlString) + "'>Düzenle</button>";
+                    actionButton = "<button type='button' class='btn btn-xs btn-default action-icon icon-edit redirect' title='Düzenle' aria-label='Düzenle' redirect='" + HttpUtility.HtmlAttributeEncode("DataEditNew.aspx?" + urlString) + "'>Düzenle</button>";
                 }
                 else if (type == "delete" || type == "delBtn")
                 {
                     urlString += "&type=delBtn&csrf=" + AuthService.GetCsrfToken(Context);
-                    actionButton = "<button type='button' class='btn btn-xs btn-danger-outline action-icon icon-delete' title='Sil' aria-label='Sil' redirect='" + HttpUtility.HtmlAttributeEncode("DataEditList.aspx?" + urlString) + "'>Sil</button>";
+                    actionButton = "<button type='button' class='btn btn-xs btn-danger-outline action-icon icon-delete redirect' title='Sil' aria-label='Sil' redirect='" + HttpUtility.HtmlAttributeEncode("DataEditList.aspx?" + urlString) + "'>Sil</button>";
                 }
 
                 html.Append("<td class='col-actions'>").Append(actionButton).Append("</td>");

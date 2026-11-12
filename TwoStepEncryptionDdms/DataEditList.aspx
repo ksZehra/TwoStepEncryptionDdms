@@ -5,7 +5,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="cphButon" runat="server">
     <div class="page-heading">
         <div>
-            <h1 class="page-title">Kayıt Düzenle / Sil</h1>
+            <h1 class="page-title"><span runat="server" id="spnDataset"></span>Kayıt Düzenle / Sil</h1>
             <p class="page-subtitle">İşlem yapmak istediğiniz kaydı seçin.</p>
         </div>
     </div>

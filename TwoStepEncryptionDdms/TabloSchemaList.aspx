@@ -12,9 +12,9 @@
         <div class="page-actions">
             <div class="search-box">
                 <asp:TextBox ID="txtAra" CssClass="form-control" runat="server" MaxLength="200" placeholder="Veri kümesi adı ara..."></asp:TextBox>
-                <asp:Button ID="btnAra" CssClass="btn btn-primary" runat="server" Text="Ara" OnClick="btnAra_Click" />
+                <asp:Button ID="btnAra" CssClass="btn btn-default" runat="server" Text="Ara" OnClick="btnAra_Click" />
             </div>
-            <asp:Button ID="btnTabloEkle" CssClass="btn btn-default" ClientIDMode="Static" runat="server" Text="Tablo Ekle" Visible="false" />
+            <a id="lnkYeniVeriKumesi" runat="server" class="btn btn-primary" href="TabloNew.aspx">+ Yeni Veri Kümesi</a>
         </div>
     </div>
 </asp:Content>

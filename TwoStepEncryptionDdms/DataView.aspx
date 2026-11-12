@@ -5,7 +5,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="cphButon" runat="server">
     <div class="page-heading">
         <div>
-            <h1 class="page-title">Kayıt Görüntüle</h1>
+            <h1 class="page-title"><span runat="server" id="spnDataset"></span>Kayıt Görüntüle</h1>
             <p class="page-subtitle">Veri kümesi kayıtlarını görüntüleyin.</p>
         </div>
     </div>
