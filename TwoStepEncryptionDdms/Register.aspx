@@ -81,7 +81,7 @@
 
                 <div class="auth-actions">
                     <asp:Button ID="btnKayitOl" runat="server" Text="Kayıt Ol" CssClass="btn btn-primary btn-block" OnClick="btnKayitOl_Click" />
-                    <asp:Button ID="btnGiriş" runat="server" Text="Giriş Yap" CssClass="btn btn-default btn-block" OnClick="btnGiriş_Click" />
+                    <asp:Button ID="btnGiris" runat="server" Text="Giriş Yap" CssClass="btn btn-default btn-block" OnClick="btnGiris_Click" />
                 </div>
             </form>
         </div>

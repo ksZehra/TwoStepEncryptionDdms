@@ -101,7 +101,7 @@
                                 <asp:Button ID="btnSil" CssClass="btn btn-xs btn-danger-outline action-icon-input icon-delete" ToolTip="Sil" runat="server" Text="Sil" CommandName="Delete" />
                             </td>
                             <td class="col-actions">
-                                <asp:Button ID="btnDüzenle" CssClass="btn btn-xs btn-default action-icon-input icon-edit" ToolTip="Düzenle" runat="server" Text="Düzenle" CommandName="Edit" />
+                                <asp:Button ID="btnDuzenle" CssClass="btn btn-xs btn-default action-icon-input icon-edit" ToolTip="Düzenle" runat="server" Text="Düzenle" CommandName="Edit" />
                             </td>
                         </tr>
                     </ItemTemplate>

@@ -38,7 +38,7 @@ namespace TwoStepEncryptionDdms
             lblMessage.Text = errorMessage;
         }
 
-        protected void btnGiriş_Click(object sender, EventArgs e)
+        protected void btnGiris_Click(object sender, EventArgs e)
         {
             Response.Redirect("Login.aspx");
         }

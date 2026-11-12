@@ -147,31 +147,45 @@ namespace TwoStepEncryptionDdms
 
         protected void GridTbl_Sorting(object sender, GridViewSortEventArgs e)
         {
-            if (Array.IndexOf(SortableColumns, e.SortExpression) < 0)
+            try
             {
-                return;
-            }
+                if (Array.IndexOf(SortableColumns, e.SortExpression) < 0)
+                {
+                    return;
+                }
 
-            SortAscending = SortColumn != e.SortExpression || !SortAscending;
-            SortColumn = e.SortExpression;
-            GridTbl.PageIndex = 0;
-            BindGrid();
+                SortAscending = SortColumn != e.SortExpression || !SortAscending;
+                SortColumn = e.SortExpression;
+                GridTbl.PageIndex = 0;
+                BindGrid();
+            }
+            catch (Exception ex)
+            {
+                ClsMessage.ShowError("Sıralama sırasında hata oluştu!", ex, this.Form);
+            }
         }
 
         protected void GridTbl_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            if (e.Row.RowType != DataControlRowType.Header || SortColumn.Length == 0)
+            try
             {
-                return;
-            }
-
-            foreach (TableCell cell in e.Row.Cells)
-            {
-                LinkButton link = cell.Controls.OfType<LinkButton>().FirstOrDefault();
-                if (link != null && link.CommandArgument == SortColumn)
+                if (e.Row.RowType != DataControlRowType.Header || SortColumn.Length == 0)
                 {
-                    cell.CssClass += SortAscending ? " sorted-asc" : " sorted-desc";
+                    return;
                 }
+
+                foreach (TableCell cell in e.Row.Cells)
+                {
+                    LinkButton link = cell.Controls.OfType<LinkButton>().FirstOrDefault();
+                    if (link != null && link.CommandArgument == SortColumn)
+                    {
+                        cell.CssClass += SortAscending ? " sorted-asc" : " sorted-desc";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                AppLog.Error(ex, "Tablo başlığı sıralama işareti");
             }
         }
 
