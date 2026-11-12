@@ -270,3 +270,6 @@ appSettings.local.config
 
 # IIS Express geçici çalışma klasörü
 .aspnet-temp/
+
+# Uygulama logları
+App_Data/logs/

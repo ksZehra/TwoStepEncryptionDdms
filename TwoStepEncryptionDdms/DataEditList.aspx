@@ -25,6 +25,10 @@
                 <asp:TextBox class="form-control" ID="tbKey" MaxLength="32" placeholder="32 karakterlik anahtar" runat="server" ClientIDMode="Static" autocomplete="off"></asp:TextBox>
                 <asp:Button ID="btnKey" CssClass="btn btn-primary" runat="server" Text="Kontrol Et" OnClick="btnKey_Click" ClientIDMode="Static" />
             </div>
+            <div class="key-status">
+                <span class="badge badge-success">Anahtar doğrulandı</span>
+                <span>Şifreli alanlar bu oturumda çözülebilir.</span>
+            </div>
         </div>
     </div>
 
@@ -114,14 +118,14 @@
                         .remove();
                     var trnum = 0; // reset tr counter
                     var maxRows = parseInt($(this).val()); // get Max Rows from select option
+                    var totalRows = $(table + ' tbody tr').length; // numbers of rows
 
-                    if (maxRows == 5000) {
-                        $('.pagination').hide();
+                    if (maxRows == 5000 || totalRows === 0 || totalRows <= maxRows) {
+                        $('.pagination-container').hide();
                     } else {
-                        $('.pagination').show();
+                        $('.pagination-container').show();
                     }
 
-                    var totalRows = $(table + ' tbody tr').length; // numbers of rows
                     $(table + ' tr:gt(0)').each(function () {
                         // each TR in  table and not the header
                         trnum++; // Start Counter

@@ -25,6 +25,10 @@
                 <asp:TextBox class="form-control" ID="tbKey" MaxLength="32" placeholder="32 karakterlik anahtar" runat="server" ClientIDMode="Static" autocomplete="off"></asp:TextBox>
                 <asp:Button ID="btnKey" CssClass="btn btn-primary" runat="server" Text="Kontrol Et" OnClick="btnKey_Click" ClientIDMode="Static" />
             </div>
+            <div class="key-status">
+                <span class="badge badge-success">Anahtar doğrulandı</span>
+                <span>Şifreli alanlar bu oturumda çözülebilir.</span>
+            </div>
         </div>
     </div>
 

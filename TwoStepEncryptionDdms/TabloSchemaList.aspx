@@ -35,8 +35,8 @@
                     <asp:Label ID="lbTblId" runat="server" Text='<%# Eval("TBLID") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:CommandField ShowDeleteButton="true" ButtonType="Link" ItemStyle-Width="8%" ItemStyle-CssClass="col-actions" HeaderText="Sil" DeleteText="Sil" Visible="false" ControlStyle-CssClass="action-link action-danger" />
-            <asp:CommandField ShowEditButton="true" ButtonType="Link" ItemStyle-Width="8%" ItemStyle-CssClass="col-actions" HeaderText="Düzenle" EditText="Düzenle" UpdateText="Kaydet" CancelText="Vazgeç" Visible="false" ControlStyle-CssClass="action-link" />
+            <asp:CommandField ShowDeleteButton="true" ButtonType="Link" ItemStyle-Width="8%" ItemStyle-CssClass="col-actions" HeaderStyle-CssClass="col-actions" HeaderText="Sil" DeleteText="Sil" Visible="false" ControlStyle-CssClass="action-link action-danger action-icon icon-delete" />
+            <asp:CommandField ShowEditButton="true" ButtonType="Link" ItemStyle-Width="8%" ItemStyle-CssClass="col-actions" HeaderStyle-CssClass="col-actions" HeaderText="Düzenle" EditText="Düzenle" UpdateText="Kaydet" CancelText="Vazgeç" Visible="false" ControlStyle-CssClass="action-link action-icon icon-edit" />
             <asp:BoundField DataField="TBLAD" HeaderText="Veri Kümesi"></asp:BoundField>
             <asp:TemplateField HeaderText="Şifreli Mi" ItemStyle-Width="10%">
                 <ItemTemplate>

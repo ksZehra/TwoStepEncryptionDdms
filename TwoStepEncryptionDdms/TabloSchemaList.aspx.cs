@@ -1,4 +1,5 @@
 ﻿using System;
+using TwoStepEncryptionDdms.Logging;
 using System.Web.UI.WebControls;
 using TwoStepEncryptionDdms.Common;
 using TwoStepEncryptionDdms.Security;
@@ -17,9 +18,9 @@ namespace TwoStepEncryptionDdms
                 GridTbl.Columns[1].Visible = CurrentUser.Has(Permission.Delete);
                 GridTbl.Columns[2].Visible = CurrentUser.Has(Permission.Edit);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ClsMessage.ShowMessage("Beklenilmeyen bir hata oluştu!", this.Form);
+                ClsMessage.ShowError("Beklenilmeyen bir hata oluştu!", ex, this.Form);
             }
         }
 
@@ -37,9 +38,9 @@ namespace TwoStepEncryptionDdms
                     this.BindGrid();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ClsMessage.ShowMessage("Beklenilmeyen bir hata oluştu!", this.Form);
+                ClsMessage.ShowError("Beklenilmeyen bir hata oluştu!", ex, this.Form);
             }
         }
 
@@ -50,9 +51,9 @@ namespace TwoStepEncryptionDdms
                 GridTbl.DataSource = datasets.ListDatasets(aramaMetni);
                 GridTbl.DataBind();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ClsMessage.ShowMessage("Kayıtlar listelenirken hata oluştu!", this.Form);
+                ClsMessage.ShowError("Kayıtlar listelenirken hata oluştu!", ex, this.Form);
             }
         }
 
@@ -63,6 +64,7 @@ namespace TwoStepEncryptionDdms
             try
             {
                 datasets.DeleteDataset(GridTbl.DataKeys[e.RowIndex].Value.ToString());
+                AppLog.Audit("DatasetDeleted", GridTbl.DataKeys[e.RowIndex].Value.ToString());
                 BindGrid();
 
                 ClsMessage.ShowMessage("Tablo Silindi", this.Form);
@@ -71,9 +73,9 @@ namespace TwoStepEncryptionDdms
             {
                 ClsMessage.ShowMessage(ux.Message, this.Form);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ClsMessage.ShowMessage("Tablo silinirken hata oluştu!", this.Form);
+                ClsMessage.ShowError("Tablo silinirken hata oluştu!", ex, this.Form);
             }
         }
 
@@ -99,10 +101,10 @@ namespace TwoStepEncryptionDdms
             {
                 ClsMessage.ShowMessage(hataMesaji, this.Form);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 GridTbl.EditIndex = -1;
-                ClsMessage.ShowMessage(hataMesaji, this.Form);
+                ClsMessage.ShowError(hataMesaji, ex, this.Form);
             }
         }
 

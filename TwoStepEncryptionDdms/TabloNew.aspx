@@ -67,7 +67,7 @@
                 </div>
             </div>
 
-            <asp:Button ID="btnEkle" CssClass="btn btn-primary" runat="server" Text="Sütun Ekle" ClientIDMode="Static" OnClick="btnEkle_Click" />
+            <asp:Button ID="btnEkle" CssClass="btn btn-primary column-add-action" runat="server" Text="Sütun Ekle" ClientIDMode="Static" OnClick="btnEkle_Click" />
 
             <div class="table-responsive" style="margin-top: 16px;">
                 <asp:ListView ID="listVwTblOlustur" runat="server" ItemPlaceholderID="iphListView"
@@ -98,10 +98,10 @@
                                 <asp:Label ID="lbIsEncrypted" Text='<%# Eval("IsEncrypted") %>' runat="server" CssClass='<%# Convert.ToString(Eval("IsEncrypted")) == "Evet" ? "badge badge-encrypted" : "badge badge-plain" %>' />
                             </td>
                             <td class="col-actions">
-                                <asp:Button ID="btnSil" CssClass="btn btn-xs btn-danger-outline" runat="server" Text="Sil" CommandName="Delete" />
+                                <asp:Button ID="btnSil" CssClass="btn btn-xs btn-danger-outline action-icon-input icon-delete" ToolTip="Sil" runat="server" Text="Sil" CommandName="Delete" />
                             </td>
                             <td class="col-actions">
-                                <asp:Button ID="btnDüzenle" CssClass="btn btn-xs btn-default" runat="server" Text="Düzenle" CommandName="Edit" />
+                                <asp:Button ID="btnDüzenle" CssClass="btn btn-xs btn-default action-icon-input icon-edit" ToolTip="Düzenle" runat="server" Text="Düzenle" CommandName="Edit" />
                             </td>
                         </tr>
                     </ItemTemplate>
@@ -115,10 +115,10 @@
                                 <asp:Label ID="lbIsEncrypted" runat="server" Text='<%# Bind("IsEncrypted") %>'></asp:Label>
                             </td>
                             <td class="col-actions">
-                                <asp:Button ID="btnGuncelle" CssClass="btn btn-xs btn-primary" runat="server" Text="Kaydet" CommandName="Update" />
+                                <asp:Button ID="btnGuncelle" CssClass="btn btn-xs btn-primary action-icon-input icon-save" ToolTip="Kaydet" runat="server" Text="Kaydet" CommandName="Update" />
                             </td>
                             <td class="col-actions">
-                                <asp:Button ID="btnIptal" CssClass="btn btn-xs btn-default" runat="server" Text="Vazgeç" CommandName="Cancel" />
+                                <asp:Button ID="btnIptal" CssClass="btn btn-xs btn-default action-icon-input icon-cancel" ToolTip="Vazgeç" runat="server" Text="Vazgeç" CommandName="Cancel" />
                             </td>
                         </tr>
                     </EditItemTemplate>

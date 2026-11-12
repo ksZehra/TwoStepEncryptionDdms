@@ -1,4 +1,5 @@
 ﻿using System;
+using TwoStepEncryptionDdms.Logging;
 using TwoStepEncryptionDdms.Security;
 using TwoStepEncryptionDdms.Services;
 
@@ -33,6 +34,7 @@ namespace TwoStepEncryptionDdms
 
                 if (LoginThrottle.IsBlocked(Context, userName))
                 {
+                    AppLog.AuditWarn("LoginBlocked", null, userName);
                     lblMesaj.Text = "Çok fazla başarısız deneme yapıldı. Lütfen birkaç dakika sonra tekrar deneyiniz.";
                     return;
                 }
@@ -41,18 +43,20 @@ namespace TwoStepEncryptionDdms
                 if (user != null)
                 {
                     LoginThrottle.Reset(Context, userName);
+                    AppLog.Audit("LoginSuccess", null, user.UserName);
                     AuthService.SignIn(Context, user.Id, user.UserName, user.FullName, chboxBeniHatirla.Checked);
                     loginAccess = true;
                 }
                 else
                 {
                     LoginThrottle.RegisterFailure(Context, userName);
+                    AppLog.AuditWarn("LoginFailed", null, userName);
                     lblMesaj.Text = "Kullanıcı adı veya şifre doğru değil. Lütfen tekrar deneyiniz!!!";
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                lblMesaj.Text = "Giriş yaparken hata oluştu!";
+                lblMesaj.Text = "Giriş yaparken hata oluştu! (Kod: " + AppLog.Error(ex, "Giriş") + ")";
             }
 
             if (loginAccess)

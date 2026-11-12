@@ -19,9 +19,9 @@ namespace TwoStepEncryptionDdms
                 GridTbl.Columns[2].Visible = CurrentUser.Has(Permission.New);
                 GridTbl.Columns[1].Visible = CurrentUser.Has(Permission.View);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ClsMessage.ShowMessage("Beklenilmeyen bir hata oluştu!", this.Form);
+                ClsMessage.ShowError("Beklenilmeyen bir hata oluştu!", ex, this.Form);
             }
         }
 
@@ -36,9 +36,9 @@ namespace TwoStepEncryptionDdms
             {
                 this.BindGrid();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ClsMessage.ShowMessage("Beklenilmeyen bir hata oluştu!", this.Form);
+                ClsMessage.ShowError("Beklenilmeyen bir hata oluştu!", ex, this.Form);
             }
         }
 
@@ -49,9 +49,9 @@ namespace TwoStepEncryptionDdms
                 GridTbl.DataSource = datasets.ListDatasets(aramaMetni);
                 GridTbl.DataBind();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ClsMessage.ShowMessage("Kayıtlar listelenirken hata oluştu!", this.Form);
+                ClsMessage.ShowError("Kayıtlar listelenirken hata oluştu!", ex, this.Form);
             }
         }
 

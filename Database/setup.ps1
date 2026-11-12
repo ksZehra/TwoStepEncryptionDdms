@@ -6,10 +6,12 @@
       2. Database\setup.sql dosyasını çalıştırarak veritabanını kurar
       3. TwoStepEncryptionDdms\appSettings.local.config dosyasını oluşturur (git'e eklenmez)
       4. -AppPoolName verilirse IIS uygulama havuzuna veritabanı yetkisi verir (grant-iis-access.sql)
+      5. -Seq verilirse log arayüzü için SEQ_URL'yi yazar ve Docker ile Seq'i başlatır (docker-compose.yml)
 
     Örnek:
       .\Database\setup.ps1
       .\Database\setup.ps1 -Server ".\SQLEXPRESS" -AppPoolName "DefaultAppPool"
+      .\Database\setup.ps1 -Seq
 
     Not: Gerçek dosya zaten varsa üzerine yazılmaz (parola kaybolursa şifreli veriye erişilemez); -Force ile yeniden oluşturulabilir.
 #>
@@ -17,7 +19,8 @@ param(
     [string]$Server = ".\SQLEXPRESS",
     [string]$AppPoolName = "",
     [string]$DbKeyPassword = "",
-    [switch]$Force
+    [switch]$Force,
+    [switch]$Seq
 )
 
 $ErrorActionPreference = 'Stop'
@@ -67,6 +70,9 @@ $xml = @"
   <add key="SQL_SERVER" value="$Server" />
 </appSettings>
 "@
+if ($Seq) {
+    $xml = $xml -replace '</appSettings>', "  <add key=`"SEQ_URL`" value=`"http://localhost:5341`" />`r`n</appSettings>"
+}
 [System.IO.File]::WriteAllText($localConfig, $xml, (New-Object System.Text.UTF8Encoding($false)))
 Write-Host "Local ayar dosyası oluşturuldu: $localConfig (git'e eklenmez, kimseyle paylaşmayın)"
 
@@ -77,6 +83,17 @@ if ($LASTEXITCODE -ne 0) { throw "setup.sql çalıştırılamadı. Gerekirse dü
 if (-not [string]::IsNullOrWhiteSpace($AppPoolName)) {
     & sqlcmd -S $Server -E -f 65001 -i $grantSql -v AppPoolName="$AppPoolName"
     if ($LASTEXITCODE -ne 0) { throw "grant-iis-access.sql çalıştırılamadı." }
+}
+
+if ($Seq) {
+    if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
+        Write-Warning "Docker bulunamadı; Seq başlatılamadı. Docker Desktop'ı kurup 'docker compose up -d' komutunu çalıştırın."
+    }
+    else {
+        & docker compose -f (Join-Path $root 'docker-compose.yml') up -d
+        if ($LASTEXITCODE -ne 0) { Write-Warning "Seq başlatılamadı. Docker Desktop'ın çalıştığından emin olun." }
+        else { Write-Host "Seq çalışıyor: http://localhost:5341" }
+    }
 }
 
 Write-Host "Tamam. Örnek kullanıcılar: admin / Admin123!  ve  demo / Demo123!  (yalnızca local ortamda kullanın)"

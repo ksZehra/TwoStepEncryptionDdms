@@ -1,4 +1,5 @@
 using System;
+using TwoStepEncryptionDdms.Logging;
 using System.Web;
 using TwoStepEncryptionDdms.Data;
 
@@ -30,6 +31,7 @@ namespace TwoStepEncryptionDdms.Security
             string throttleKey = "tablekey:" + tblAd;
             if (LoginThrottle.IsBlocked(context, throttleKey))
             {
+                AppLog.AuditWarn("KeyBlocked", tblAd);
                 throw new UserException("Çok fazla hatalı anahtar denemesi yapıldı. Lütfen birkaç dakika sonra tekrar deneyiniz.");
             }
 
@@ -62,6 +64,7 @@ namespace TwoStepEncryptionDdms.Security
             }
             else
             {
+                AppLog.AuditWarn("KeyRejected", tblAd);
                 LoginThrottle.RegisterFailure(context, throttleKey);
             }
             return ok;

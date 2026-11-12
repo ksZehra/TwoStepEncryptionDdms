@@ -34,27 +34,27 @@
                     <asp:Label ID="lbTblId" runat="server" Text='<%# Eval("TBLID") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="Görüntüle" ItemStyle-Width="7%" ItemStyle-CssClass="col-actions" Visible="false">
+            <asp:TemplateField HeaderText="Görüntüle" ItemStyle-Width="7%" ItemStyle-CssClass="col-actions" HeaderStyle-CssClass="col-actions" Visible="false">
                 <ItemTemplate>
-                    <asp:HyperLink ID="Hlink1" runat="server" CssClass="action-link" ToolTip="Kayıtları görüntüle"
+                    <asp:HyperLink ID="Hlink1" runat="server" CssClass="action-link action-icon icon-view" ToolTip="Kayıtları görüntüle"
                         NavigateUrl='<%# "~/DataView.aspx?tblAd="+HttpUtility.UrlEncode(DataBinder.Eval(Container.DataItem, "TBLAD").ToString()) %>'>Görüntüle</asp:HyperLink>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="Ekle" ItemStyle-Width="5%" ItemStyle-CssClass="col-actions" Visible="false">
+            <asp:TemplateField HeaderText="Ekle" ItemStyle-Width="5%" ItemStyle-CssClass="col-actions" HeaderStyle-CssClass="col-actions" Visible="false">
                 <ItemTemplate>
-                    <asp:HyperLink ID="Hlink2" runat="server" CssClass="action-link" ToolTip="Yeni kayıt ekle"
+                    <asp:HyperLink ID="Hlink2" runat="server" CssClass="action-link action-icon icon-add" ToolTip="Yeni kayıt ekle"
                         NavigateUrl='<%# "~/DataEditNew.aspx?tblId="+HttpUtility.UrlEncode(DataBinder.Eval(Container.DataItem, "TBLID").ToString())+"&tblAd="+HttpUtility.UrlEncode(DataBinder.Eval(Container.DataItem, "TBLAD").ToString()) %>'>Ekle</asp:HyperLink>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="Güncelle" ItemStyle-Width="7%" ItemStyle-CssClass="col-actions" Visible="false">
+            <asp:TemplateField HeaderText="Güncelle" ItemStyle-Width="7%" ItemStyle-CssClass="col-actions" HeaderStyle-CssClass="col-actions" Visible="false">
                 <ItemTemplate>
-                    <asp:HyperLink ID="Hlink3" runat="server" CssClass="action-link" ToolTip="Kayıt güncelle"
+                    <asp:HyperLink ID="Hlink3" runat="server" CssClass="action-link action-icon icon-edit" ToolTip="Kayıt güncelle"
                         NavigateUrl='<%# "~/DataEditList.aspx?tblId="+HttpUtility.UrlEncode(DataBinder.Eval(Container.DataItem, "TBLID").ToString())+"&tblAd="+HttpUtility.UrlEncode(DataBinder.Eval(Container.DataItem, "TBLAD").ToString())+"&type="+HttpUtility.UrlEncode("edit") %>'>Güncelle</asp:HyperLink>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="Sil" ItemStyle-Width="5%" ItemStyle-CssClass="col-actions" Visible="false">
+            <asp:TemplateField HeaderText="Sil" ItemStyle-Width="5%" ItemStyle-CssClass="col-actions" HeaderStyle-CssClass="col-actions" Visible="false">
                 <ItemTemplate>
-                    <asp:HyperLink ID="Hlink4" runat="server" CssClass="action-link action-danger" ToolTip="Kayıt sil"
+                    <asp:HyperLink ID="Hlink4" runat="server" CssClass="action-link action-danger action-icon icon-delete" ToolTip="Kayıt sil"
                         NavigateUrl='<%# "~/DataEditList.aspx?tblId="+HttpUtility.UrlEncode(DataBinder.Eval(Container.DataItem, "TBLID").ToString())+"&tblAd="+HttpUtility.UrlEncode(DataBinder.Eval(Container.DataItem, "TBLAD").ToString())+"&type="+HttpUtility.UrlEncode("delete") %>'>Sil</asp:HyperLink>
                 </ItemTemplate>
             </asp:TemplateField>

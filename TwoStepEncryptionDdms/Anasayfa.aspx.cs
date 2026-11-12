@@ -12,6 +12,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using TwoStepEncryptionDdms.Security;
 using TwoStepEncryptionDdms.Data;
+using TwoStepEncryptionDdms.Logging;
 using TwoStepEncryptionDdms.Services;
 
 namespace TwoStepEncryptionDdms
@@ -58,8 +59,9 @@ namespace TwoStepEncryptionDdms
                 RecordCount = summary.RecordCount;
                 DashboardAvailable = true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                AppLog.Error(ex, "Ana sayfa özeti");
                 DashboardAvailable = false;
             }
         }

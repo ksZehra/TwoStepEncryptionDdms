@@ -1,4 +1,5 @@
 ﻿using System;
+using TwoStepEncryptionDdms.Logging;
 using TwoStepEncryptionDdms.Security;
 using TwoStepEncryptionDdms.Services;
 
@@ -18,14 +19,15 @@ namespace TwoStepEncryptionDdms
             try
             {
                 accounts.Register(txtAd.Text, txtSoyad.Text, txtEmail.Text, txtKullaniciAdi.Text, txtSifre.Text);
+                AppLog.Audit("Register", null, txtKullaniciAdi.Text);
             }
             catch (UserException ux)
             {
                 errorMessage = ux.Message;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                errorMessage = "Hesap oluşturulurken hata oluştu!";
+                errorMessage = "Hesap oluşturulurken hata oluştu! (Kod: " + AppLog.Error(ex, "Kayıt") + ")";
             }
 
             if (string.IsNullOrWhiteSpace(errorMessage))

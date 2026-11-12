@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Optimization;
 using System.Web.Routing;
-using System.Web.Security;
-using System.Web.SessionState;
+using TwoStepEncryptionDdms.Logging;
 
 namespace TwoStepEncryptionDdms
 {
@@ -13,10 +10,31 @@ namespace TwoStepEncryptionDdms
     {
         void Application_Start(object sender, EventArgs e)
         {
-            AppConfig.Validate();
+            AppLog.Initialize();
+
+            try
+            {
+                AppConfig.Validate();
+            }
+            catch (Exception ex)
+            {
+                AppLog.Error(ex, "Yapılandırma doğrulaması");
+                throw;
+            }
 
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+        }
+
+        void Application_Error(object sender, EventArgs e)
+        {
+            Exception error = Server.GetLastError();
+            if (error is HttpUnhandledException && error.InnerException != null)
+            {
+                error = error.InnerException;
+            }
+
+            AppLog.Error(error, "Yakalanmayan hata");
         }
     }
 }

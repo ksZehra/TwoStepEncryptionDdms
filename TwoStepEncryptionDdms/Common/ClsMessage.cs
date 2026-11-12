@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 using System.IO;
+using TwoStepEncryptionDdms.Logging;
 
 
 namespace TwoStepEncryptionDdms.Common
@@ -25,6 +26,12 @@ namespace TwoStepEncryptionDdms.Common
                 form.Controls.Add(myLabel);
             }
             catch { }
+        }
+
+        public static void ShowError(string message, Exception ex, HtmlForm form, string scriptMessage = "")
+        {
+            string code = AppLog.Error(ex);
+            ShowMessage(message + " (Kod: " + code + ")", form, scriptMessage);
         }
     }
 }

@@ -72,9 +72,9 @@ namespace TwoStepEncryptionDdms
             {
                 ClsMessage.ShowMessage(ux.Message, this.Form);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ClsMessage.ShowMessage("Beklenmeyen bir hata oluştu!", this.Form);
+                ClsMessage.ShowError("Beklenmeyen bir hata oluştu!", ex, this.Form);
             }
         }
 
@@ -147,9 +147,9 @@ namespace TwoStepEncryptionDdms
             {
                 ClsMessage.ShowMessage(ux.Message, this.Form);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ClsMessage.ShowMessage("Hata oluştu!", this.Form);
+                ClsMessage.ShowError("Hata oluştu!", ex, this.Form);
             }
         }
 
@@ -168,10 +168,10 @@ namespace TwoStepEncryptionDdms
                 hataVar = true;
                 ClsMessage.ShowMessage(ux.Message, this.Form);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 hataVar = true;
-                ClsMessage.ShowMessage("Kayıt kaydedilirken hata oluştu!", this.Form);
+                ClsMessage.ShowError("Kayıt kaydedilirken hata oluştu!", ex, this.Form);
             }
             finally
             {

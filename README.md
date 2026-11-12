@@ -74,7 +74,7 @@ Teknolojiler: ASP.NET Web Forms, .NET Framework 4.8, SQL Server Express.
    .\Database\setup.ps1
    ```
 
-   SQL Server örneğiniz farklıysa `-Server ".\ORNEKADI"` verin.
+   SQL Server örneğiniz farklıysa `-Server ".\ORNEKADI"` verin. Log arayüzünü de (Seq, Docker gerekir) kurmak isterseniz komuta `-Seq` ekleyin; ayrıntı için [Loglama](#loglama) bölümüne bakın.
 
 3. Solution'ı Visual Studio'da açıp çalıştırın. NuGet paketleri otomatik geri yüklenir.
 
@@ -107,6 +107,31 @@ Havuza `db_owner` verilmez; yalnızca `ddms` şemasında ve gerekli tablolarda i
 | `SQL_SERVER`, `SQL_DATABASE`, `SQL_AUTH` | | Veritabanı bağlantısı |
 
 Gizli değerler (`DBKEY`, `DBKEYPWD`) `Web.config` içinde tutulmaz; `appSettings.local.config` dosyasından okunur ve bu dosya git'e eklenmez. `setup.ps1` kullanmak istemezseniz `appSettings.example.config` dosyasını bu adla kopyalayıp doldurabilirsiniz. Kaybedilen `DBKEYPWD` geri getirilemez; şifreli veriye erişim de kaybolur.
+
+## Loglama
+
+[Serilog](https://serilog.net) ile `TwoStepEncryptionDdms\App_Data\logs` altına günlük dosyalar yazılır (30 gün saklanır, git'e eklenmez). Uygulama havuzu hesabının bu klasöre yazma yetkisi olmalıdır.
+
+- `app-YYYYMMDD.log`: uygulama olayları ve hatalar. Kullanıcıya gösterilen hata mesajındaki `Kod` bu dosyada aranır.
+- `audit-YYYYMMDD.log`: giriş (başarılı, başarısız, bloklanan), çıkış, kullanıcı kaydı, şifre değişikliği, veri kümesi ve kayıt silme, yetkisiz erişim ve hatalı anahtar denemeleri.
+
+Satır biçimi: `zaman | seviye (INF, WRN, ERR) | kullanıcı | IP | sayfa | mesaj`. Hatalarda stack trace bir sonraki satırlarda yer alır. Parola, anahtar ve kayıt içeriği loglanmaz.
+
+### İsteğe bağlı: Seq ile arama
+
+Seq kurmak zorunlu değildir; kurulmazsa loglar yalnızca dosyaya yazılır. Tarih, seviye, kullanıcı, sayfa ve metne göre filtrelemek için [Seq](https://datalust.co/seq) log arayüzünü Docker ile tek komutla başlatabilirsiniz (Docker Desktop gerekir; Seq'in lisans koşullarını kendiniz kontrol edin). Seq arayüzüne yalnızca onu çalıştıran makineden (`localhost`) erişilir; ağdaki başka makineler bağlanamaz. Kimlik doğrulaması kapalı olduğu için paylaşımlı bir sunucuda kullanmayın.
+
+1. Seq'i başlatın (repo kök klasöründe):
+   ```bash
+   docker compose up -d
+   ```
+2. `TwoStepEncryptionDdms\appSettings.local.config` içine şu satırı ekleyin. `setup.ps1 -Seq` kullandıysanız bu ve önceki adım otomatik yapılır:
+   ```xml
+   <add key="SEQ_URL" value="http://localhost:5341" />
+   ```
+3. Uygulamayı yeniden başlatıp bir işlem yapın, sonra `http://localhost:5341` adresini açın.
+
+Durdurmak için `docker compose down` (kayıtlar `seq-data` birimi silinmedikçe korunur). `SEQ_URL` boşsa ya da Seq'e ulaşılamazsa uygulama yine çalışır. Seq'te her kayıt `LogType` (`app`/`audit`), `Event`, `ErrorCode`, `User`, `Ip` ve `Page` alanlarıyla gelir; örneğin `ErrorCode = 'BED596'` veya `LogType = 'audit' and Event = 'LoginFailed'` sorgusu yazılabilir.
 
 ## Güvenlik özeti
 

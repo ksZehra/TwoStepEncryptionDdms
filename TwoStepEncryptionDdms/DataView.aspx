@@ -25,6 +25,10 @@
                 <asp:TextBox class="form-control" ID="tbKey" MaxLength="32" placeholder="32 karakterlik anahtar" runat="server" ClientIDMode="Static" autocomplete="off"></asp:TextBox>
                 <asp:Button ID="btnKey" CssClass="btn btn-primary" runat="server" Text="Kontrol Et" OnClick="btnKey_Click" ClientIDMode="Static" />
             </div>
+            <div class="key-status">
+                <span class="badge badge-success">Anahtar doğrulandı</span>
+                <span>Şifreli alanlar bu oturumda çözülebilir.</span>
+            </div>
         </div>
     </div>
 
@@ -43,7 +47,7 @@
             <span class="card-note">Şifreli sütunlar mavi olarak işaretlenir</span>
         </div>
         <div class="card-body">
-            <div style="display: none;">
+            <div class="search-panel">
                 <div class="form-grid">
                     <div class="form-field">
                         <asp:Label runat="server" CssClass="field-label" AssociatedControlID="tbSutunAdi">Sütun Adı</asp:Label>
@@ -54,8 +58,10 @@
                         <asp:TextBox class="form-control" ID="tbKelime" MaxLength="120" placeholder="Aramak istediğiniz kelimeyi giriniz..." runat="server" ClientIDMode="Static"></asp:TextBox>
                     </div>
                 </div>
-                <asp:Button ID="btnKelimeAra" CssClass="btn btn-default btn-sm" runat="server" Text="Ara" ClientIDMode="Static" OnClick="btnKelimeAra_Click" />
-                <asp:Button ID="btnTemizle" runat="server" Text="Temizle" CssClass="btn btn-default btn-sm" OnClick="btnTemizle_Click" />
+                <div class="search-actions">
+                    <asp:Button ID="btnKelimeAra" CssClass="btn btn-default btn-sm" runat="server" Text="Ara" ClientIDMode="Static" OnClick="btnKelimeAra_Click" />
+                    <asp:Button ID="btnTemizle" runat="server" Text="Temizle" CssClass="btn btn-default btn-sm" OnClick="btnTemizle_Click" />
+                </div>
             </div>
 
             <div class="table-toolbar">
@@ -137,14 +143,14 @@
                         .remove();
                     var trnum = 0; // reset tr counter
                     var maxRows = parseInt($(this).val()); // get Max Rows from select option
+                    var totalRows = $(table + ' tbody tr').length; // numbers of rows
 
-                    if (maxRows == 5000) {
-                        $('.pagination').hide();
+                    if (maxRows == 5000 || totalRows === 0 || totalRows <= maxRows) {
+                        $('.pagination-container').hide();
                     } else {
-                        $('.pagination').show();
+                        $('.pagination-container').show();
                     }
 
-                    var totalRows = $(table + ' tbody tr').length; // numbers of rows
                     $(table + ' tr:gt(0)').each(function () {
                         // each TR in  table and not the header
                         trnum++; // Start Counter
@@ -255,7 +261,7 @@
 
             var id = 0;
 
-            $('table tr:gt(0)').each(function () {
+            $('table tr:gt(0):not(.empty-row)').each(function () {
                 id++;
                 $(this).prepend('<td>' + id + '</td>');
             });

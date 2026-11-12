@@ -1,4 +1,5 @@
 ﻿using System;
+using TwoStepEncryptionDdms.Logging;
 using System.Data;
 using System.Web;
 using TwoStepEncryptionDdms.Common;
@@ -29,9 +30,9 @@ namespace TwoStepEncryptionDdms
                     lbYetki.Text = Convert.ToString(item["LISTELEME"]) + Convert.ToString(item["GUNCELLEME"]) + Convert.ToString(item["YENIEKLEME"]) + Convert.ToString(item["GORUNTULEME"]) + Convert.ToString(item["SILME"]).TrimEnd().TrimEnd(',');
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ClsMessage.ShowMessage("Hesap bilgileri listelenirken hata oluştu!", this.Form);
+                ClsMessage.ShowError("Hesap bilgileri listelenirken hata oluştu!", ex, this.Form);
             }
         }
 
@@ -41,15 +42,16 @@ namespace TwoStepEncryptionDdms
             try
             {
                 accounts.ChangePassword(CurrentUser.Id, txtMevcutSifre.Text, txtYeniSifre.Text);
+                AppLog.Audit("PasswordChanged");
                 ClsMessage.ShowMessage("Şifre başarıyla değiştirildi", this.Form, showDialogScript);
             }
             catch (UserException ux)
             {
                 ClsMessage.ShowMessage(ux.Message, this.Form, showDialogScript);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ClsMessage.ShowMessage("Şifre değiştirilirken hata oluştu!", this.Form, "");
+                ClsMessage.ShowError("Şifre değiştirilirken hata oluştu!", ex, this.Form, "");
             }
         }
     }

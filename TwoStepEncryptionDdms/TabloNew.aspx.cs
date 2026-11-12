@@ -27,9 +27,9 @@ namespace TwoStepEncryptionDdms
                     this.BindGrid();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ClsMessage.ShowMessage("Beklenmeyen bir hata oluştu!", this.Form);
+                ClsMessage.ShowError("Beklenmeyen bir hata oluştu!", ex, this.Form);
             }
         }
 
@@ -146,9 +146,9 @@ namespace TwoStepEncryptionDdms
             {
                 ClsMessage.ShowMessage(ux.Message, this.Form);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ClsMessage.ShowMessage("Tablo oluşturulurken hata oluştu!", this.Form);
+                ClsMessage.ShowError("Tablo oluşturulurken hata oluştu!", ex, this.Form);
             }
 
             if (yonlendir) { Response.Redirect("TabloSchemaList.aspx"); }

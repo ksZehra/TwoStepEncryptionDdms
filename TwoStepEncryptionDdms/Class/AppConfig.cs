@@ -43,6 +43,11 @@ namespace TwoStepEncryptionDdms
             get { return Get("DBKEYPWD"); }
         }
 
+        public static string SeqUrl
+        {
+            get { return Get("SEQ_URL") ?? ""; }
+        }
+
 
         public static string SqlAuth
         {

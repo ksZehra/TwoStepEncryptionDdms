@@ -37,9 +37,9 @@ namespace TwoStepEncryptionDdms
             {
                 ClsMessage.ShowMessage(ux.Message, this.Form);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ClsMessage.ShowMessage("Kayıt listelenirken hata oluştu!", this.Form);
+                ClsMessage.ShowError("Kayıt listelenirken hata oluştu!", ex, this.Form);
             }
         }
 
@@ -95,6 +95,11 @@ namespace TwoStepEncryptionDdms
                 html.Append("</tr>");
             }
 
+            if (list.Rows.Count == 0)
+            {
+                html.Append("<tr class='empty-row'><td colspan='99'>Kayıt bulunamadı.</td></tr>");
+            }
+
             html.Append(" </tbody></table>");
             return html.ToString();
         }
@@ -120,9 +125,9 @@ namespace TwoStepEncryptionDdms
             {
                 ClsMessage.ShowMessage(ux.Message, this.Form);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ClsMessage.ShowMessage("Hata oluştu!", this.Form);
+                ClsMessage.ShowError("Hata oluştu!", ex, this.Form);
             }
         }
 
@@ -141,9 +146,9 @@ namespace TwoStepEncryptionDdms
             {
                 ClsMessage.ShowMessage(ux.Message, this.Form);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ClsMessage.ShowMessage("Arama sırasında hata oluştu!", this.Form);
+                ClsMessage.ShowError("Arama sırasında hata oluştu!", ex, this.Form);
             }
         }
 
@@ -155,9 +160,9 @@ namespace TwoStepEncryptionDdms
                 tbSutunAdi.Text = "";
                 listele();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ClsMessage.ShowMessage("Hata oluştu!", this.Form);
+                ClsMessage.ShowError("Hata oluştu!", ex, this.Form);
             }
         }
     }

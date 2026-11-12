@@ -1,4 +1,5 @@
 ﻿using System;
+using TwoStepEncryptionDdms.Logging;
 using System.Text;
 using System.Web;
 using TwoStepEncryptionDdms.Common;
@@ -77,9 +78,9 @@ namespace TwoStepEncryptionDdms
             {
                 ClsMessage.ShowMessage(ux.Message, this.Form);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ClsMessage.ShowMessage("Kayıt listelenirken hata oluştu!", this.Form);
+                ClsMessage.ShowError("Kayıt listelenirken hata oluştu!", ex, this.Form);
             }
         }
 
@@ -99,6 +100,7 @@ namespace TwoStepEncryptionDdms
             EnsurePermission(Permission.Delete);
 
             records.DeleteRecord(tblAd, satirId);
+            AppLog.Audit("RecordDeleted", tblAd + " #" + satirId);
 
             ClsMessage.ShowMessage("Kayıt silindi.", this.Form);
         }
@@ -136,12 +138,12 @@ namespace TwoStepEncryptionDdms
 
                 if (type == "edit")
                 {
-                    actionButton = "<button type='button' class='btn btn-xs btn-default redirect' redirect='" + HttpUtility.HtmlAttributeEncode("DataEditNew.aspx?" + urlString) + "'>Düzenle</button>";
+                    actionButton = "<button type='button' class='btn btn-xs btn-default action-icon icon-edit' title='Düzenle' aria-label='Düzenle' redirect='" + HttpUtility.HtmlAttributeEncode("DataEditNew.aspx?" + urlString) + "'>Düzenle</button>";
                 }
                 else if (type == "delete" || type == "delBtn")
                 {
                     urlString += "&type=delBtn&csrf=" + AuthService.GetCsrfToken(Context);
-                    actionButton = "<button type='button' class='btn btn-xs btn-danger-outline redirect' redirect='" + HttpUtility.HtmlAttributeEncode("DataEditList.aspx?" + urlString) + "'>Sil</button>";
+                    actionButton = "<button type='button' class='btn btn-xs btn-danger-outline action-icon icon-delete' title='Sil' aria-label='Sil' redirect='" + HttpUtility.HtmlAttributeEncode("DataEditList.aspx?" + urlString) + "'>Sil</button>";
                 }
 
                 html.Append("<td class='col-actions'>").Append(actionButton).Append("</td>");
@@ -153,6 +155,11 @@ namespace TwoStepEncryptionDdms
                 }
 
                 html.Append("</tr>");
+            }
+
+            if (list.Rows.Count == 0)
+            {
+                html.Append("<tr class='empty-row'><td colspan='99'>Kayıt bulunamadı.</td></tr>");
             }
 
             html.Append("</tbody></table>");
@@ -180,9 +187,9 @@ namespace TwoStepEncryptionDdms
             {
                 ClsMessage.ShowMessage(ux.Message, this.Form);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ClsMessage.ShowMessage("Hata oluştu!", this.Form);
+                ClsMessage.ShowError("Hata oluştu!", ex, this.Form);
             }
         }
     }

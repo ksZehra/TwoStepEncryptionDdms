@@ -1,4 +1,5 @@
 using System;
+using TwoStepEncryptionDdms.Logging;
 using System.Web;
 using System.Web.UI;
 
@@ -39,6 +40,8 @@ namespace TwoStepEncryptionDdms.Security
             {
                 return;
             }
+
+            AppLog.AuditWarn("AccessDenied", permission.ToString());
 
             Response.Clear();
             Response.StatusCode = 403;

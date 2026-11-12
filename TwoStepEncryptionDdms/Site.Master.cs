@@ -1,4 +1,5 @@
 ﻿using System;
+using TwoStepEncryptionDdms.Logging;
 using System.Web;
 using TwoStepEncryptionDdms.Security;
 
@@ -55,6 +56,7 @@ namespace TwoStepEncryptionDdms
 
         protected void btnCikisYap_Click(object sender, EventArgs e)
         {
+            AppLog.Audit("Logout");
             AuthService.SignOut(Context);
             Response.Redirect("Login.aspx");
         }
