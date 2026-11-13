@@ -8,15 +8,20 @@ namespace TwoStepEncryptionDdms.Security
 {
     public static class AuthService
     {
-        private const int TicketHours = 5;
+        private const int IdleTimeoutMinutes = 60;
+        private const int MaxSessionHours = 8;
         private const string ItemsKey = "__AppUser";
+        private const string RememberedUserCookie = "RememberedUser";
+        private const int RememberedUserDays = 7;
+        private const int MaxUserNameLength = 100;
 
-        public static void SignIn(HttpContext context, int userId, string userName, string fullName, bool persistent)
+        // Ticket bir session cookie'dir (browser kapanınca sona erer). Idle timeout, Web.config'teki forms timeout ile aynı olmalıdır.
+        public static void SignIn(HttpContext context, int userId, string userName)
         {
             DateTime now = DateTime.Now;
             var ticket = new FormsAuthenticationTicket(
-                1, userName, now, now.AddHours(TicketHours), persistent,
-                userId + "|" + fullName, FormsAuthentication.FormsCookiePath);
+                1, userName, now, now.AddMinutes(IdleTimeoutMinutes), false,
+                userId + "|" + DateTime.UtcNow.Ticks, FormsAuthentication.FormsCookiePath);
 
             var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(ticket))
             {
@@ -25,13 +30,43 @@ namespace TwoStepEncryptionDdms.Security
                 Path = FormsAuthentication.FormsCookiePath,
                 SameSite = SameSiteMode.Lax
             };
-            if (persistent)
-            {
-                cookie.Expires = ticket.Expiration;
-            }
 
             context.Response.Cookies.Set(cookie);
             context.Items.Remove(ItemsKey);
+        }
+
+        public static string GetRememberedUserName(HttpContext context)
+        {
+            HttpCookie cookie = context.Request.Cookies[RememberedUserCookie];
+            if (cookie == null || string.IsNullOrWhiteSpace(cookie.Value))
+            {
+                return null;
+            }
+
+            string userName = HttpUtility.UrlDecode(cookie.Value);
+            return string.IsNullOrWhiteSpace(userName) || userName.Length > MaxUserNameLength ? null : userName;
+        }
+
+        public static void RememberUserName(HttpContext context, string userName)
+        {
+            context.Response.Cookies.Set(CreateUserNameCookie(HttpUtility.UrlEncode(userName), DateTime.Now.AddDays(RememberedUserDays)));
+        }
+
+        public static void ForgetUserName(HttpContext context)
+        {
+            context.Response.Cookies.Set(CreateUserNameCookie(string.Empty, DateTime.Now.AddYears(-1)));
+        }
+
+        private static HttpCookie CreateUserNameCookie(string value, DateTime expires)
+        {
+            return new HttpCookie(RememberedUserCookie, value)
+            {
+                HttpOnly = true,
+                Secure = FormsAuthentication.RequireSSL,
+                Path = FormsAuthentication.FormsCookiePath,
+                SameSite = SameSiteMode.Lax,
+                Expires = expires
+            };
         }
 
         public static void SignOut(HttpContext context)
@@ -95,7 +130,16 @@ namespace TwoStepEncryptionDdms.Security
             string userData = identity.Ticket.UserData ?? string.Empty;
             int separator = userData.IndexOf('|');
             int userId;
-            if (separator <= 0 || !int.TryParse(userData.Substring(0, separator), out userId))
+            long signedInTicks;
+            if (separator <= 0
+                || !int.TryParse(userData.Substring(0, separator), out userId)
+                || !long.TryParse(userData.Substring(separator + 1), out signedInTicks))
+            {
+                return null;
+            }
+
+            // Idle timeout ticket'ı yeniler; bu kontrol session'ın toplam süresini (absolute timeout) sınırlar.
+            if (DateTime.UtcNow - new DateTime(signedInTicks, DateTimeKind.Utc) > TimeSpan.FromHours(MaxSessionHours))
             {
                 return null;
             }

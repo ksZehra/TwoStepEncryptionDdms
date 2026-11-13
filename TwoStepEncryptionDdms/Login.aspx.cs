@@ -15,6 +15,16 @@ namespace TwoStepEncryptionDdms
             {
                 Response.Redirect("Anasayfa.aspx");
             }
+
+            if (!IsPostBack)
+            {
+                string rememberedUser = AuthService.GetRememberedUserName(Context);
+                if (rememberedUser != null)
+                {
+                    txtKAdi.Text = rememberedUser;
+                    chboxBeniHatirla.Checked = true;
+                }
+            }
         }
 
         protected void btnGirisYap_Click(object sender, EventArgs e)
@@ -44,7 +54,17 @@ namespace TwoStepEncryptionDdms
                 {
                     LoginThrottle.Reset(Context, userName);
                     AppLog.Audit("LoginSuccess", null, user.UserName);
-                    AuthService.SignIn(Context, user.Id, user.UserName, user.FullName, chboxBeniHatirla.Checked);
+                    AuthService.SignIn(Context, user.Id, user.UserName);
+
+                    if (chboxBeniHatirla.Checked)
+                    {
+                        AuthService.RememberUserName(Context, user.UserName);
+                    }
+                    else
+                    {
+                        AuthService.ForgetUserName(Context);
+                    }
+
                     loginAccess = true;
                 }
                 else
