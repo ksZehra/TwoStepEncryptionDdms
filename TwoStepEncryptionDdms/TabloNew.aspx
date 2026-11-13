@@ -135,14 +135,14 @@
     <script type="text/javascript">
         $('#btnTblOlustur').click(function () {
             if (document.getElementById("txtTabloAdi").value == "") {
-                alert("Veri kümesi adı boş bırakılamaz!");
+                iqwerty.toast.toast("Veri kümesi adı boş bırakılamaz!", { type: 'warning' });
                 return false
             }
         });
 
         $('#btnEkle').click(function () {
             if (document.getElementById("txtKolonAdi").value == "") {
-                alert("Sütun adı boş bırakılamaz!");
+                iqwerty.toast.toast("Sütun adı boş bırakılamaz!", { type: 'warning' });
                 return false
             }
         });

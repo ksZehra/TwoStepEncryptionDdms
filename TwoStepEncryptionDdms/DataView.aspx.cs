@@ -35,7 +35,7 @@ namespace TwoStepEncryptionDdms
             }
             catch (UserException ux)
             {
-                ClsMessage.ShowMessage(ux.Message, this.Form);
+                ClsMessage.ShowError(ux.Message, this.Form);
             }
             catch (Exception ex)
             {
@@ -124,7 +124,7 @@ namespace TwoStepEncryptionDdms
             }
             catch (UserException ux)
             {
-                ClsMessage.ShowMessage(ux.Message, this.Form);
+                ClsMessage.ShowError(ux.Message, this.Form);
             }
             catch (Exception ex)
             {
@@ -138,14 +138,14 @@ namespace TwoStepEncryptionDdms
             {
                 if (string.IsNullOrWhiteSpace(tbSutunAdi.Text) || string.IsNullOrWhiteSpace(tbKelime.Text))
                 {
-                    throw new UserException("Arama yapabilmek için \"Sütün Adı\" ve \"Aranacak Kelime\" alanlarının doldurulması zorunludur!");
+                    throw new UserException("Arama yapabilmek için \"Sütun Adı\" ve \"Aranacak Kelime\" alanlarının doldurulması zorunludur!");
                 }
 
                 listele(tbSutunAdi.Text.Trim(), tbKelime.Text.TrimEnd());
             }
             catch (UserException ux)
             {
-                ClsMessage.ShowMessage(ux.Message, this.Form);
+                ClsMessage.ShowWarning(ux.Message, this.Form);
             }
             catch (Exception ex)
             {

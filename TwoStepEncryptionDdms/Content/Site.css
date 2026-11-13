@@ -724,6 +724,10 @@ select.form-control {
     transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
 }
 
+.btn svg {
+    flex: 0 0 auto;
+}
+
 .btn:focus,
 .btn:active:focus,
 .btn.active:focus {

@@ -13,7 +13,7 @@
 
     <script src="Scripts/jquery-3.3.1.min.js"></script>
     <script src="Scripts/bootstrap.min.js"></script>
-    <script src="Themes/js/toast.min.js"></script>
+    <script src="Themes/js/twostep-toast.min.js"></script>
 </head>
 <body class="auth-body">
     <div class="auth-shell">
@@ -71,11 +71,11 @@
     <script type="text/javascript">
         $('#btnGirisYap').click(function () {
             if (document.getElementById("txtKAdi").value == "") {
-                alert("Kullanıcı adı boş bırakılamaz!");
+                iqwerty.toast.toast("Kullanıcı adı boş bırakılamaz!", { type: 'warning' });
                 return false
             }
             else if (document.getElementById("txtPassword").value == "") {
-                alert("Şifre boş bırakılamaz!");
+                iqwerty.toast.toast("Şifre boş bırakılamaz!", { type: 'warning' });
                 return false
             }
         });

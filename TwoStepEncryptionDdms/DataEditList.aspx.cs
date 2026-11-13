@@ -48,6 +48,13 @@ namespace TwoStepEncryptionDdms
 
                 if (!IsPostBack && !IsCallback)
                 {
+                    var successMsg = Session["SuccessToast"] as string;
+                    if (!string.IsNullOrWhiteSpace(successMsg))
+                    {
+                        ClsMessage.ShowSuccess(successMsg, this.Form);
+                        Session.Remove("SuccessToast");
+                    }
+
                     loadPageKeyControls();
 
                     if (type == "delBtn" && satirId > 0)
@@ -76,7 +83,7 @@ namespace TwoStepEncryptionDdms
             }
             catch (UserException ux)
             {
-                ClsMessage.ShowMessage(ux.Message, this.Form);
+                ClsMessage.ShowError(ux.Message, this.Form);
             }
             catch (Exception ex)
             {
@@ -103,7 +110,7 @@ namespace TwoStepEncryptionDdms
             records.DeleteRecord(tblAd, satirId);
             AppLog.Audit("RecordDeleted", tblAd + " #" + satirId);
 
-            ClsMessage.ShowMessage("Kayıt silindi.", this.Form);
+            ClsMessage.ShowSuccess("Kayıt silindi.", this.Form);
         }
 
         private void listele()
@@ -186,7 +193,7 @@ namespace TwoStepEncryptionDdms
             }
             catch (UserException ux)
             {
-                ClsMessage.ShowMessage(ux.Message, this.Form);
+                ClsMessage.ShowError(ux.Message, this.Form);
             }
             catch (Exception ex)
             {

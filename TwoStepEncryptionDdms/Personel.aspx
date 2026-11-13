@@ -153,7 +153,7 @@
             }
 
             if (hataVar) {
-                iqwerty.toast.toast(errorMsg);
+                iqwerty.toast.toast(errorMsg, { type: 'error' });
                 return false;
             }
             else {

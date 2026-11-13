@@ -70,7 +70,7 @@ namespace TwoStepEncryptionDdms
             }
             catch (UserException ux)
             {
-                ClsMessage.ShowMessage(ux.Message, this.Form);
+                ClsMessage.ShowError(ux.Message, this.Form);
             }
             catch (Exception ex)
             {
@@ -135,9 +135,19 @@ namespace TwoStepEncryptionDdms
                 if (records.VerifyKey(Context, tblAd, tbKey.Text))
                 {
                     TableKeyService.Remember(Context, tblAd, tbKey.Text);
+                    parKey = tbKey.Text;
                     divTablo.Visible = true;
                     btnKey.Visible = false;
                     tbKey.Enabled = false;
+
+                    // Edit ekranında key sonradan girildiyse field'ları yeniden oluştur.
+                    if (!string.IsNullOrWhiteSpace(satirId))
+                    {
+                        divKey.Visible = false;
+                        divAlert.Visible = true;
+                        btnKayitGir.Visible = true;
+                        getTableColums();
+                    }
                 }
                 else
                 {
@@ -146,7 +156,7 @@ namespace TwoStepEncryptionDdms
             }
             catch (UserException ux)
             {
-                ClsMessage.ShowMessage(ux.Message, this.Form);
+                ClsMessage.ShowError(ux.Message, this.Form);
             }
             catch (Exception ex)
             {
@@ -167,7 +177,7 @@ namespace TwoStepEncryptionDdms
             catch (UserException ux)
             {
                 hataVar = true;
-                ClsMessage.ShowMessage(ux.Message, this.Form);
+                ClsMessage.ShowError(ux.Message, this.Form);
             }
             catch (Exception ex)
             {
@@ -178,11 +188,14 @@ namespace TwoStepEncryptionDdms
             {
                 if (!hataVar)
                 {
-                    ClsMessage.ShowMessage(!string.IsNullOrWhiteSpace(satirId) ? "Kayıt güncellendi." : "Kayıt eklendi.", this.Form);
-
                     if (!string.IsNullOrWhiteSpace(satirId))
                     {
+                        Session["SuccessToast"] = "Kayıt güncellendi.";
                         Response.Redirect("DataEditList.aspx?tblId=" + HttpUtility.UrlEncode(tblId) + "&tblAd=" + HttpUtility.UrlEncode(tblAd) + "&type=edit&k=1");
+                    }
+                    else
+                    {
+                        ClsMessage.ShowSuccess("Kayıt eklendi.", this.Form);
                     }
                 }
             }

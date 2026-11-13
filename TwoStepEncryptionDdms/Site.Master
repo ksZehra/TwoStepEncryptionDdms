@@ -14,7 +14,7 @@
 
     <script src="Scripts/jquery-3.3.1.min.js"></script>
     <script src="Scripts/bootstrap.min.js"></script>
-    <script src="Themes/js/toast.min.js"></script>
+    <script src="Themes/js/twostep-toast.min.js"></script>
 
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>

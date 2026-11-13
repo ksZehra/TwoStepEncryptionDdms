@@ -56,7 +56,7 @@ namespace TwoStepEncryptionDdms
             string kolonAdi = txtKolonAdi.Text.Trim().Replace(" ", "_");
             if (!GecerliAdMi(kolonAdi))
             {
-                ClsMessage.ShowMessage("Kolon adı yalnızca harf, rakam ve alt çizgi içerebilir!", this.Form);
+                ClsMessage.ShowWarning("Kolon adı yalnızca harf, rakam ve alt çizgi içerebilir!", this.Form);
                 return;
             }
 
@@ -97,7 +97,7 @@ namespace TwoStepEncryptionDdms
 
             if (!GecerliAdMi(yeniDeger))
             {
-                ClsMessage.ShowMessage("Kolon adı yalnızca harf, rakam ve alt çizgi içerebilir!", this.Form);
+                ClsMessage.ShowWarning("Kolon adı yalnızca harf, rakam ve alt çizgi içerebilir!", this.Form);
                 return;
             }
 
@@ -144,14 +144,18 @@ namespace TwoStepEncryptionDdms
             }
             catch (UserException ux)
             {
-                ClsMessage.ShowMessage(ux.Message, this.Form);
+                ClsMessage.ShowError(ux.Message, this.Form);
             }
             catch (Exception ex)
             {
                 ClsMessage.ShowError("Tablo oluşturulurken hata oluştu!", ex, this.Form);
             }
 
-            if (yonlendir) { Response.Redirect("TabloSchemaList.aspx"); }
+            if (yonlendir)
+            {
+                Session["SuccessToast"] = "Veri kümesi başarıyla oluşturuldu.";
+                Response.Redirect("TabloSchemaList.aspx");
+            }
         }
 
         protected void btnTemizle_Click(object sender, EventArgs e)

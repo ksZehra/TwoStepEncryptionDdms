@@ -13,7 +13,7 @@
 
     <script src="Scripts/jquery-3.3.1.min.js"></script>
     <script src="Scripts/bootstrap.min.js"></script>
-    <script src="Themes/js/toast.min.js"></script>
+    <script src="Themes/js/twostep-toast.min.js"></script>
 </head>
 <body class="auth-body">
     <div class="auth-shell auth-shell-wide">
@@ -97,15 +97,15 @@
             var sifre2 = $("#txtTekrarSifre").val();
 
             if (ad == '' || soyad == '' || email == '' || KULLANICIADI == '' || sifre1 == '' || sifre2 == '') {
-                alert("Bütün alanların doldurulması zorunludur!");
+                iqwerty.toast.toast("Bütün alanların doldurulması zorunludur!", { type: 'warning' });
                 return false
             }
             else if (sifre1 != sifre2) {
-                alert("Lütfen şifre alanlarının aynı girildiğinden emin olunuz!");
+                iqwerty.toast.toast("Lütfen şifre alanlarının aynı girildiğinden emin olunuz!", { type: 'warning' });
                 return false
             }
             else if (sifre1.length < 8 || sifre1.length > 128) {
-                alert("Şifreniz en az 8, en fazla 128 karakterden oluşabilir!");
+                iqwerty.toast.toast("Şifreniz en az 8, en fazla 128 karakterden oluşabilir!", { type: 'warning' });
                 return false
             }
         });

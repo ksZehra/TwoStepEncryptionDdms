@@ -52,6 +52,12 @@ namespace TwoStepEncryptionDdms
             {
                 if (!this.IsPostBack)
                 {
+                    var successMsg = Session["SuccessToast"] as string;
+                    if (!string.IsNullOrWhiteSpace(successMsg))
+                    {
+                        ClsMessage.ShowSuccess(successMsg, this.Form);
+                        Session.Remove("SuccessToast");
+                    }
                     this.BindGrid();
                 }
             }
@@ -90,11 +96,11 @@ namespace TwoStepEncryptionDdms
                 AppLog.Audit("DatasetDeleted", GridTbl.DataKeys[e.RowIndex].Value.ToString());
                 BindGrid();
 
-                ClsMessage.ShowMessage("Tablo Silindi", this.Form);
+                ClsMessage.ShowSuccess("Tablo Silindi", this.Form);
             }
             catch (UserException ux)
             {
-                ClsMessage.ShowMessage(ux.Message, this.Form);
+                ClsMessage.ShowError(ux.Message, this.Form);
             }
             catch (Exception ex)
             {
@@ -118,11 +124,11 @@ namespace TwoStepEncryptionDdms
                 GridTbl.EditIndex = -1;
                 BindGrid();
 
-                ClsMessage.ShowMessage("Tablo Adı Güncellendi", this.Form);
+                ClsMessage.ShowSuccess("Tablo Adı Güncellendi", this.Form);
             }
             catch (UserException)
             {
-                ClsMessage.ShowMessage(hataMesaji, this.Form);
+                ClsMessage.ShowError(hataMesaji, this.Form);
             }
             catch (Exception ex)
             {

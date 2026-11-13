@@ -43,11 +43,11 @@ namespace TwoStepEncryptionDdms
             {
                 accounts.ChangePassword(CurrentUser.Id, txtMevcutSifre.Text, txtYeniSifre.Text);
                 AppLog.Audit("PasswordChanged");
-                ClsMessage.ShowMessage("Şifre başarıyla değiştirildi", this.Form, showDialogScript);
+                ClsMessage.ShowSuccess("Şifre başarıyla değiştirildi", this.Form, showDialogScript);
             }
             catch (UserException ux)
             {
-                ClsMessage.ShowMessage(ux.Message, this.Form, showDialogScript);
+                ClsMessage.ShowError(ux.Message, this.Form, showDialogScript);
             }
             catch (Exception ex)
             {

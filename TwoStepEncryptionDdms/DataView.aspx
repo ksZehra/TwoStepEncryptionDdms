@@ -110,7 +110,7 @@
 
             $('#btnKey').click(function () {
                 if (document.getElementById("tbKey").value == "") {
-                    alert("Görüntülemek istediğiniz tablonun içerisinde şifrelenmesini istediğiniz alanlar olduğu için 'anahtar' bilgisi boş bırakılamaz!");
+                    iqwerty.toast.toast("Görüntülemek istediğiniz tablonun içerisinde şifrelenmesini istediğiniz alanlar olduğu için 'anahtar' bilgisi boş bırakılamaz!", { type: 'warning' });
                     return false
                 }
             });
