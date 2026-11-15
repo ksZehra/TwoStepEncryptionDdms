@@ -79,6 +79,15 @@ namespace TwoStepEncryptionDdms.Security
             return PasswordVerifyResult.Failed;
         }
 
+        public static string Stamp(string storedHash)
+        {
+            using (var sha = SHA256.Create())
+            {
+                byte[] bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(storedHash ?? string.Empty));
+                return BitConverter.ToString(bytes, 0, 8).Replace("-", "");
+            }
+        }
+
         // Kullanıcı bulunamadığında da aynı cost'ta hesaplama yapılır (user enumeration).
         public static void BurnTime(string password)
         {

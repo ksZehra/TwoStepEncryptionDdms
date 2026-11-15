@@ -9,6 +9,11 @@ namespace TwoStepEncryptionDdms
     {
         readonly AccountService accounts = new AccountService();
 
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            ViewStateUserKey = AuthService.GetAnonymousKey(Context);
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack && User.Identity.IsAuthenticated && AuthService.GetCurrentUser(Context) != null)
@@ -34,7 +39,7 @@ namespace TwoStepEncryptionDdms
             try
             {
                 string userName = txtKAdi.Text.Trim();
-                string pass = txtPassword.Text.TrimEnd();
+                string pass = txtPassword.Text;
 
                 if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(pass))
                 {
@@ -54,7 +59,7 @@ namespace TwoStepEncryptionDdms
                 {
                     LoginThrottle.Reset(Context, userName);
                     AppLog.Audit("LoginSuccess", null, user.UserName);
-                    AuthService.SignIn(Context, user.Id, user.UserName);
+                    AuthService.SignIn(Context, user.Id, user.UserName, user.Stamp);
 
                     if (chboxBeniHatirla.Checked)
                     {

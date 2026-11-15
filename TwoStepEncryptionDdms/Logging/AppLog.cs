@@ -43,11 +43,6 @@ namespace TwoStepEncryptionDdms.Logging
             return code;
         }
 
-        public static void Warn(string message)
-        {
-            Write(appLogger, LogEventLevel.Warning, null, Clean(message), null);
-        }
-
         public static void Info(string message)
         {
             Write(appLogger, LogEventLevel.Information, null, Clean(message), null);

@@ -15,6 +15,7 @@ namespace TwoStepEncryptionDdms.Repositories
 
         public DataTable Select(string quotedTable, string selectList, string whereSql, object whereValue)
         {
+            AddKeyPasswordIfNeeded(selectList);
             string sql = "SELECT " + selectList + " FROM " + DatasetRepository.TableReference(quotedTable);
             if (whereSql != null)
             {
@@ -26,9 +27,18 @@ namespace TwoStepEncryptionDdms.Repositories
 
         public DataTable SelectById(string quotedTable, string selectList, string recordId)
         {
+            AddKeyPasswordIfNeeded(selectList);
             _data.AddParameter("@KAYITID", recordId);
             return _data.QueryTable(
                 "SELECT " + selectList + " FROM " + DatasetRepository.TableReference(quotedTable) + " WHERE KAYITID=@KAYITID");
+        }
+
+        private void AddKeyPasswordIfNeeded(string selectList)
+        {
+            if (selectList.Contains(EncryptedSql.KeyPasswordParameter))
+            {
+                _data.AddParameter(EncryptedSql.KeyPasswordParameter, AppConfig.DbKeyPassword);
+            }
         }
 
         public void Delete(string quotedTable, int recordId)

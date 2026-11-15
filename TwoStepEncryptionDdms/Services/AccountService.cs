@@ -22,7 +22,8 @@ namespace TwoStepEncryptionDdms.Services
                 }
 
                 DataRow row = table.Rows[0];
-                PasswordVerifyResult result = PasswordHasher.Verify(password, Convert.ToString(row["KSIFRE"]));
+                string storedHash = Convert.ToString(row["KSIFRE"]);
+                PasswordVerifyResult result = PasswordHasher.Verify(password, storedHash);
                 if (result == PasswordVerifyResult.Failed)
                 {
                     return null;
@@ -37,15 +38,30 @@ namespace TwoStepEncryptionDdms.Services
 
                 if (result == PasswordVerifyResult.SuccessRehashNeeded)
                 {
-                    users.UpdatePasswordHash(id, PasswordHasher.Hash(password));
+                    storedHash = PasswordHasher.Hash(password);
+                    users.UpdatePasswordHash(id, storedHash);
                 }
 
-                return new AuthenticatedUser(id, name, Convert.ToString(row["ADSOYAD"]).Trim());
+                return new AuthenticatedUser(id, name, Convert.ToString(row["ADSOYAD"]).Trim(), PasswordHasher.Stamp(storedHash));
             }
         }
 
         public void Register(string firstName, string lastName, string email, string userName, string password)
         {
+            firstName = (firstName ?? "").Trim();
+            lastName = (lastName ?? "").Trim();
+            email = (email ?? "").Trim().ToLowerInvariant();
+            userName = (userName ?? "").Trim();
+
+            if (email.Length == 0 || userName.Length == 0)
+            {
+                throw new UserException("E-posta ve kullanıcı adı alanları boş bırakılamaz!");
+            }
+            if (firstName.Length > 50 || lastName.Length > 50 || email.Length > 250 || userName.Length > 100)
+            {
+                throw new UserException("Girilen bilgilerden biri izin verilen uzunluğu aşıyor!");
+            }
+
             string policyMessage;
             if (!ValidateControl.ValidatePassword(password, out policyMessage))
             {
@@ -56,16 +72,21 @@ namespace TwoStepEncryptionDdms.Services
             {
                 var users = new UserRepository(data);
 
-                foreach (DataRow item in users.FindByEmailOrUserName(email, userName).Rows)
+                DataTable existing = users.FindByEmailOrUserName(email, userName);
+                foreach (DataRow item in existing.Rows)
                 {
-                    if (item["KEMAIL"].ToString() == email)
+                    if (string.Equals(Convert.ToString(item["KEMAIL"]), email, StringComparison.OrdinalIgnoreCase))
                     {
                         throw new UserException("İlgili E-posta adresi ile daha önce hesap oluşturulmuş. Lütfen başka bir E-posta adresi deneyiniz!");
                     }
-                    else if (item["KULLANICIADI"].ToString() == userName)
+                    if (string.Equals(Convert.ToString(item["KULLANICIADI"]), userName, StringComparison.OrdinalIgnoreCase))
                     {
                         throw new UserException("İlgili kullanıcı adı ile daha önce hesap oluşturulmuş. Lütfen başka bir kullanıcı adı deneyiniz!");
                     }
+                }
+                if (existing.Rows.Count > 0)
+                {
+                    throw new UserException("Bu E-posta adresi veya kullanıcı adı zaten kullanılıyor. Lütfen farklı bilgiler deneyiniz!");
                 }
 
                 users.Insert(firstName, lastName, email, userName, PasswordHasher.Hash(password), "1", "nyk");
@@ -80,7 +101,7 @@ namespace TwoStepEncryptionDdms.Services
             }
         }
 
-        public void ChangePassword(int userId, string currentPassword, string newPassword)
+        public string ChangePassword(int userId, string currentPassword, string newPassword)
         {
             string policyMessage;
             if (!ValidateControl.ValidatePassword(newPassword, out policyMessage))
@@ -98,7 +119,9 @@ namespace TwoStepEncryptionDdms.Services
                     throw new UserException("Mevcut şifrenizi yanlış girdiniz!");
                 }
 
-                users.UpdatePasswordHash(userId, PasswordHasher.Hash(newPassword));
+                string newHash = PasswordHasher.Hash(newPassword);
+                users.UpdatePasswordHash(userId, newHash);
+                return PasswordHasher.Stamp(newHash);
             }
         }
 

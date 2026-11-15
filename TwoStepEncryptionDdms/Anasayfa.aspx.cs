@@ -19,8 +19,9 @@ namespace TwoStepEncryptionDdms
 {
     public partial class Anasayfa : TwoStepEncryptionDdms.Security.BasePage
     {
-        DataIslemleri data = new DataIslemleri();
-        static DataTable dtDatas = new DataTable();
+        // Performans testi alanları; PeformansTesti() ile birlikte açılır.
+        //DataIslemleri data = new DataIslemleri();
+        //static DataTable dtDatas = new DataTable();
         readonly DatasetService datasets = new DatasetService();
 
         protected int DatasetCount { get; private set; }
@@ -70,8 +71,8 @@ namespace TwoStepEncryptionDdms
         // Tez çalışmasında AES modlarının (ECB, CBC, CFB), tek ve çift adımlı şifrelemenin okuma/çözme sürelerini
         // ayrı test tablolarında ölçmek için yazılmıştı. Sonuçlar tezde yayımlandı ve son kullanıcının bu ölçümü
         // görmesi gerekmediği için kod yorum satırına alındı.
-        // Ölçümü yeniden yapmak için: test tablolarını oluşturun, bu bloğu ve Page_Load içindeki PeformansTesti()
-        // çağrısını açın, <AES_KEY_32_CHARS> ve <ASYM_KEY_*> yer tutucularını kendi anahtarlarınızla değiştirin,
+        // Ölçümü yeniden yapmak için: test tablolarını oluşturun, bu bloğu, yukarıdaki data ve dtDatas alanlarını ve Page_Load içindeki
+        // PeformansTesti() çağrısını açın, <AES_KEY_32_CHARS> ve <ASYM_KEY_*> yer tutucularını kendi anahtarlarınızla değiştirin,
         // Anasayfa.aspx içindeki yorumlanmış sonuç etiketlerini (lbSifresiz, lbEcbTek vb.) geri açın.
         //private void PeformansTesti()
         //{

@@ -131,6 +131,11 @@ namespace TwoStepEncryptionDdms
                     columns.Add(new DatasetColumn(Convert.ToString(dr["KolonAdi"]), Convert.ToString(dr["IsEncrypted"]) == "Evet"));
                 }
 
+                if (txtKey.Text != txtKeyTekrar.Text)
+                {
+                    throw new UserException("Anahtar ve anahtar tekrarı aynı olmalıdır!");
+                }
+
                 string tableName = txtTabloAdi.Text.Trim().Replace(" ", "_");
                 datasets.CreateDataset(CurrentUser.Id, CurrentUser.FullName, tableName, columns, txtKey.Text);
 
@@ -139,6 +144,7 @@ namespace TwoStepEncryptionDdms
                 ViewState["Vs_Kolon"] = NewColumnTable();
                 txtTabloAdi.Text = "";
                 txtKey.Text = "";
+                txtKeyTekrar.Text = "";
 
                 yonlendir = true;
             }

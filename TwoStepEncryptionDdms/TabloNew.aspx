@@ -23,7 +23,8 @@
             <ul class="notice-list">
                 <li>Veri kümesi ve sütun adlarında yalnızca harf, rakam ve alt çizgi (_) kullanılabilir.</li>
                 <li>Boşluklar otomatik olarak alt çizgiye dönüştürülür.</li>
-                <li>Şifrelenecek sütun varsa 32 karakterlik anahtar zorunludur.</li>
+                <li>Veri kümesi ve sütun adları en fazla 70 karakter olabilir.</li>
+                <li>Şifrelenecek sütun varsa 32 karakterlik anahtar zorunludur (Türkçe karakter kullanmayın).</li>
             </ul>
         </div>
     </div>
@@ -33,15 +34,20 @@
             <h2 class="card-title">Veri kümesi bilgileri</h2>
         </div>
         <div class="card-body">
-            <div class="form-grid">
+            <div class="form-grid" style="grid-template-columns: minmax(0, 1fr); max-width: 720px;">
                 <div class="form-field">
                     <asp:Label runat="server" AssociatedControlID="txtTabloAdi" CssClass="field-label">Veri Kümesi Adı</asp:Label>
-                    <asp:TextBox class="form-control" ID="txtTabloAdi" MaxLength="120" placeholder="Örn. PERSONEL" runat="server" ClientIDMode="Static" autocomplete="off"></asp:TextBox>
+                    <asp:TextBox class="form-control" ID="txtTabloAdi" MaxLength="70" placeholder="Örn. PERSONEL" runat="server" ClientIDMode="Static" autocomplete="off"></asp:TextBox>
                 </div>
                 <div class="form-field">
                     <asp:Label runat="server" AssociatedControlID="txtKey" CssClass="field-label">Anahtar (Key)</asp:Label>
                     <asp:TextBox class="form-control" ID="txtKey" MaxLength="32" placeholder="32 karakterlik anahtar" runat="server" ClientIDMode="Static" autocomplete="off"></asp:TextBox>
                     <span class="field-hint">Yalnızca şifrelenecek sütun varsa kullanılır.</span>
+                </div>
+                <div class="form-field">
+                    <asp:Label runat="server" AssociatedControlID="txtKeyTekrar" CssClass="field-label">Anahtar (Tekrar)</asp:Label>
+                    <asp:TextBox class="form-control" ID="txtKeyTekrar" MaxLength="32" placeholder="Anahtarı tekrar girin" runat="server" ClientIDMode="Static" autocomplete="off"></asp:TextBox>
+                    <span class="field-hint">Anahtarı kaybederseniz şifreli verilere erişilemez; güvenli bir yerde saklayın.</span>
                 </div>
             </div>
         </div>
@@ -56,7 +62,7 @@
             <div class="form-grid">
                 <div class="form-field">
                     <asp:Label ID="lblKolonAdi" runat="server" Text="Sütun Adı" AssociatedControlID="txtKolonAdi" CssClass="field-label"></asp:Label>
-                    <asp:TextBox class="form-control" ID="txtKolonAdi" MaxLength="50" placeholder="Örn. AD" runat="server" ClientIDMode="Static" autocomplete="off"></asp:TextBox>
+                    <asp:TextBox class="form-control" ID="txtKolonAdi" MaxLength="70" placeholder="Örn. AD" runat="server" ClientIDMode="Static" autocomplete="off"></asp:TextBox>
                 </div>
                 <div class="form-field">
                     <label class="checkbox-inline" for="cbSifrele">
@@ -109,7 +115,7 @@
                     <EditItemTemplate>
                         <tr class="is-editing">
                             <td>
-                                <asp:TextBox ID="txtEmpKolonAdi" runat="server" MaxLength="200" CssClass="form-control input-sm" Text='<%# Bind("KolonAdi") %>' />
+                                <asp:TextBox ID="txtEmpKolonAdi" runat="server" MaxLength="70" CssClass="form-control input-sm" Text='<%# Bind("KolonAdi") %>' />
                             </td>
                             <td>
                                 <asp:Label ID="lbIsEncrypted" runat="server" Text='<%# Bind("IsEncrypted") %>'></asp:Label>

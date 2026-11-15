@@ -9,17 +9,35 @@ namespace TwoStepEncryptionDdms
     {
         readonly AccountService accounts = new AccountService();
 
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            ViewStateUserKey = AuthService.GetAnonymousKey(Context);
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
         }
 
         protected void btnKayitOl_Click(object sender, EventArgs e)
         {
+            if (RegisterThrottle.IsBlocked(Context))
+            {
+                AppLog.AuditWarn("RegisterBlocked");
+                lblMessage.Text = "Çok fazla kayıt denemesi yapıldı. Lütfen daha sonra tekrar deneyiniz.";
+                return;
+            }
+            RegisterThrottle.RegisterAttempt(Context);
+
             string errorMessage = "";
             try
             {
+                if (txtSifre.Text != txtTekrarSifre.Text)
+                {
+                    throw new UserException("Şifre ve şifre tekrarı aynı olmalıdır!");
+                }
+
                 accounts.Register(txtAd.Text, txtSoyad.Text, txtEmail.Text, txtKullaniciAdi.Text, txtSifre.Text);
-                AppLog.Audit("Register", null, txtKullaniciAdi.Text);
+                AppLog.Audit("Register", null, txtKullaniciAdi.Text.Trim());
             }
             catch (UserException ux)
             {

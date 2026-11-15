@@ -207,6 +207,7 @@
     <Compile Include="Security\UserException.cs" />
     <Compile Include="Security\PasswordHasher.cs" />
     <Compile Include="Security\LoginThrottle.cs" />
+    <Compile Include="Security\RegisterThrottle.cs" />
     <Compile Include="Repositories\EncryptedSql.cs" />
     <Compile Include="Repositories\SqlLike.cs" />
     <Compile Include="Repositories\DatasetRepository.cs" />

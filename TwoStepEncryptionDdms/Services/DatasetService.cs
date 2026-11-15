@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using TwoStepEncryptionDdms.Data;
 using TwoStepEncryptionDdms.Repositories;
 using TwoStepEncryptionDdms.Security;
@@ -9,6 +10,8 @@ namespace TwoStepEncryptionDdms.Services
 {
     public class DatasetService
     {
+        public const int MaxNameLength = 70;
+
         public DataTable ListDatasets(string search)
         {
             using (var data = Open())
@@ -41,15 +44,28 @@ namespace TwoStepEncryptionDdms.Services
             {
                 throw new UserException("'Anahtar(Key)' uzunluğu 32 karakter olmak zorundadır! Lütfen anahtarı 32 karakter olacak şekilde düzenleyiniz.");
             }
+            if (encryptedCount > 0 && key.Any(c => c > 127))
+            {
+                throw new UserException("'Anahtar(Key)' yalnızca ASCII karakterlerden oluşmalıdır! Türkçe karakter (ç, ğ, ı, ö, ş, ü) kullanmayınız.");
+            }
 
             if (!SqlIdentifier.IsValid(tableName) || tableName.StartsWith("TBL_", StringComparison.OrdinalIgnoreCase))
             {
                 throw new UserException("Tablo adı yalnızca harf, rakam ve alt çizgi içerebilir ve 'TBL_' ile başlayamaz!");
             }
 
+            if (tableName.Length > MaxNameLength)
+            {
+                throw new UserException("Veri kümesi adı " + MaxNameLength + " karakterden fazla olamaz!");
+            }
+
             var names = new List<string>();
             foreach (DatasetColumn column in columns)
             {
+                if (column.Name != null && column.Name.Length > MaxNameLength)
+                {
+                    throw new UserException("Sütun adı " + MaxNameLength + " karakterden fazla olamaz!");
+                }
                 if (!SqlIdentifier.IsValid(column.Name) || string.Equals(column.Name, "KAYITID", StringComparison.OrdinalIgnoreCase))
                 {
                     throw new UserException("Kolon adları yalnızca harf, rakam ve alt çizgi içerebilir ('KAYITID' ayrılmıştır)!");
@@ -125,9 +141,9 @@ namespace TwoStepEncryptionDdms.Services
             {
                 throw new UserException("Tablo adı boş bırakılamaz!");
             }
-            if (newName.Length > 120)
+            if (newName.Length > MaxNameLength)
             {
-                throw new UserException("Tablo adı 120 karakterden fazla olamaz!");
+                throw new UserException("Veri kümesi adı " + MaxNameLength + " karakterden fazla olamaz!");
             }
             if (!SqlIdentifier.IsValid(newName))
             {

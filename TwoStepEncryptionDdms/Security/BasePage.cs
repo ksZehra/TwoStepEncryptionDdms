@@ -21,6 +21,9 @@ namespace TwoStepEncryptionDdms.Security
         {
             base.OnPreInit(e);
 
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.SetNoStore();
+
             if (CurrentUser == null)
             {
                 AuthService.SignOut(Context);

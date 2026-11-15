@@ -55,16 +55,18 @@ namespace TwoStepEncryptionDdms.Services
 
     public sealed class AuthenticatedUser
     {
-        public AuthenticatedUser(int id, string userName, string fullName)
+        public AuthenticatedUser(int id, string userName, string fullName, string stamp)
         {
             Id = id;
             UserName = userName;
             FullName = fullName;
+            Stamp = stamp;
         }
 
         public int Id { get; private set; }
         public string UserName { get; private set; }
         public string FullName { get; private set; }
+        public string Stamp { get; private set; }
     }
 
     public sealed class DashboardSummary

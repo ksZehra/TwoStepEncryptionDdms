@@ -98,6 +98,7 @@ namespace TwoStepEncryptionDdms
             tabloBaslik.InnerText = tblAd;
 
             bool editing = !string.IsNullOrWhiteSpace(satirId);
+            int encryptedLimit = RecordService.GetEncryptedInputLimit();
             var html = new StringBuilder();
             html.Append("<div class=\"field-grid\">");
 
@@ -119,6 +120,10 @@ namespace TwoStepEncryptionDdms
                 {
                     html.Append(" value=\"").Append(HttpUtility.HtmlAttributeEncode(field.Value)).Append("\"");
                 }
+                if (field.IsEncrypted && encryptedLimit > 0)
+                {
+                    html.Append(" data-maxbytes=\"").Append(encryptedLimit).Append("\"");
+                }
                 html.Append(" />");
                 html.Append("</div>");
             }
@@ -132,10 +137,13 @@ namespace TwoStepEncryptionDdms
         {
             try
             {
-                if (records.VerifyKey(Context, tblAd, tbKey.Text))
+                string enteredKey = tbKey.Text;
+                tbKey.Text = "";
+
+                if (records.VerifyKey(Context, tblAd, enteredKey))
                 {
-                    TableKeyService.Remember(Context, tblAd, tbKey.Text);
-                    parKey = tbKey.Text;
+                    TableKeyService.Remember(Context, tblAd, enteredKey);
+                    parKey = enteredKey;
                     divTablo.Visible = true;
                     btnKey.Visible = false;
                     tbKey.Enabled = false;
@@ -171,7 +179,7 @@ namespace TwoStepEncryptionDdms
             {
                 EnsurePermission(string.IsNullOrWhiteSpace(satirId) ? Permission.New : Permission.Edit);
 
-                string aesKey = string.IsNullOrWhiteSpace(satirId) ? tbKey.Text : parKey;
+                string aesKey = TableKeyService.Recall(Context, tblAd) ?? "";
                 records.SaveRecord(Context, tblAd, satirId, aesKey, ParsePostedValues(hfSaveData.Value));
             }
             catch (UserException ux)
@@ -201,14 +209,14 @@ namespace TwoStepEncryptionDdms
             }
         }
 
-        // UI "column#value|column#value" biçiminde gönderir; value içindeki '#' korunur.
+        // UI "column#value|column#value" biçiminde gönderir; her parça URL-encode edilir, böylece value içindeki '#' ve '|' korunur.
         private static IList<KeyValuePair<string, string>> ParsePostedValues(string posted)
         {
             var values = new List<KeyValuePair<string, string>>();
             foreach (string group in posted.TrimEnd('|').Split('|'))
             {
                 string[] parts = group.Split(new[] { '#' }, 2);
-                values.Add(new KeyValuePair<string, string>(parts[0], parts.Length > 1 ? parts[1] : ""));
+                values.Add(new KeyValuePair<string, string>(Uri.UnescapeDataString(parts[0]), parts.Length > 1 ? Uri.UnescapeDataString(parts[1]) : ""));
             }
             return values;
         }

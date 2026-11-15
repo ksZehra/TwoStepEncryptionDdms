@@ -62,11 +62,27 @@ namespace TwoStepEncryptionDdms
             }
         }
 
+        private string GetVerifiedKey()
+        {
+            if (!divKey.Visible)
+            {
+                return "";
+            }
+
+            string key = TableKeyService.Recall(Context, tblAd);
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new UserException("Önce veri kümesi anahtarını doğrulayın!");
+            }
+
+            return key;
+        }
+
         private void listele(string parKolondi = "", string parAranacakKelime = "")
         {
             tabloBaslik.InnerText = tblAd;
 
-            RecordList list = records.GetRecords(tblAd, divKey.Visible, tbKey.Text, parKolondi, parAranacakKelime);
+            RecordList list = records.GetRecords(tblAd, divKey.Visible, GetVerifiedKey(), parKolondi, parAranacakKelime);
 
             ltList.Text = BuildTable(list);
             divContainer.Visible = true;
@@ -109,9 +125,12 @@ namespace TwoStepEncryptionDdms
         {
             try
             {
-                if (records.VerifyKey(Context, tblAd, tbKey.Text))
+                string enteredKey = tbKey.Text;
+                tbKey.Text = "";
+
+                if (records.VerifyKey(Context, tblAd, enteredKey))
                 {
-                    TableKeyService.Remember(Context, tblAd, tbKey.Text);
+                    TableKeyService.Remember(Context, tblAd, enteredKey);
                     btnKey.Visible = false;
                     tbKey.Enabled = false;
                     divAlert.Visible = true;

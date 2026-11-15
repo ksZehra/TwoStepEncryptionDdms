@@ -22,7 +22,8 @@
             <h2 class="key-card-title">Bu veri kümesi şifreli</h2>
             <p class="key-card-text">Kayıtları görüntülemek için 32 karakterlik anahtarı girin.</p>
             <div class="key-form">
-                <asp:TextBox class="form-control" ID="tbKey" MaxLength="32" placeholder="32 karakterlik anahtar" runat="server" ClientIDMode="Static" autocomplete="off"></asp:TextBox>
+                <asp:TextBox class="form-control" ID="tbKey" TextMode="Password" MaxLength="32" placeholder="32 karakterlik anahtar" runat="server" ClientIDMode="Static" autocomplete="new-password"></asp:TextBox>
+                <button type="button" id="btnShowKey" class="btn btn-default">Göster</button>
                 <asp:Button ID="btnKey" CssClass="btn btn-primary" runat="server" Text="Kontrol Et" OnClick="btnKey_Click" ClientIDMode="Static" />
             </div>
             <div class="key-status">
@@ -90,6 +91,13 @@
     <script type="text/javascript">
 
         $(function () {
+
+            $('#btnShowKey').click(function () {
+                var field = $('#tbKey');
+                var show = field.attr('type') === 'password';
+                field.attr('type', show ? 'text' : 'password');
+                $(this).text(show ? 'Gizle' : 'Göster');
+            });
 
             $('#btnKey').click(function () {
                 if (document.getElementById("tbKey").value == "") {

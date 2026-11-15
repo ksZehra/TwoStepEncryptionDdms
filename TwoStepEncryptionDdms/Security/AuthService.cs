@@ -12,16 +12,28 @@ namespace TwoStepEncryptionDdms.Security
         private const int MaxSessionHours = 8;
         private const string ItemsKey = "__AppUser";
         private const string RememberedUserCookie = "RememberedUser";
+        private const string AnonymousKeyCookie = "AnonymousKey";
         private const int RememberedUserDays = 7;
         private const int MaxUserNameLength = 100;
 
         // Ticket bir session cookie'dir (browser kapanınca sona erer). Idle timeout, Web.config'teki forms timeout ile aynı olmalıdır.
-        public static void SignIn(HttpContext context, int userId, string userName)
+        public static void SignIn(HttpContext context, int userId, string userName, string stamp)
+        {
+            IssueTicket(context, userId, userName, stamp);
+            context.Items.Remove(ItemsKey);
+        }
+
+        public static void RenewTicket(HttpContext context, int userId, string userName, string stamp)
+        {
+            IssueTicket(context, userId, userName, stamp);
+        }
+
+        private static void IssueTicket(HttpContext context, int userId, string userName, string stamp)
         {
             DateTime now = DateTime.Now;
             var ticket = new FormsAuthenticationTicket(
                 1, userName, now, now.AddMinutes(IdleTimeoutMinutes), false,
-                userId + "|" + DateTime.UtcNow.Ticks, FormsAuthentication.FormsCookiePath);
+                userId + "|" + DateTime.UtcNow.Ticks + "|" + stamp, FormsAuthentication.FormsCookiePath);
 
             var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(ticket))
             {
@@ -32,7 +44,25 @@ namespace TwoStepEncryptionDdms.Security
             };
 
             context.Response.Cookies.Set(cookie);
-            context.Items.Remove(ItemsKey);
+        }
+
+        public static string GetAnonymousKey(HttpContext context)
+        {
+            HttpCookie cookie = context.Request.Cookies[AnonymousKeyCookie];
+            if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
+            {
+                return cookie.Value;
+            }
+
+            string key = Guid.NewGuid().ToString("N");
+            context.Response.Cookies.Set(new HttpCookie(AnonymousKeyCookie, key)
+            {
+                HttpOnly = true,
+                Secure = FormsAuthentication.RequireSSL,
+                Path = FormsAuthentication.FormsCookiePath,
+                SameSite = SameSiteMode.Lax
+            });
+            return key;
         }
 
         public static string GetRememberedUserName(HttpContext context)
@@ -128,15 +158,16 @@ namespace TwoStepEncryptionDdms.Security
             }
 
             string userData = identity.Ticket.UserData ?? string.Empty;
-            int separator = userData.IndexOf('|');
+            string[] parts = userData.Split('|');
             int userId;
             long signedInTicks;
-            if (separator <= 0
-                || !int.TryParse(userData.Substring(0, separator), out userId)
-                || !long.TryParse(userData.Substring(separator + 1), out signedInTicks))
+            if (parts.Length != 3
+                || !int.TryParse(parts[0], out userId)
+                || !long.TryParse(parts[1], out signedInTicks))
             {
                 return null;
             }
+            string ticketStamp = parts[2];
 
             // Idle timeout ticket'ı yeniler; bu kontrol session'ın toplam süresini (absolute timeout) sınırlar.
             if (DateTime.UtcNow - new DateTime(signedInTicks, DateTimeKind.Utc) > TimeSpan.FromHours(MaxSessionHours))
@@ -150,7 +181,7 @@ namespace TwoStepEncryptionDdms.Security
                 data.Open();
                 data.AddParameter("@KID", userId);
                 DataTable dt = data.QueryTable(
-                    @"SELECT U.KULLANICIADI, U.KDURUM, ISNULL(U.KAD,'')+' '+ISNULL(U.KSOYAD,'') ADSOYAD,
+                    @"SELECT U.KULLANICIADI, U.KDURUM, U.KSIFRE, ISNULL(U.KAD,'')+' '+ISNULL(U.KSOYAD,'') ADSOYAD,
                              PS.LIST, PS.NEW, PS.EDIT, PS.[VIEW], PS.[DELETE]
                       FROM TBL_USERS U
                       LEFT JOIN TBL_PROFILSEC PS ON PS.PROFILKODU = U.PROFILKODU
@@ -164,7 +195,8 @@ namespace TwoStepEncryptionDdms.Security
                 DataRow first = dt.Rows[0];
                 bool active = Convert.ToString(first["KDURUM"]) == "1";
                 bool nameMatches = string.Equals(Convert.ToString(first["KULLANICIADI"]), identity.Name, StringComparison.Ordinal);
-                if (!active || !nameMatches)
+                bool stampMatches = string.Equals(PasswordHasher.Stamp(Convert.ToString(first["KSIFRE"])), ticketStamp, StringComparison.Ordinal);
+                if (!active || !nameMatches || !stampMatches)
                 {
                     return null;
                 }

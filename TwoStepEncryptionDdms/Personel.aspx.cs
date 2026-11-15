@@ -41,9 +41,15 @@ namespace TwoStepEncryptionDdms
             const string showDialogScript = "$('#sifreModal').modal('show');";
             try
             {
-                accounts.ChangePassword(CurrentUser.Id, txtMevcutSifre.Text, txtYeniSifre.Text);
+                if (txtYeniSifre.Text != txtYeniSifreTekrar.Text)
+                {
+                    throw new UserException("Yeni şifre ve tekrarı aynı olmalıdır!");
+                }
+
+                string stamp = accounts.ChangePassword(CurrentUser.Id, txtMevcutSifre.Text, txtYeniSifre.Text);
+                AuthService.RenewTicket(Context, CurrentUser.Id, CurrentUser.UserName, stamp);
                 AppLog.Audit("PasswordChanged");
-                ClsMessage.ShowSuccess("Şifre başarıyla değiştirildi", this.Form, showDialogScript);
+                ClsMessage.ShowSuccess("Şifre başarıyla değiştirildi", this.Form);
             }
             catch (UserException ux)
             {

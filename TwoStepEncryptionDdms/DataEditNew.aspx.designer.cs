@@ -15,6 +15,15 @@ namespace TwoStepEncryptionDdms
     {
 
         /// <summary>
+        /// spnDataset control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl spnDataset;
+
+        /// <summary>
         /// divKey control.
         /// </summary>
         /// <remarks>
@@ -51,15 +60,6 @@ namespace TwoStepEncryptionDdms
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divTablo;
 
         /// <summary>
-        /// divAlert control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divAlert;
-
-        /// <summary>
         /// tabloBaslik control.
         /// </summary>
         /// <remarks>
@@ -69,13 +69,13 @@ namespace TwoStepEncryptionDdms
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl tabloBaslik;
 
         /// <summary>
-        /// spnDataset control.
+        /// divAlert control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl spnDataset;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divAlert;
 
         /// <summary>
         /// hfTable control.

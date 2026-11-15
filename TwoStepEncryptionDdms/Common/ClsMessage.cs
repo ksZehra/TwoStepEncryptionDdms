@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
-using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
-using System.IO;
+using System.Web.UI.WebControls;
 using TwoStepEncryptionDdms.Logging;
-
 
 namespace TwoStepEncryptionDdms.Common
 {
-    public class ClsMessage
+    public static class ClsMessage
     {
-        public ClsMessage() { }
-
         private static void ShowToast(string message, string type, HtmlForm form, string scriptMessage = "")
         {
             try
@@ -27,11 +21,6 @@ namespace TwoStepEncryptionDdms.Common
                 form.Controls.Add(myLabel);
             }
             catch { }
-        }
-
-        public static void ShowInfo(string message, HtmlForm form, string scriptMessage = "")
-        {
-            ShowToast(message, "info", form, scriptMessage);
         }
 
         public static void ShowSuccess(string message, HtmlForm form, string scriptMessage = "")
@@ -53,11 +42,6 @@ namespace TwoStepEncryptionDdms.Common
         {
             string code = AppLog.Error(ex);
             ShowToast(message + " (Kod: " + code + ")", "error", form, scriptMessage);
-        }
-
-        public static void ShowMessage(string message, HtmlForm form, string scriptMessage = "")
-        {
-            ShowToast(message, "info", form, scriptMessage);
         }
     }
 }

@@ -2,17 +2,17 @@
 using TwoStepEncryptionDdms.Logging;
 using System.Text;
 using System.Web;
+using System.Web.UI;
 using TwoStepEncryptionDdms.Common;
 using TwoStepEncryptionDdms.Security;
 using TwoStepEncryptionDdms.Services;
 
 namespace TwoStepEncryptionDdms
 {
-    public partial class DataEditList : TwoStepEncryptionDdms.Security.BasePage
+    public partial class DataEditList : TwoStepEncryptionDdms.Security.BasePage, IPostBackEventHandler
     {
         readonly RecordService records = new RecordService();
         string tblAd = "", tblId = "", parKey = "", type = "";
-        int satirId = 0;
 
         protected override Permission RequiredPermission
         {
@@ -28,10 +28,7 @@ namespace TwoStepEncryptionDdms
                 tblId = int.TryParse(Request.QueryString["tblId"], out tblIdSayi) ? tblIdSayi.ToString() : "";
 
                 string gelenType = Request.QueryString["type"];
-                type = (gelenType == "edit" || gelenType == "delete" || gelenType == "delBtn") ? gelenType : "";
-
-                int gelenSatirId;
-                satirId = int.TryParse(Request.QueryString["satirId"], out gelenSatirId) ? gelenSatirId : 0;
+                type = (gelenType == "edit" || gelenType == "delete") ? gelenType : "";
 
                 // Key URL'de taşınmaz; k=1 ise bu session'da verify edilip hatırlanan key kullanılır.
                 if (Request.QueryString["k"] == "1" && !string.IsNullOrWhiteSpace(tblAd))
@@ -57,26 +54,11 @@ namespace TwoStepEncryptionDdms
 
                     loadPageKeyControls();
 
-                    if (type == "delBtn" && satirId > 0)
-                    {
-                        // State değiştiren GET isteği olduğu için session'a bağlı CSRF token zorunludur.
-                        if (!AuthService.ValidateCsrfToken(Context, Request.QueryString["csrf"]))
-                        {
-                            throw new UserException("Geçersiz istek! Lütfen silme işlemini listeden tekrar başlatınız.");
-                        }
-                        dataDelete();
-                        if (string.IsNullOrWhiteSpace(parKey))
-                        {
-                            listele();
-                        }
-                    }
-
                     if (!string.IsNullOrWhiteSpace(parKey))
                     {
                         btnKey.Visible = false;
                         tbKey.Enabled = false;
                         divAlert.Visible = true;
-                        tbKey.Text = parKey;
                         listele();
                     }
                 }
@@ -103,21 +85,35 @@ namespace TwoStepEncryptionDdms
             }
         }
 
-        private void dataDelete()
+        private void dataDelete(int recordId)
         {
-            EnsurePermission(Permission.Delete);
-
-            records.DeleteRecord(tblAd, satirId);
-            AppLog.Audit("RecordDeleted", tblAd + " #" + satirId);
+            records.DeleteRecord(tblAd, recordId);
+            AppLog.Audit("RecordDeleted", tblAd + " #" + recordId);
 
             ClsMessage.ShowSuccess("Kayıt silindi.", this.Form);
+        }
+
+        private string GetVerifiedKey()
+        {
+            if (!divKey.Visible)
+            {
+                return "";
+            }
+
+            string key = TableKeyService.Recall(Context, tblAd);
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new UserException("Önce veri kümesi anahtarını doğrulayın!");
+            }
+
+            return key;
         }
 
         private void listele()
         {
             tabloBaslik.InnerText = tblAd;
 
-            RecordList list = records.GetRecords(tblAd, divKey.Visible, tbKey.Text, null, null);
+            RecordList list = records.GetRecords(tblAd, divKey.Visible, GetVerifiedKey(), null, null);
 
             ltList.Text = BuildTable(list);
             divContainer.Visible = true;
@@ -148,10 +144,10 @@ namespace TwoStepEncryptionDdms
                 {
                     actionButton = "<button type='button' class='btn btn-xs btn-default action-icon icon-edit redirect' title='Düzenle' aria-label='Düzenle' redirect='" + HttpUtility.HtmlAttributeEncode("DataEditNew.aspx?" + urlString) + "'>Düzenle</button>";
                 }
-                else if (type == "delete" || type == "delBtn")
+                else if (type == "delete")
                 {
-                    urlString += "&type=delBtn&csrf=" + AuthService.GetCsrfToken(Context);
-                    actionButton = "<button type='button' class='btn btn-xs btn-danger-outline action-icon icon-delete redirect' title='Sil' aria-label='Sil' redirect='" + HttpUtility.HtmlAttributeEncode("DataEditList.aspx?" + urlString) + "'>Sil</button>";
+                    string deleteScript = "if (confirm('Bu kaydı silmek istediğinize emin misiniz?')) { " + ClientScript.GetPostBackEventReference(this, "delete:" + cells[0] + ":" + AuthService.GetCsrfToken(Context)) + "; }";
+                    actionButton = "<button type='button' class='btn btn-xs btn-danger-outline action-icon icon-delete' title='Sil' aria-label='Sil' onclick=\"" + HttpUtility.HtmlAttributeEncode(deleteScript) + "\">Sil</button>";
                 }
 
                 html.Append("<td class='col-actions'>").Append(actionButton).Append("</td>");
@@ -174,13 +170,46 @@ namespace TwoStepEncryptionDdms
             return html.ToString();
         }
 
+        public void RaisePostBackEvent(string eventArgument)
+        {
+            EnsurePermission(Permission.Delete);
+
+            try
+            {
+                string[] parts = (eventArgument ?? "").Split(':');
+                int recordId;
+                if (parts.Length != 3
+                    || parts[0] != "delete"
+                    || !int.TryParse(parts[1], out recordId)
+                    || recordId <= 0
+                    || !AuthService.ValidateCsrfToken(Context, parts[2]))
+                {
+                    throw new UserException("Geçersiz istek! Lütfen silme işlemini listeden tekrar başlatınız.");
+                }
+
+                dataDelete(recordId);
+                listele();
+            }
+            catch (UserException ux)
+            {
+                ClsMessage.ShowError(ux.Message, this.Form);
+            }
+            catch (Exception ex)
+            {
+                ClsMessage.ShowError("Kayıt silinirken hata oluştu!", ex, this.Form);
+            }
+        }
+
         protected void btnKey_Click(object sender, EventArgs e)
         {
             try
             {
-                if (records.VerifyKey(Context, tblAd, tbKey.Text))
+                string enteredKey = tbKey.Text;
+                tbKey.Text = "";
+
+                if (records.VerifyKey(Context, tblAd, enteredKey))
                 {
-                    TableKeyService.Remember(Context, tblAd, tbKey.Text);
+                    TableKeyService.Remember(Context, tblAd, enteredKey);
                     btnKey.Visible = false;
                     tbKey.Enabled = false;
                     divAlert.Visible = true;

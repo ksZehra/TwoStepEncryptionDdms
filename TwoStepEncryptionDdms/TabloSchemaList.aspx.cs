@@ -116,8 +116,7 @@ namespace TwoStepEncryptionDdms
             try
             {
                 string eskiTblAd = GridTbl.DataKeys[e.RowIndex].Value.ToString();
-                GridViewRow row = GridTbl.Rows[e.RowIndex];
-                string yeniTableName = ((TextBox)row.Cells[3].Controls[0]).Text.Trim().Replace(' ', '_');
+                string yeniTableName = Convert.ToString(e.NewValues["TBLAD"]).Trim().Replace(' ', '_');
 
                 datasets.RenameDataset(eskiTblAd, yeniTableName, CurrentUser.Id, CurrentUser.FullName);
 

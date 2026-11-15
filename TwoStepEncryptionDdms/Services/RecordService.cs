@@ -21,6 +21,44 @@ namespace TwoStepEncryptionDdms.Services
             }
         }
 
+        // Şifreli alana girilebilecek en fazla UTF-8 byte sayısı; 0 ise sınır yoktur.
+        public static int GetEncryptedInputLimit()
+        {
+            if (!AppConfig.IsDatabaseEncryptionEnabled)
+            {
+                return 0;
+            }
+            if (!AppConfig.IsBackendEncryptionEnabled)
+            {
+                return EncryptedSql.MaxRsaPayloadBytes;
+            }
+
+            try
+            {
+                string probeKey = new string('k', 32);
+                int low = 0;
+                int high = EncryptedSql.MaxRsaPayloadBytes;
+                while (low < high)
+                {
+                    int mid = (low + high + 1) / 2;
+                    string encrypted = Aes256Encrypter.Encrypt(new string('a', mid), probeKey);
+                    if (encrypted != null && encrypted.Length <= EncryptedSql.MaxRsaPayloadBytes)
+                    {
+                        low = mid;
+                    }
+                    else
+                    {
+                        high = mid - 1;
+                    }
+                }
+                return low;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
         public bool HasKey(string tblAd)
         {
             using (var data = Open())
@@ -242,6 +280,11 @@ namespace TwoStepEncryptionDdms.Services
                         if (isEncrypted && encryptBackend)
                         {
                             valueToSave = Aes256Encrypter.Encrypt(posted.Value, key);
+                        }
+
+                        if (isEncrypted && AppConfig.IsDatabaseEncryptionEnabled && valueToSave != null && valueToSave.Length > EncryptedSql.MaxRsaPayloadBytes)
+                        {
+                            throw new UserException("\"" + realColumn + "\" kolonundaki değer şifrelenemeyecek kadar uzun! Şifreli kolonlara şifrelenmiş haliyle en fazla " + EncryptedSql.MaxRsaPayloadBytes + " byte yazılabilir. Lütfen daha kısa bir değer giriniz.");
                         }
 
                         string expression = EncryptedSql.WriteValue(parameterName, isEncrypted);

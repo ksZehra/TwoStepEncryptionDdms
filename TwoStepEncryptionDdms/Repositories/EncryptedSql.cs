@@ -4,6 +4,11 @@ namespace TwoStepEncryptionDdms.Repositories
 {
     internal static class EncryptedSql
     {
+        // RSA_2048 ile tek seferde en fazla 190 byte encrypt edilebilir; fazlasında ENCRYPTBYASYMKEY hata vermeden NULL döner.
+        public const int MaxRsaPayloadBytes = 190;
+
+        public const string KeyPasswordParameter = "@DBKEYPWD";
+
         public static string SelectColumn(string columnName, bool encrypted)
         {
             string quoted = SqlIdentifier.QuoteSchemaName(columnName);
@@ -17,7 +22,7 @@ namespace TwoStepEncryptionDdms.Repositories
 
         private static string Decrypt(string quotedColumn)
         {
-            return "CONVERT(VARCHAR(600),DECRYPTBYASYMKEY(ASYMKEY_ID('" + KeyName + "')," + quotedColumn + ",N'" + KeyPassword + "'))";
+            return "CONVERT(VARCHAR(600),DECRYPTBYASYMKEY(ASYMKEY_ID('" + KeyName + "')," + quotedColumn + "," + KeyPasswordParameter + "))";
         }
 
         private static string Encrypt(string parameterName)
@@ -28,11 +33,6 @@ namespace TwoStepEncryptionDdms.Repositories
         private static string KeyName
         {
             get { return SqlIdentifier.EscapeLiteral(AppConfig.DbKeyName); }
-        }
-
-        private static string KeyPassword
-        {
-            get { return SqlIdentifier.EscapeLiteral(AppConfig.DbKeyPassword); }
         }
     }
 }
