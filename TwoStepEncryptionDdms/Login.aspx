@@ -9,7 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="Content/bootstrap.min.css" rel="stylesheet" />
-    <link href="Content/Site.css" rel="stylesheet" />
+    <asp:PlaceHolder runat="server">
+        <link href="<%= TwoStepEncryptionDdms.Common.AssetVersion.Url("~/Content/Site.css") %>" rel="stylesheet" />
+    </asp:PlaceHolder>
 
     <script src="Scripts/jquery-3.3.1.min.js"></script>
     <script src="Scripts/bootstrap.min.js"></script>
@@ -67,6 +69,14 @@
             </form>
         </div>
     </div>
+
+    <footer class="auth-credit">
+        <div class="auth-credit-owner">
+            <span class="auth-credit-mark" aria-hidden="true">Z</span>
+            <span>Zehra Nur Köse</span>
+        </div>
+        <div class="auth-credit-copy">© 2023 · Tüm hakları saklıdır</div>
+    </footer>
 
     <script type="text/javascript">
         $('#btnGirisYap').click(function () {

@@ -219,6 +219,7 @@
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Class\Aes256Encrypter.cs" />
     <Compile Include="Class\DataIslemleri.cs" />
+    <Compile Include="Common\AssetVersion.cs" />
     <Compile Include="Common\ClsMessage.cs" />
     <Compile Include="Security\ValidateControl.cs" />
     <Compile Include="Logging\AppLog.cs" />
