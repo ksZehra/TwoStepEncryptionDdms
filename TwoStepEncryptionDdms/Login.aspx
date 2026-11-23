@@ -71,11 +71,8 @@
     </div>
 
     <footer class="auth-credit">
-        <div class="auth-credit-owner">
-            <span class="auth-credit-mark" aria-hidden="true">Z</span>
-            <span>Zehra Nur Köse</span>
-        </div>
-        <div class="auth-credit-copy">© 2023 · Tüm hakları saklıdır</div>
+        <img class="auth-credit-mark" src="<%= TwoStepEncryptionDdms.Common.AssetVersion.Url("~/Content/img/zk-logo.svg") %>" alt="" aria-hidden="true" />
+        <span class="auth-credit-copy">© 2023 <span class="auth-credit-owner">Zehra Nur Köse</span>. Tüm hakları saklıdır.</span>
     </footer>
 
     <script type="text/javascript">

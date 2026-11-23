@@ -1603,47 +1603,39 @@ select.form-control {
     text-align: center;
 }
 
+/* İmza sayfanın en altında kalsın diye shell kalan yüksekliği doldurur. */
+.auth-body {
+    display: flex;
+    flex-direction: column;
+}
+
 .auth-body .auth-shell {
-    padding-bottom: 88px;
+    flex: 1 0 auto;
+    min-height: 0;
 }
 
 .auth-credit {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 10;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 14px 32px;
-    border-top: 1px solid var(--border);
-    background: var(--surface);
+    justify-content: center;
+    gap: 10px;
+    padding: 8px 16px 20px;
     color: var(--muted);
-    font-size: 13px;
+    font-size: 12.5px;
 }
 
 .auth-credit-owner {
-    display: flex;
-    align-items: center;
-    gap: 10px;
     color: var(--text);
     font-weight: 600;
 }
 
 .auth-credit-mark {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 7px;
-    background: #111827;
-    color: #ffffff;
-    font-size: 13px;
-    font-weight: 650;
+    display: block;
+    width: 36px;
+    height: 36px;
 }
+
 
 .password-field {
     position: relative;
@@ -1870,14 +1862,11 @@ select.form-control {
     }
 
     .auth-credit {
-        flex-direction: column;
-        gap: 6px;
-        padding: 10px 16px;
-        font-size: 12px;
+        padding: 4px 16px 16px;
     }
 
-    .auth-body .auth-shell {
-        padding-bottom: 100px;
+    .auth-credit-copy {
+        text-align: center;
     }
 }
 
