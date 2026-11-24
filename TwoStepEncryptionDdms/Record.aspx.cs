@@ -1,19 +1,19 @@
 ﻿using System;
-using TwoStepEncryptionDdms.Logging;
 using System.Data;
 using System.Linq;
 using System.Web.UI.WebControls;
 using TwoStepEncryptionDdms.Common;
+using TwoStepEncryptionDdms.Logging;
 using TwoStepEncryptionDdms.Security;
 using TwoStepEncryptionDdms.Services;
 
 namespace TwoStepEncryptionDdms
 {
-    public partial class TabloSchemaList : TwoStepEncryptionDdms.Security.BasePage
+    public partial class Record : TwoStepEncryptionDdms.Security.BasePage
     {
         readonly DatasetService datasets = new DatasetService();
 
-        static readonly string[] SortableColumns = { "TBLID", "TBLAD", "ISENCRYPT", "OLUSTURAN", "OLUSTURMATARIHI_SIRA", "GUNCELLEYEN", "GUNCELLEMETARIHI_SIRA" };
+        static readonly string[] SortableColumns = { "TBLID", "TBLAD", "ISENCRYPT", "OLUSTURAN", "OLUSTURMATARIHI_SIRA" };
 
         string SortColumn
         {
@@ -31,9 +31,9 @@ namespace TwoStepEncryptionDdms
         {
             try
             {
-                GridTbl.Columns[1].Visible = CurrentUser.Has(Permission.Delete);
-                lnkYeniVeriKumesi.Visible = CurrentUser.Has(Permission.New);
-                GridTbl.Columns[2].Visible = CurrentUser.Has(Permission.Edit);
+                GridTbl.Columns[2].Visible = CurrentUser.Has(Permission.New);
+                // Güncelleme ve silme kayıt sayfasında yapıldığı için bu yetkiler de kayıt sayfasını açabilir.
+                GridTbl.Columns[1].Visible = CurrentUser.Has(Permission.View) || CurrentUser.Has(Permission.Edit) || CurrentUser.Has(Permission.Delete);
             }
             catch (Exception ex)
             {
@@ -50,16 +50,7 @@ namespace TwoStepEncryptionDdms
         {
             try
             {
-                if (!this.IsPostBack)
-                {
-                    var successMsg = Session["SuccessToast"] as string;
-                    if (!string.IsNullOrWhiteSpace(successMsg))
-                    {
-                        ClsMessage.ShowSuccess(successMsg, this.Form);
-                        Session.Remove("SuccessToast");
-                    }
-                    this.BindGrid();
-                }
+                this.BindGrid();
             }
             catch (Exception ex)
             {
@@ -84,70 +75,6 @@ namespace TwoStepEncryptionDdms
             {
                 ClsMessage.ShowError("Kayıtlar listelenirken hata oluştu!", ex, this.Form);
             }
-        }
-
-        protected void GridTbl_RowDeleting(object sender, GridViewDeleteEventArgs e)
-        {
-            EnsurePermission(Permission.Delete);
-
-            try
-            {
-                datasets.DeleteDataset(GridTbl.DataKeys[e.RowIndex].Value.ToString());
-                AppLog.Audit("DatasetDeleted", GridTbl.DataKeys[e.RowIndex].Value.ToString());
-                BindGrid();
-
-                ClsMessage.ShowSuccess("Tablo Silindi", this.Form);
-            }
-            catch (UserException ux)
-            {
-                ClsMessage.ShowError(ux.Message, this.Form);
-            }
-            catch (Exception ex)
-            {
-                ClsMessage.ShowError("Tablo silinirken hata oluştu!", ex, this.Form);
-            }
-        }
-
-        protected void GridTbl_RowUpdating(object sender, GridViewUpdateEventArgs e)
-        {
-            EnsurePermission(Permission.Edit);
-
-            const string hataMesaji = "Tablo adı güncellenemedi. Ad geçersiz veya zaten kullanılıyor olabilir.";
-            try
-            {
-                string eskiTblAd = GridTbl.DataKeys[e.RowIndex].Value.ToString();
-                string yeniTableName = Convert.ToString(e.NewValues["TBLAD"]).Trim().Replace(' ', '_');
-
-                datasets.RenameDataset(eskiTblAd, yeniTableName, CurrentUser.Id, CurrentUser.FullName);
-
-                GridTbl.EditIndex = -1;
-                BindGrid();
-
-                ClsMessage.ShowSuccess("Tablo Adı Güncellendi", this.Form);
-            }
-            catch (UserException)
-            {
-                ClsMessage.ShowError(hataMesaji, this.Form);
-            }
-            catch (Exception ex)
-            {
-                GridTbl.EditIndex = -1;
-                ClsMessage.ShowError(hataMesaji, ex, this.Form);
-            }
-        }
-
-        protected void GridTbl_RowEditing(object sender, GridViewEditEventArgs e)
-        {
-            EnsurePermission(Permission.Edit);
-
-            GridTbl.EditIndex = e.NewEditIndex;
-            BindGrid();
-        }
-
-        protected void GridTbl_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
-        {
-            GridTbl.EditIndex = -1;
-            BindGrid();
         }
 
         protected void GridTbl_Sorting(object sender, GridViewSortEventArgs e)

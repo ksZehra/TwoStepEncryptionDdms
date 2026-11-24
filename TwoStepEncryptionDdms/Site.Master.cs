@@ -25,7 +25,7 @@ namespace TwoStepEncryptionDdms
             liTablolar.Visible = user.Has(Permission.List);
             liKayitlar.Visible = user.Has(Permission.List);
 
-            linkHesap.HRef = "Personel.aspx";
+            linkHesap.HRef = "Account.aspx";
 
             SetActiveNavigation();
         }
@@ -35,13 +35,11 @@ namespace TwoStepEncryptionDdms
         {
             string path = (Request.AppRelativeCurrentExecutionFilePath ?? string.Empty).ToLowerInvariant();
 
-            liAnasayfa.Attributes["class"] = IsPage(path, "anasayfa") ? "active" : "";
-            liTablolar.Attributes["class"] = IsPage(path, "tabloschemalist") || IsPage(path, "tablonew") ? "active" : "";
+            liDashboard.Attributes["class"] = IsPage(path, "dashboard") ? "active" : "";
+            liTablolar.Attributes["class"] = IsPage(path, "tableschemalist") || IsPage(path, "tablenew") ? "active" : "";
             liKayitlar.Attributes["class"] =
-                IsPage(path, "tablodatalist") ||
-                IsPage(path, "dataview") ||
-                IsPage(path, "dataeditlist") ||
-                IsPage(path, "dataeditnew")
+                IsPage(path, "record") ||
+                IsPage(path, "dataview")
                     ? "active"
                     : "";
         }

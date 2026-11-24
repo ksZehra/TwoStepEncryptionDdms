@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Veri Kümeleri" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TabloSchemaList.aspx.cs" Inherits="TwoStepEncryptionDdms.TabloSchemaList" %>
+﻿<%@ Page Title="Veri Kümeleri" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TableSchemaList.aspx.cs" Inherits="TwoStepEncryptionDdms.TableSchemaList" %>
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
@@ -14,7 +14,7 @@
                 <asp:TextBox ID="txtAra" CssClass="form-control" runat="server" MaxLength="200" placeholder="Veri kümesi adı ara..."></asp:TextBox>
                 <asp:Button ID="btnAra" CssClass="btn btn-default" runat="server" Text="Ara" OnClick="btnAra_Click" />
             </div>
-            <a id="lnkYeniVeriKumesi" runat="server" class="btn btn-primary" href="TabloNew.aspx">
+            <a id="lnkYeniVeriKumesi" runat="server" class="btn btn-primary" href="TableNew.aspx">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
                     <line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 Yeni Veri Kümesi Oluştur
@@ -34,13 +34,13 @@
                 OnRowCancelingEdit="GridTbl_RowCancelingEdit" OnPageIndexChanging="GridTbl_PageIndexChanging" CssClass="data-table"
                 GridLines="None" EmptyDataText="Kayıt bulunamadı." PagerSettings-Position="Bottom" PagerStyle-CssClass="grid-pager">
                 <Columns>
-                    <asp:TemplateField HeaderText="ID" SortExpression="TBLID" ItemStyle-Width="6%" ItemStyle-Height="30px" HeaderStyle-Height="35px">
+                    <asp:TemplateField HeaderText="ID" SortExpression="TBLID" ItemStyle-CssClass="col-no" HeaderStyle-CssClass="col-no">
                         <ItemTemplate>
                             <asp:Label ID="lbTblId" runat="server" Text='<%# Eval("TBLID") %>'></asp:Label>
                         </ItemTemplate>
                     </asp:TemplateField>
-                    <asp:CommandField ShowDeleteButton="true" ButtonType="Link" ItemStyle-Width="8%" ItemStyle-CssClass="col-actions" HeaderStyle-CssClass="col-actions" HeaderText="Sil" DeleteText="Sil" Visible="false" ControlStyle-CssClass="action-link action-danger action-icon icon-delete" />
-                    <asp:CommandField ShowEditButton="true" ButtonType="Link" ItemStyle-Width="8%" ItemStyle-CssClass="col-actions" HeaderStyle-CssClass="col-actions" HeaderText="Düzenle" EditText="Düzenle" UpdateText="Kaydet" CancelText="Vazgeç" Visible="false" ControlStyle-CssClass="action-link action-icon icon-edit" />
+                    <asp:CommandField ShowDeleteButton="true" ButtonType="Link" ItemStyle-CssClass="col-actions" HeaderStyle-CssClass="col-actions" HeaderText="Kümeyi Sil" DeleteText="Veri kümesini ve tüm kayıtlarını sil" Visible="false" ControlStyle-CssClass="btn btn-xs btn-default action-icon icon-delete" />
+                    <asp:CommandField ShowEditButton="true" ButtonType="Link" ItemStyle-CssClass="col-actions" HeaderStyle-CssClass="col-actions" HeaderText="Yeniden Adlandır" EditText="Veri kümesinin adını değiştir" UpdateText="Kaydet" CancelText="Vazgeç" Visible="false" ControlStyle-CssClass="btn btn-xs btn-default action-icon icon-edit" />
                     <asp:BoundField DataField="TBLAD" HeaderText="Veri Kümesi" SortExpression="TBLAD"></asp:BoundField>
                     <asp:TemplateField HeaderText="Şifreli mi" SortExpression="ISENCRYPT" ItemStyle-Width="10%">
                         <ItemTemplate>

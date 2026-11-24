@@ -44,7 +44,7 @@
             <h1 class="auth-title">Beklenmeyen bir hata oluştu</h1>
             <p class="auth-subtitle">İsteğiniz işlenirken bir sorun çıktı. Birkaç dakika sonra tekrar deneyin; sorun sürerse sistem yöneticinize haber verin.</p>
             <div class="auth-actions">
-                <a class="btn btn-primary btn-block" href="<%= ResolveUrl("~/Anasayfa") %>">Ana sayfaya dön</a>
+                <a class="btn btn-primary btn-block" href="<%= ResolveUrl("~/Dashboard") %>">Ana sayfaya dön</a>
             </div>
         </div>
     </div>

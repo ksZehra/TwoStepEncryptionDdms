@@ -11,79 +11,106 @@ namespace TwoStepEncryptionDdms
 {
 
 
-    public partial class DataEditList
+    public partial class TableNew
     {
 
         /// <summary>
-        /// spnDataset control.
+        /// txtTabloAdi control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl spnDataset;
+        protected global::System.Web.UI.WebControls.TextBox txtTabloAdi;
 
         /// <summary>
-        /// divKey control.
+        /// txtKey control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divKey;
+        protected global::System.Web.UI.WebControls.TextBox txtKey;
 
         /// <summary>
-        /// tbKey control.
+        /// txtKeyTekrar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox tbKey;
+        protected global::System.Web.UI.WebControls.TextBox txtKeyTekrar;
 
         /// <summary>
-        /// btnKey control.
+        /// lblKolonAdi control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnKey;
+        protected global::System.Web.UI.WebControls.Label lblKolonAdi;
 
         /// <summary>
-        /// divAlert control.
+        /// txtKolonAdi control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divAlert;
+        protected global::System.Web.UI.WebControls.TextBox txtKolonAdi;
 
         /// <summary>
-        /// divContainer control.
+        /// cbSifrele control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divContainer;
+        protected global::System.Web.UI.WebControls.CheckBox cbSifrele;
 
         /// <summary>
-        /// tabloBaslik control.
+        /// btnEkle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl tabloBaslik;
+        protected global::System.Web.UI.WebControls.Button btnEkle;
 
         /// <summary>
-        /// ltList control.
+        /// listVwTblOlustur control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ltList;
+        protected global::System.Web.UI.WebControls.ListView listVwTblOlustur;
+
+        /// <summary>
+        /// divButtons control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divButtons;
+
+        /// <summary>
+        /// btnTblOlustur control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnTblOlustur;
+
+        /// <summary>
+        /// btnTemizle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnTemizle;
     }
 }

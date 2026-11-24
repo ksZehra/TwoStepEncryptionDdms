@@ -1,12 +1,16 @@
-﻿<%@ Page Title="Listelenen Tablo" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="DataView.aspx.cs" Inherits="TwoStepEncryptionDdms.DataView" %>
+﻿<%@ Page Title="Kayıtlar" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="DataView.aspx.cs" Inherits="TwoStepEncryptionDdms.DataView" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="cphButon" runat="server">
     <div class="page-heading">
         <div>
-            <h1 class="page-title"><span runat="server" id="spnDataset"></span>Kayıt Görüntüle</h1>
-            <p class="page-subtitle">Veri kümesi kayıtlarını görüntüleyin.</p>
+            <h1 class="page-title" runat="server" id="pageTitle">Kayıtlar</h1>
+            <p class="page-subtitle">Veri kümesindeki kayıtları görüntüleyin, ekleyin ve güncelleyin.</p>
+        </div>
+        <div class="page-actions">
+            <a class="btn btn-default" href="Record.aspx">Veri Kümesi Listesine Dön</a>
+            <button type="button" class="btn btn-primary" id="btnNewRecord" runat="server" clientidmode="Static" visible="false">Yeni Kayıt</button>
         </div>
     </div>
 </asp:Content>
@@ -20,26 +24,35 @@
         </div>
         <div class="key-card-body">
             <h2 class="key-card-title">Bu Veri Kümesi Şifreli</h2>
-            <p class="key-card-text">Kayıtları görüntülemek için 32 karakterlik anahtarı girin.</p>
+            <p class="key-card-text">Kayıtlarla çalışmak için 32 karakterlik anahtarı girin. Güvenliğiniz için anahtar sayfa her açıldığında yeniden istenir.</p>
             <div class="key-form">
-                <asp:TextBox class="form-control" ID="tbKey" TextMode="Password" MaxLength="32" placeholder="32 karakterlik anahtar" runat="server" ClientIDMode="Static" autocomplete="new-password"></asp:TextBox>
-                <button type="button" id="btnShowKey" class="btn btn-default">Göster</button>
+                <asp:TextBox class="form-control" ID="tbKey" TextMode="Password" MaxLength="32" placeholder="32 karakterlik anahtar" runat="server" ClientIDMode="Static" autocomplete="new-password" data-reveal="true"></asp:TextBox>
                 <asp:Button ID="btnKey" CssClass="btn btn-primary" runat="server" Text="Kontrol Et" OnClick="btnKey_Click" ClientIDMode="Static" />
             </div>
             <div class="key-status">
                 <span class="badge badge-success">Anahtar doğrulandı</span>
-                <span>Şifreli alanlar bu oturumda çözülebilir.</span>
+                <span>Bu sayfada kayıtları görüntüleyebilir, ekleyebilir ve güncelleyebilirsiniz.</span>
             </div>
         </div>
     </div>
 
-    <div class="notice notice-info" runat="server" id="divAlert" visible="false">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="9"></circle>
-            <path d="M12 11v5"></path>
-            <path d="M12 8h.01"></path>
-        </svg>
-        <div>Mavi renkli alanlar şifrelenerek kaydedilmiştir.</div>
+    <asp:HiddenField runat="server" ID="hfFormMode" ClientIDMode="Static" />
+    <asp:HiddenField runat="server" ID="hfRecordId" ClientIDMode="Static" />
+    <asp:HiddenField runat="server" ID="hfSaveData" ClientIDMode="Static" />
+
+    <div class="card record-form" id="divForm" runat="server" clientidmode="Static" visible="false">
+        <div class="card-header">
+            <h2 class="card-title" id="formTitle">Yeni kayıt</h2>
+            <span class="card-note">Şifreli alanlar mavi olarak işaretlenir</span>
+        </div>
+        <div class="card-body">
+            <asp:Literal runat="server" ID="ltFields"></asp:Literal>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-default" id="btnFormCancel">Vazgeç</button>
+                <asp:Button ID="btnSave" CssClass="btn btn-primary" runat="server" Text="Ekle" OnClick="btnSave_Click" ClientIDMode="Static" />
+            </div>
+        </div>
     </div>
 
     <div class="card" id="divContainer" runat="server" visible="false">
@@ -67,15 +80,12 @@
 
             <div class="table-toolbar">
                 <label for="maxRows" class="table-toolbar-label">Kayıt sayısı</label>
-                <select class="form-control input-sm" name="state" id="maxRows">
+                <select class="form-control input-sm" id="maxRows">
                     <option value="5000">Tüm Kayıtları Gör</option>
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="20">20</option>
-                    <option value="30">30</option>
-                    <option value="40">40</option>
                     <option value="50">50</option>
-                    <option value="70">70</option>
                     <option value="100">100</option>
                 </select>
             </div>
@@ -84,16 +94,13 @@
                 <asp:Literal ID="ltList" runat="server"></asp:Literal>
             </div>
 
-            <!--		Start Pagination -->
             <div class="pagination-container">
                 <nav>
                     <ul class="pagination">
-
                         <li data-page="prev">
                             <span aria-hidden="true">‹</span>
                             <span class="sr-only">Önceki sayfa</span>
                         </li>
-                        <!--	Here the JS Function Will Add the Rows -->
                         <li data-page="next" id="prev">
                             <span aria-hidden="true">›</span>
                             <span class="sr-only">Sonraki sayfa</span>
@@ -106,175 +113,159 @@
 
     <script src="Scripts/table-sort.js"></script>
     <script type="text/javascript">
-
 $(function () {
-
-    $('#btnShowKey').click(function () {
-        var field = $('#tbKey');
-        var show = field.attr('type') === 'password';
-        field.attr('type', show ? 'text' : 'password');
-        $(this).text(show ? 'Gizle' : 'Göster');
-    });
-
     $('#btnKey').click(function () {
-        if (document.getElementById("tbKey").value == "") {
-            iqwerty.toast.toast("Görüntülemek istediğiniz tablonun içerisinde şifrelenmesini istediğiniz alanlar olduğu için 'anahtar' bilgisi boş bırakılamaz!", { type: 'warning' });
-            return false
+        if (document.getElementById('tbKey').value == '') {
+            iqwerty.toast.toast('Anahtar bilgisi boş bırakılamaz.', { type: 'warning' });
+            return false;
         }
     });
+
+    var form = $('#divForm');
+    var inputs = form.find('.record-input');
+
+    function openForm(mode, row) {
+        $('#hfFormMode').val(mode);
+        $('#hfRecordId').val(row ? row.data('id') : '');
+        $('#formTitle').text(mode === 'edit' ? 'Kayıt #' + row.data('id') + ' güncelle' : 'Yeni kayıt');
+        $('#btnSave').val(mode === 'edit' ? 'Güncelle' : 'Ekle');
+        $('.data-table tr.is-editing').removeClass('is-editing');
+
+        inputs.each(function () {
+            var cell = row ? row.find('td[data-col="' + $(this).data('col') + '"]') : null;
+            $(this).val(cell && cell.length ? cell.text() : '');
+        });
+
+        if (row) {
+            row.addClass('is-editing');
+        }
+        form.show();
+        inputs.first().focus();
+        form[0].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+
+    function closeForm() {
+        $('#hfFormMode').val('');
+        $('#hfRecordId').val('');
+        $('.data-table tr.is-editing').removeClass('is-editing');
+        form.hide();
+    }
+
+    $('#btnNewRecord').click(function () { openForm('new'); });
+    $('#btnFormCancel').click(closeForm);
+    $(document).on('click', '.js-edit', function () { openForm('edit', $(this).closest('tr')); });
+
+    $('#btnSave').click(function () {
+        var saveVal = '';
+        inputs.each(function () {
+            saveVal += encodeURIComponent($(this).data('col')) + '#' + encodeURIComponent($(this).val()) + '|';
+        });
+        $('#hfSaveData').val(saveVal);
+    });
+
+    var encoder = new TextEncoder();
+    inputs.filter('[data-maxbytes]').on('input', function () {
+        var max = parseInt($(this).attr('data-maxbytes'), 10);
+        var chars = Array.from(this.value);
+        while (chars.length && encoder.encode(chars.join('')).length > max) {
+            chars.pop();
+        }
+        var trimmed = chars.join('');
+        if (trimmed !== this.value) {
+            this.value = trimmed;
+        }
+    });
+
+    // Postback sonrası form durumu korunur; hata alınırsa kullanıcının girdiği değerler kaybolmaz.
+    var mode = $('#hfFormMode').val();
+    if (mode) {
+        var row = mode === 'edit' ? $('.data-table tr[data-id="' + $('#hfRecordId').val() + '"]') : null;
+        openForm(mode, row && row.length ? row : null);
+        $.each(($('#hfSaveData').val() || '').split('|'), function (i, pair) {
+            var parts = pair.split('#');
+            if (parts.length === 2) {
+                inputs.filter(function () { return $(this).data('col') === decodeURIComponent(parts[0]); }).val(decodeURIComponent(parts[1]));
+            }
+        });
+    } else {
+        form.hide();
+    }
+    $('#hfSaveData').val('');
 });
 
 getPagination('#table-id');
 makeSortable('#table-id', function () { $('#maxRows').change(); });
-//getPagination('.table-class');
-//getPagination('table');
-
-/*					PAGINATION 
-- on change max rows select options fade out all rows gt option value mx = 5
-- append pagination list as per numbers of rows / max rows option (20row/5= 4pages )
-- each pagination li on click -> fade out all tr gt max rows * li num and (5*pagenum 2 = 10 rows)
-- fade out all tr lt max rows * li num - max rows ((5*pagenum 2 = 10) - 5)
-- fade in all tr between (maxRows*PageNum) and (maxRows*pageNum)- MaxRows 
-*/
-
 
 function getPagination(table) {
     var lastPage = 1;
     $(table).addClass('is-paginated');
 
-    $('#maxRows')
-        .on('change', function (evt) {
-            //$('.paginationprev').html('');						// reset pagination
+    $('#maxRows').on('change', function () {
+        lastPage = 1;
+        $('.pagination').find('li').slice(1, -1).remove();
 
-            lastPage = 1;
-            $('.pagination')
-                .find('li')
-                .slice(1, -1)
-                .remove();
-            var trnum = 0; // reset tr counter
-            var maxRows = parseInt($(this).val()); // get Max Rows from select option
-            var totalRows = $(table + ' tbody tr').length; // numbers of rows
+        var maxRows = parseInt($(this).val());
+        var totalRows = $(table + ' tbody tr').length;
+        $('.pagination-container').toggle(!(maxRows == 5000 || totalRows === 0 || totalRows <= maxRows));
 
-            if (maxRows == 5000 || totalRows === 0 || totalRows <= maxRows) {
-                $('.pagination-container').hide();
-            } else {
-                $('.pagination-container').show();
+        var trnum = 0;
+        $(table + ' tr:gt(0)').each(function () {
+            trnum++;
+            $(this).toggle(trnum <= maxRows);
+        });
+
+        if (totalRows > maxRows) {
+            var pagenum = Math.ceil(totalRows / maxRows);
+            for (var i = 1; i <= pagenum; i++) {
+                $('.pagination #prev').before('<li data-page="' + i + '"><span>' + i + '<span class="sr-only">(current)</span></span></li>').show();
+            }
+        }
+        $('.pagination [data-page="1"]').addClass('active');
+
+        $('.pagination li').on('click', function (evt) {
+            evt.stopImmediatePropagation();
+            evt.preventDefault();
+            var pageNum = $(this).attr('data-page');
+            var maxRows = parseInt($('#maxRows').val());
+
+            if (pageNum == 'prev') {
+                if (lastPage == 1) return;
+                pageNum = --lastPage;
+            }
+            if (pageNum == 'next') {
+                if (lastPage == $('.pagination li').length - 2) return;
+                pageNum = ++lastPage;
             }
 
-            $(table + ' tr:gt(0)').each(function () {
-                // each TR in  table and not the header
-                trnum++; // Start Counter
-                if (trnum > maxRows) {
-                    // if tr number gt maxRows
-
-                    $(this).hide(); // fade it out
-                }
-                if (trnum <= maxRows) {
-                    $(this).show();
-                } // else fade in Important in case if it ..
-            }); //  was fade out to fade it in
-            if (totalRows > maxRows) {
-                // if tr total rows gt max rows option
-                var pagenum = Math.ceil(totalRows / maxRows); // ceil total(rows/maxrows) to get ..
-                //	numbers of pages
-                for (var i = 1; i <= pagenum;) {
-                    // for each page append pagination li
-                    $('.pagination #prev')
-                        .before(
-                            '<li data-page="' +
-                            i +
-                            '">\
-								  <span>' +
-                            i++ +
-                            '<span class="sr-only">(current)</span></span>\
-								</li>'
-                        )
-                        .show();
-                } // end for i
-            } // end if row count > max rows
-            $('.pagination [data-page="1"]').addClass('active'); // add active class to the first li
-            $('.pagination li').on('click', function (evt) {
-                // on click each page
-                evt.stopImmediatePropagation();
-                evt.preventDefault();
-                var pageNum = $(this).attr('data-page'); // get it's number
-
-                var maxRows = parseInt($('#maxRows').val()); // get Max Rows from select option
-
-                if (pageNum == 'prev') {
-                    if (lastPage == 1) {
-                        return;
-                    }
-                    pageNum = --lastPage;
-                }
-                if (pageNum == 'next') {
-                    if (lastPage == $('.pagination li').length - 2) {
-                        return;
-                    }
-                    pageNum = ++lastPage;
-                }
-
-                lastPage = pageNum;
-                var trIndex = 0; // reset tr counter
-                $('.pagination li').removeClass('active'); // remove active class from all li
-                $('.pagination [data-page="' + lastPage + '"]').addClass('active'); // add active class to the clicked
-                // $(this).addClass('active');					// add active class to the clicked
-                limitPagging();
-                $(table + ' tr:gt(0)').each(function () {
-                    // each tr in table not the header
-                    trIndex++; // tr index counter
-                    // if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out
-                    if (
-                        trIndex > maxRows * pageNum ||
-                        trIndex <= maxRows * pageNum - maxRows
-                    ) {
-                        $(this).hide();
-                    } else {
-                        $(this).show();
-                    } //else fade in
-                }); // end of for each tr in table
-            }); // end of on click pagination list
+            lastPage = pageNum;
+            $('.pagination li').removeClass('active');
+            $('.pagination [data-page="' + lastPage + '"]').addClass('active');
             limitPagging();
-        })
-        .val(10)
-        .change();
 
-    // end of on select change
-
-    // END OF PAGINATION
+            var trIndex = 0;
+            $(table + ' tr:gt(0)').each(function () {
+                trIndex++;
+                $(this).toggle(!(trIndex > maxRows * pageNum || trIndex <= maxRows * pageNum - maxRows));
+            });
+        });
+        limitPagging();
+    }).val(10).change();
 }
 
 function limitPagging() {
-    // alert($('.pagination li').length)
+    if ($('.pagination li').length <= 7) return;
 
-    if ($('.pagination li').length > 7) {
-        if ($('.pagination li.active').attr('data-page') <= 3) {
-            $('.pagination li:gt(10)').hide();
-            $('.pagination li:lt(10)').show();
-            $('.pagination [data-page="next"]').show();
-        } if ($('.pagination li.active').attr('data-page') > 3) {
-            $('.pagination li:gt(0)').hide();
-            $('.pagination [data-page="next"]').show();
-            for (let i = (parseInt($('.pagination li.active').attr('data-page')) - 2); i <= (parseInt($('.pagination li.active').attr('data-page')) + 2); i++) {
-                $('.pagination [data-page="' + i + '"]').show();
-
-            }
-
+    var active = parseInt($('.pagination li.active').attr('data-page'));
+    if (active <= 3) {
+        $('.pagination li:gt(10)').hide();
+        $('.pagination li:lt(10)').show();
+    } else {
+        $('.pagination li:gt(0)').hide();
+        for (var i = active - 2; i <= active + 2; i++) {
+            $('.pagination [data-page="' + i + '"]').show();
         }
     }
+    $('.pagination [data-page="next"]').show();
 }
-
-//Tablonun en başındaki sutüna ID ekler ve tüm sütunların birer artmasını sağlar
-$(function () {
-    // Just to append id number for each row
-    $('table tr:eq(0)').prepend('<th>No</th>');
-
-    var id = 0;
-
-    $('table tr:gt(0):not(.empty-row)').each(function () {
-        id++;
-        $(this).prepend('<td>' + id + '</td>');
-    });
-});
 </script>
 </asp:Content>

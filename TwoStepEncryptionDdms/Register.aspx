@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Register.aspx.cs" Inherits="TwoStepEncryptionDdms.Register" %>
+
 <%@ Register Src="~/Controls/CreditFooter.ascx" TagPrefix="uc" TagName="CreditFooter" %>
 
 <!DOCTYPE html>
@@ -12,6 +13,7 @@
     <link href="Content/bootstrap.min.css" rel="stylesheet" />
     <asp:PlaceHolder runat="server">
         <link href="<%= TwoStepEncryptionDdms.Common.AssetVersion.Url("~/Content/Site.css") %>" rel="stylesheet" />
+        <script src="<%= TwoStepEncryptionDdms.Common.AssetVersion.Url("~/Scripts/secret-toggle.js") %>"></script>
     </asp:PlaceHolder>
 
     <script src="Scripts/jquery-3.3.1.min.js"></script>
@@ -29,7 +31,7 @@
             </span>
             <div>
                 <div class="auth-brand-name">Şifreli Dinamik Veri Kayıt Sistemi</div>
-                <div class="auth-brand-note">İki adımlı şifreleme</div>
+                <div class="auth-brand-note">İki Adımlı Şifreleme</div>
             </div>
         </div>
 
@@ -59,17 +61,11 @@
                     </div>
                     <div class="form-group">
                         <asp:Label ID="lblSifre" runat="server" Text="Şifre" AssociatedControlID="txtSifre"></asp:Label>
-                        <div class="password-field">
-                            <asp:TextBox ID="txtSifre" runat="server" TextMode="Password" MaxLength="128" MinLength="8" CssClass="form-control" ClientIDMode="Static" placeholder="Şifreniz"></asp:TextBox>
-                            <button type="button" class="password-toggle" data-target="txtSifre" aria-label="Şifreyi göster">Göster</button>
-                        </div>
+                        <asp:TextBox ID="txtSifre" runat="server" TextMode="Password" data-reveal="true" MaxLength="128" MinLength="8" CssClass="form-control" ClientIDMode="Static" placeholder="Şifreniz"></asp:TextBox>
                     </div>
                     <div class="form-group">
                         <asp:Label ID="lblTekrarSifre" runat="server" Text="Tekrar Şifre" AssociatedControlID="txtTekrarSifre"></asp:Label>
-                        <div class="password-field">
-                            <asp:TextBox ID="txtTekrarSifre" runat="server" TextMode="Password" MaxLength="128" MinLength="8" CssClass="form-control" ClientIDMode="Static" placeholder="Şifrenizi tekrar girin"></asp:TextBox>
-                            <button type="button" class="password-toggle" data-target="txtTekrarSifre" aria-label="Şifreyi göster">Göster</button>
-                        </div>
+                        <asp:TextBox ID="txtTekrarSifre" runat="server" TextMode="Password" data-reveal="true" MaxLength="128" MinLength="8" CssClass="form-control" ClientIDMode="Static" placeholder="Şifrenizi tekrar girin"></asp:TextBox>
                     </div>
                 </div>
 
@@ -93,36 +89,27 @@
     <uc:CreditFooter runat="server" />
 
     <script type="text/javascript">
-        $('#btnKayitOl').click(function (event) {
-            var ad = $("#txtAd").val();
-            var soyad = $("#txtSoyad").val();
-            var email = $("#txtEmail").val();
-            var KULLANICIADI = $("#txtKullaniciAdi").val();
-            var sifre1 = $("#txtSifre").val();
-            var sifre2 = $("#txtTekrarSifre").val();
+$('#btnKayitOl').click(function (event) {
+    var ad = $("#txtAd").val();
+    var soyad = $("#txtSoyad").val();
+    var email = $("#txtEmail").val();
+    var KULLANICIADI = $("#txtKullaniciAdi").val();
+    var sifre1 = $("#txtSifre").val();
+    var sifre2 = $("#txtTekrarSifre").val();
 
-            if (ad == '' || soyad == '' || email == '' || KULLANICIADI == '' || sifre1 == '' || sifre2 == '') {
-                iqwerty.toast.toast("Bütün alanların doldurulması zorunludur!", { type: 'warning' });
-                return false
-            }
-            else if (sifre1 != sifre2) {
-                iqwerty.toast.toast("Lütfen şifre alanlarının aynı girildiğinden emin olunuz!", { type: 'warning' });
-                return false
-            }
-            else if (sifre1.length < 8 || sifre1.length > 128) {
-                iqwerty.toast.toast("Şifreniz en az 8, en fazla 128 karakterden oluşabilir!", { type: 'warning' });
-                return false
-            }
-        });
-
-        $('.password-toggle').on('click', function () {
-            var targetId = $(this).data('target');
-            var $input = $('#' + targetId);
-            var show = $input.attr('type') === 'password';
-
-            $input.attr('type', show ? 'text' : 'password');
-            $(this).text(show ? 'Gizle' : 'Göster');
-        });
-    </script>
+    if (ad == '' || soyad == '' || email == '' || KULLANICIADI == '' || sifre1 == '' || sifre2 == '') {
+        iqwerty.toast.toast("Bütün alanların doldurulması zorunludur!", { type: 'warning' });
+        return false
+    }
+    else if (sifre1 != sifre2) {
+        iqwerty.toast.toast("Lütfen şifre alanlarının aynı girildiğinden emin olunuz!", { type: 'warning' });
+        return false
+    }
+    else if (sifre1.length < 8 || sifre1.length > 128) {
+        iqwerty.toast.toast("Şifreniz en az 8, en fazla 128 karakterden oluşabilir!", { type: 'warning' });
+        return false
+    }
+});
+</script>
 </body>
 </html>

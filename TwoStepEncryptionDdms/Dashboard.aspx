@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Ana Sayfa" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Anasayfa.aspx.cs" Inherits="TwoStepEncryptionDdms.Anasayfa" %>
+﻿<%@ Page Title="Ana Sayfa" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="TwoStepEncryptionDdms.Dashboard" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -9,8 +9,8 @@
             <p class="page-subtitle">Sistemdeki veri kümeleri ve iki adımlı şifreleme özeti.</p>
         </div>
         <div class="page-actions">
-            <a class="btn btn-default <%= CanList ? "" : "hidden" %>" href="TabloSchemaList.aspx">Veri Kümeleri</a>
-            <a class="btn btn-primary <%= CanCreate ? "" : "hidden" %>" href="TabloNew.aspx">
+            <a class="btn btn-default <%= CanList ? "" : "hidden" %>" href="TableSchemaList.aspx">Veri Kümeleri</a>
+            <a class="btn btn-primary <%= CanCreate ? "" : "hidden" %>" href="TableNew.aspx">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
                     <line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 Yeni Veri Kümesi Oluştur
@@ -132,28 +132,28 @@
             <div class="card-body">
                 <ul class="quick-list">
                     <li class="<%= CanCreate ? "" : "hidden" %>">
-                        <a href="TabloNew.aspx">Yeni veri kümesi oluştur
+                        <a href="TableNew.aspx">Yeni veri kümesi oluştur
                            
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <path d="m9 18 6-6-6-6"></path></svg>
                         </a>
                     </li>
                     <li class="<%= CanList ? "" : "hidden" %>">
-                        <a href="TabloSchemaList.aspx">Veri kümelerini yönet
+                        <a href="TableSchemaList.aspx">Veri kümelerini yönet
                            
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <path d="m9 18 6-6-6-6"></path></svg>
                         </a>
                     </li>
                     <li class="<%= CanList ? "" : "hidden" %>">
-                        <a href="TabloDataList.aspx">Kayıtları görüntüle
+                        <a href="Record.aspx">Kayıtları görüntüle
                            
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <path d="m9 18 6-6-6-6"></path></svg>
                         </a>
                     </li>
                     <li>
-                        <a href="Personel.aspx">Hesap bilgilerim
+                        <a href="Account.aspx">Hesap bilgilerim
                            
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <path d="m9 18 6-6-6-6"></path></svg>

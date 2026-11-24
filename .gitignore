@@ -276,3 +276,5 @@ App_Data/logs/
 
 # ASP.NET runtime compilation temp (Smart App Control / WDAC workaround)
 aspnet-temp/
+
+CLAUDE.local.md

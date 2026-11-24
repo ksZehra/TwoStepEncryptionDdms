@@ -44,7 +44,7 @@
             <h1 class="auth-title">Sayfa bulunamadı</h1>
             <p class="auth-subtitle">Aradığınız sayfa taşınmış, silinmiş ya da hiç var olmamış olabilir. Adresi kontrol edip tekrar deneyin.</p>
             <div class="auth-actions">
-                <a class="btn btn-primary btn-block" href="<%= ResolveUrl("~/Anasayfa") %>">Ana sayfaya dön</a>
+                <a class="btn btn-primary btn-block" href="<%= ResolveUrl("~/Dashboard") %>">Ana sayfaya dön</a>
             </div>
         </div>
     </div>

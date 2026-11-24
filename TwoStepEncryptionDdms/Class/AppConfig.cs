@@ -48,6 +48,11 @@ namespace TwoStepEncryptionDdms
             get { return Get("SEQ_URL") ?? ""; }
         }
 
+        public static string AppVersion
+        {
+            get { return Get("APP_VERSION") ?? ""; }
+        }
+
 
         public static string SqlAuth
         {

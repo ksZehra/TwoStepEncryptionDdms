@@ -124,7 +124,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Anasayfa.aspx" />
+    <Content Include="Dashboard.aspx" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -142,14 +142,13 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
-    <Content Include="DataEditNew.aspx" />
-    <Content Include="DataEditList.aspx" />
     <Content Include="DataView.aspx" />
     <Content Include="Controls\CreditFooter.ascx" />
     <Content Include="Errors\NotFound.aspx" />
+    <Content Include="Scripts\secret-toggle.js" />
     <Content Include="Errors\ServerError.aspx" />
     <Content Include="Login.aspx" />
-    <Content Include="Personel.aspx" />
+    <Content Include="Account.aspx" />
     <Content Include="Register.aspx" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -180,9 +179,9 @@
     <Content Include="Scripts\WebForms\WebForms.js" />
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
-    <Content Include="TabloDataList.aspx" />
-    <Content Include="TabloSchemaList.aspx" />
-    <Content Include="TabloNew.aspx" />
+    <Content Include="Record.aspx" />
+    <Content Include="TableSchemaList.aspx" />
+    <Content Include="TableNew.aspx" />
     <Content Include="Themes\js\twostep-toast.js" />
     <Content Include="Themes\js\twostep-toast.min.js" />
     <Content Include="Web.config">
@@ -192,12 +191,12 @@
     <Content Include="Site.Master" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Anasayfa.aspx.cs">
-      <DependentUpon>Anasayfa.aspx</DependentUpon>
+    <Compile Include="Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Anasayfa.aspx.designer.cs">
-      <DependentUpon>Anasayfa.aspx</DependentUpon>
+    <Compile Include="Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -231,20 +230,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="DataEditNew.aspx.cs">
-      <DependentUpon>DataEditNew.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="DataEditNew.aspx.designer.cs">
-      <DependentUpon>DataEditNew.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="DataEditList.aspx.cs">
-      <DependentUpon>DataEditList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="DataEditList.aspx.designer.cs">
-      <DependentUpon>DataEditList.aspx</DependentUpon>
-    </Compile>
     <Compile Include="DataView.aspx.cs">
       <DependentUpon>DataView.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -259,12 +244,12 @@
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Personel.aspx.cs">
-      <DependentUpon>Personel.aspx</DependentUpon>
+    <Compile Include="Account.aspx.cs">
+      <DependentUpon>Account.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Personel.aspx.designer.cs">
-      <DependentUpon>Personel.aspx</DependentUpon>
+    <Compile Include="Account.aspx.designer.cs">
+      <DependentUpon>Account.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Register.aspx.cs">
@@ -283,26 +268,26 @@
     <Compile Include="Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
-    <Compile Include="TabloDataList.aspx.cs">
-      <DependentUpon>TabloDataList.aspx</DependentUpon>
+    <Compile Include="Record.aspx.cs">
+      <DependentUpon>Record.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="TabloDataList.aspx.designer.cs">
-      <DependentUpon>TabloDataList.aspx</DependentUpon>
+    <Compile Include="Record.aspx.designer.cs">
+      <DependentUpon>Record.aspx</DependentUpon>
     </Compile>
-    <Compile Include="TabloSchemaList.aspx.cs">
-      <DependentUpon>TabloSchemaList.aspx</DependentUpon>
+    <Compile Include="TableSchemaList.aspx.cs">
+      <DependentUpon>TableSchemaList.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="TabloSchemaList.aspx.designer.cs">
-      <DependentUpon>TabloSchemaList.aspx</DependentUpon>
+    <Compile Include="TableSchemaList.aspx.designer.cs">
+      <DependentUpon>TableSchemaList.aspx</DependentUpon>
     </Compile>
-    <Compile Include="TabloNew.aspx.cs">
-      <DependentUpon>TabloNew.aspx</DependentUpon>
+    <Compile Include="TableNew.aspx.cs">
+      <DependentUpon>TableNew.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="TabloNew.aspx.designer.cs">
-      <DependentUpon>TabloNew.aspx</DependentUpon>
+    <Compile Include="TableNew.aspx.designer.cs">
+      <DependentUpon>TableNew.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

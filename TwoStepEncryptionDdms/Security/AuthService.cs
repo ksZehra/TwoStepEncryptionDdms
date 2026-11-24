@@ -116,6 +116,11 @@ namespace TwoStepEncryptionDdms.Security
                 Expires = DateTime.Now.AddYears(-1)
             };
             context.Response.Cookies.Set(expired);
+            context.Response.Cookies.Set(new HttpCookie("ASP.NET_SessionId", string.Empty)
+            {
+                HttpOnly = true,
+                Expires = DateTime.Now.AddYears(-1)
+            });
             context.Items.Remove(ItemsKey);
         }
 

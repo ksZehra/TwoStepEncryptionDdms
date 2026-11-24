@@ -86,5 +86,28 @@ namespace TwoStepEncryptionDdms.Security
         {
             return context.Session[SessionPrefix + tblAd] as string;
         }
+
+        public static void Forget(HttpContext context, string tblAd)
+        {
+            context.Session.Remove(SessionPrefix + tblAd);
+        }
+
+        public static void ForgetAll(HttpContext context)
+        {
+            if (context.Session == null)
+            {
+                return;
+            }
+
+            var keys = new System.Collections.Generic.List<string>();
+            foreach (string name in context.Session.Keys)
+            {
+                if (name.StartsWith(SessionPrefix, StringComparison.Ordinal))
+                {
+                    keys.Add(name);
+                }
+            }
+            keys.ForEach(context.Session.Remove);
+        }
     }
 }

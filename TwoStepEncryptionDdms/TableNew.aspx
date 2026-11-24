@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Tablo Oluştur" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TabloNew.aspx.cs" Inherits="TwoStepEncryptionDdms.TabloNew" %>
+﻿<%@ Page Title="Tablo Oluştur" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TableNew.aspx.cs" Inherits="TwoStepEncryptionDdms.TableNew" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -41,12 +41,12 @@
                 </div>
                 <div class="form-field">
                     <asp:Label runat="server" AssociatedControlID="txtKey" CssClass="field-label">Anahtar (Key)</asp:Label>
-                    <asp:TextBox class="form-control" ID="txtKey" MaxLength="32" placeholder="32 karakterlik anahtar" runat="server" ClientIDMode="Static" autocomplete="off"></asp:TextBox>
+                    <asp:TextBox class="form-control" ID="txtKey" MaxLength="32" data-reveal="true" placeholder="32 karakterlik anahtar" runat="server" ClientIDMode="Static" autocomplete="off"></asp:TextBox>
                     <span class="field-hint">Yalnızca şifrelenecek sütun varsa kullanılır.</span>
                 </div>
                 <div class="form-field">
                     <asp:Label runat="server" AssociatedControlID="txtKeyTekrar" CssClass="field-label">Anahtar (Tekrar)</asp:Label>
-                    <asp:TextBox class="form-control" ID="txtKeyTekrar" MaxLength="32" placeholder="Anahtarı tekrar girin" runat="server" ClientIDMode="Static" autocomplete="off"></asp:TextBox>
+                    <asp:TextBox class="form-control" ID="txtKeyTekrar" MaxLength="32" data-reveal="true" placeholder="Anahtarı tekrar girin" runat="server" ClientIDMode="Static" autocomplete="off"></asp:TextBox>
                     <span class="field-hint">Anahtarı kaybederseniz şifreli verilere erişilemez; güvenli bir yerde saklayın.</span>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Hesabım" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Personel.aspx.cs" Inherits="TwoStepEncryptionDdms.Personel" %>
+﻿<%@ Page Title="Hesabım" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Account.aspx.cs" Inherits="TwoStepEncryptionDdms.Account" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -53,7 +53,7 @@
                     </div>
                     <div class="detail-row">
                         <dt>Durum</dt>
-                        <dd><span class="badge badge-plain"><asp:Label ID="lbDurum" runat="server" Text=""></asp:Label></span></dd>
+                        <dd><asp:Label ID="lbDurum" runat="server" CssClass="badge badge-plain"></asp:Label></dd>
                     </div>
                     <div class="detail-row">
                         <dt>Yetkiler</dt>
@@ -90,15 +90,15 @@
 
                     <div class="form-group">
                         <asp:Label ID="Label1" runat="server" Text="Mevcut şifreniz" AssociatedControlID="txtMevcutSifre"></asp:Label>
-                        <asp:TextBox ID="txtMevcutSifre" runat="server" TextMode="Password" ClientIDMode="Static" MinLength="1" MaxLength="128" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtMevcutSifre" runat="server" TextMode="Password" ClientIDMode="Static" MinLength="1" MaxLength="128" data-reveal="true" CssClass="form-control"></asp:TextBox>
                     </div>
                     <div class="form-group">
                         <asp:Label ID="Label2" runat="server" Text="Yeni şifre" AssociatedControlID="txtYeniSifre"></asp:Label>
-                        <asp:TextBox ID="txtYeniSifre" runat="server" TextMode="Password" ClientIDMode="Static" MinLength="8" MaxLength="128" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtYeniSifre" runat="server" TextMode="Password" ClientIDMode="Static" MinLength="8" MaxLength="128" data-reveal="true" CssClass="form-control"></asp:TextBox>
                     </div>
                     <div class="form-group mb-0">
                         <asp:Label ID="lblEmail" runat="server" Text="Yeni şifre tekrar" AssociatedControlID="txtYeniSifreTekrar"></asp:Label>
-                        <asp:TextBox ID="txtYeniSifreTekrar" TextMode="Password" runat="server" ClientIDMode="Static" MinLength="8" MaxLength="128" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtYeniSifreTekrar" TextMode="Password" runat="server" ClientIDMode="Static" MinLength="8" MaxLength="128" data-reveal="true" CssClass="form-control"></asp:TextBox>
                     </div>
                 </div>
                 <div class="modal-footer">

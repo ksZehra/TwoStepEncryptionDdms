@@ -11,7 +11,7 @@ namespace TwoStepEncryptionDdms
 {
 
 
-    public partial class Personel
+    public partial class Account
     {
 
         /// <summary>

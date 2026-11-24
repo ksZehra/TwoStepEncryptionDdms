@@ -11,7 +11,7 @@ namespace TwoStepEncryptionDdms
 {
 
 
-    public partial class TabloDataList
+    public partial class TableSchemaList
     {
 
         /// <summary>
@@ -31,6 +31,15 @@ namespace TwoStepEncryptionDdms
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAra;
+
+        /// <summary>
+        /// lnkYeniVeriKumesi control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor lnkYeniVeriKumesi;
 
         /// <summary>
         /// GridTbl control.

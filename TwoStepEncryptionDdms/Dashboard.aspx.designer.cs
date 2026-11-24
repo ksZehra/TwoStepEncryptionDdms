@@ -11,7 +11,7 @@ namespace TwoStepEncryptionDdms
 {
 
 
-    public partial class Anasayfa
+    public partial class Dashboard
     {
     }
 }

@@ -18,7 +18,7 @@ namespace TwoStepEncryptionDdms
         {
             if (!IsPostBack && User.Identity.IsAuthenticated && AuthService.GetCurrentUser(Context) != null)
             {
-                Response.Redirect("Anasayfa.aspx");
+                Response.Redirect("Dashboard.aspx");
             }
 
             if (!IsPostBack)
@@ -86,7 +86,7 @@ namespace TwoStepEncryptionDdms
 
             if (loginAccess)
             {
-                Response.Redirect("Anasayfa.aspx");
+                Response.Redirect("Dashboard.aspx");
             }
         }
 

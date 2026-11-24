@@ -8,7 +8,7 @@ using TwoStepEncryptionDdms.Services;
 
 namespace TwoStepEncryptionDdms
 {
-    public partial class Personel : TwoStepEncryptionDdms.Security.BasePage
+    public partial class Account : TwoStepEncryptionDdms.Security.BasePage
     {
         readonly AccountService accounts = new AccountService();
 
@@ -25,7 +25,9 @@ namespace TwoStepEncryptionDdms
                     lbSoyad.Text = HttpUtility.HtmlEncode(Convert.ToString(item["KSOYAD"]));
                     lbEposta.Text = HttpUtility.HtmlEncode(Convert.ToString(item["KEMAIL"]));
                     lbUserName.Text = HttpUtility.HtmlEncode(Convert.ToString(item["KULLANICIADI"]));
-                    lbDurum.Text = Convert.ToString(item["KDURUM"]) == "1" ? "Aktif" : "Pasif";
+                    bool aktif = Convert.ToString(item["KDURUM"]) == "1";
+                    lbDurum.Text = aktif ? "Aktif" : "Pasif";
+                    lbDurum.CssClass = aktif ? "badge badge-success" : "badge badge-danger";
                     lbProfil.Text = HttpUtility.HtmlEncode(Convert.ToString(item["PROFILADI"]));
                     lbYetki.Text = Convert.ToString(item["LISTELEME"]) + Convert.ToString(item["GUNCELLEME"]) + Convert.ToString(item["YENIEKLEME"]) + Convert.ToString(item["GORUNTULEME"]) + Convert.ToString(item["SILME"]).TrimEnd().TrimEnd(',');
                 }

@@ -51,7 +51,7 @@ namespace TwoStepEncryptionDdms.Services
 
             if (!SqlIdentifier.IsValid(tableName) || tableName.StartsWith("TBL_", StringComparison.OrdinalIgnoreCase))
             {
-                throw new UserException("Tablo adı yalnızca harf, rakam ve alt çizgi içerebilir ve 'TBL_' ile başlayamaz!");
+                throw new UserException("Veri kümesi adı yalnızca harf, rakam ve alt çizgi içerebilir; 'TBL_' ile başlayamaz.");
             }
 
             if (tableName.Length > MaxNameLength)
@@ -79,7 +79,7 @@ namespace TwoStepEncryptionDdms.Services
             }
             if (names.Count < 1)
             {
-                throw new UserException("Boş kolona sahip bir tablo oluşturulamaz!");
+                throw new UserException("Boş sütun içeren bir veri kümesi oluşturulamaz.");
             }
 
             using (var data = Open())
@@ -95,7 +95,7 @@ namespace TwoStepEncryptionDdms.Services
 
                     if (datasets.TableExists(tableName))
                     {
-                        throw new UserException("Bu tablo daha önce oluşturulmuş. Lütfen yeni bir tablo adı deneyiniz!");
+                        throw new UserException("Bu adla bir veri kümesi zaten var. Lütfen farklı bir ad deneyin.");
                     }
 
                     datasets.CreateTable(tableName, names);
@@ -139,7 +139,7 @@ namespace TwoStepEncryptionDdms.Services
         {
             if (string.IsNullOrWhiteSpace(newName))
             {
-                throw new UserException("Tablo adı boş bırakılamaz!");
+                throw new UserException("Veri kümesi adı boş bırakılamaz.");
             }
             if (newName.Length > MaxNameLength)
             {
@@ -147,7 +147,7 @@ namespace TwoStepEncryptionDdms.Services
             }
             if (!SqlIdentifier.IsValid(newName))
             {
-                throw new UserException("Tablo adı yalnızca harf, rakam ve alt çizgi içerebilir!");
+                throw new UserException("Veri kümesi adı yalnızca harf, rakam ve alt çizgi içerebilir.");
             }
 
             using (var data = Open())

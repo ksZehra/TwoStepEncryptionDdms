@@ -33,6 +33,12 @@ namespace TwoStepEncryptionDdms.Security
 
             EnsurePermission(RequiredPermission);
 
+            // Anahtar yalnızca DataView kullanılırken session'da kalır.
+            if (!(this is DataView))
+            {
+                TableKeyService.ForgetAll(Context);
+            }
+
             // CSRF: ViewState/event validation kullanıcıya bağlanır; başka bir site bu form'u submit edemez.
             ViewStateUserKey = CurrentUser.Id.ToString();
         }

@@ -8,7 +8,7 @@ using TwoStepEncryptionDdms.Services;
 
 namespace TwoStepEncryptionDdms
 {
-    public partial class TabloNew : TwoStepEncryptionDdms.Security.BasePage
+    public partial class TableNew : TwoStepEncryptionDdms.Security.BasePage
     {
         readonly DatasetService datasets = new DatasetService();
 
@@ -154,13 +154,13 @@ namespace TwoStepEncryptionDdms
             }
             catch (Exception ex)
             {
-                ClsMessage.ShowError("Tablo oluşturulurken hata oluştu!", ex, this.Form);
+                ClsMessage.ShowError("Veri kümesi oluşturulurken hata oluştu.", ex, this.Form);
             }
 
             if (yonlendir)
             {
                 Session["SuccessToast"] = "Veri kümesi başarıyla oluşturuldu.";
-                Response.Redirect("TabloSchemaList.aspx");
+                Response.Redirect("TableSchemaList.aspx");
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="TwoStepEncryptionDdms.Login" %>
+
 <%@ Register Src="~/Controls/CreditFooter.ascx" TagPrefix="uc" TagName="CreditFooter" %>
 
 <!DOCTYPE html>
@@ -12,6 +13,7 @@
     <link href="Content/bootstrap.min.css" rel="stylesheet" />
     <asp:PlaceHolder runat="server">
         <link href="<%= TwoStepEncryptionDdms.Common.AssetVersion.Url("~/Content/Site.css") %>" rel="stylesheet" />
+        <script src="<%= TwoStepEncryptionDdms.Common.AssetVersion.Url("~/Scripts/secret-toggle.js") %>"></script>
     </asp:PlaceHolder>
 
     <script src="Scripts/jquery-3.3.1.min.js"></script>
@@ -29,7 +31,7 @@
             </span>
             <div>
                 <div class="auth-brand-name">Şifreli Dinamik Veri Kayıt Sistemi</div>
-                <div class="auth-brand-note">İki adımlı şifreleme</div>
+                <div class="auth-brand-note">İki Adımlı Şifreleme</div>
             </div>
         </div>
 
@@ -47,10 +49,7 @@
 
                 <div class="form-group">
                     <asp:Label ID="lblPassword" runat="server" Text="Şifre" AssociatedControlID="txtPassword"></asp:Label>
-                    <div class="password-field">
-                        <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" CssClass="form-control" MaxLength="200" ClientIDMode="Static" placeholder="Şifreniz" autocomplete="current-password"></asp:TextBox>
-                        <button type="button" class="password-toggle" data-target="txtPassword" aria-label="Şifreyi göster">Göster</button>
-                    </div>
+                    <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" CssClass="form-control" MaxLength="200" ClientIDMode="Static" placeholder="Şifreniz" autocomplete="current-password" data-reveal="true"></asp:TextBox>
                 </div>
 
                 <div class="checkbox-inline auth-checkbox">
@@ -65,6 +64,7 @@
 
                 <div class="auth-footer">
                     Hesabınız yok mu?
+                   
                     <asp:Button ID="btnKayitOl" runat="server" Text="Kayıt Ol" CssClass="btn btn-link btn-sm" BorderStyle="None" OnClick="btnKayitOl_Click" />
                 </div>
             </form>
@@ -74,25 +74,16 @@
     <uc:CreditFooter runat="server" />
 
     <script type="text/javascript">
-        $('#btnGirisYap').click(function () {
-            if (document.getElementById("txtKAdi").value == "") {
-                iqwerty.toast.toast("Kullanıcı adı boş bırakılamaz!", { type: 'warning' });
-                return false
-            }
-            else if (document.getElementById("txtPassword").value == "") {
-                iqwerty.toast.toast("Şifre boş bırakılamaz!", { type: 'warning' });
-                return false
-            }
-        });
-
-        $('.password-toggle').on('click', function () {
-            var targetId = $(this).data('target');
-            var $input = $('#' + targetId);
-            var show = $input.attr('type') === 'password';
-
-            $input.attr('type', show ? 'text' : 'password');
-            $(this).text(show ? 'Gizle' : 'Göster');
-        });
-    </script>
+$('#btnGirisYap').click(function () {
+    if (document.getElementById("txtKAdi").value == "") {
+        iqwerty.toast.toast("Kullanıcı adı boş bırakılamaz!", { type: 'warning' });
+        return false
+    }
+    else if (document.getElementById("txtPassword").value == "") {
+        iqwerty.toast.toast("Şifre boş bırakılamaz!", { type: 'warning' });
+        return false
+    }
+});
+</script>
 </body>
 </html>

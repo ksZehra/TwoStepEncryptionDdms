@@ -17,7 +17,7 @@ using TwoStepEncryptionDdms.Services;
 
 namespace TwoStepEncryptionDdms
 {
-    public partial class Anasayfa : TwoStepEncryptionDdms.Security.BasePage
+    public partial class Dashboard : TwoStepEncryptionDdms.Security.BasePage
     {
         // Performans testi alanları; PeformansTesti() ile birlikte açılır.
         //DataIslemleri data = new DataIslemleri();
@@ -73,7 +73,7 @@ namespace TwoStepEncryptionDdms
         // görmesi gerekmediği için kod yorum satırına alındı.
         // Ölçümü yeniden yapmak için: test tablolarını oluşturun, bu bloğu, yukarıdaki data ve dtDatas alanlarını ve Page_Load içindeki
         // PeformansTesti() çağrısını açın, <AES_KEY_32_CHARS> ve <ASYM_KEY_*> yer tutucularını kendi anahtarlarınızla değiştirin,
-        // Anasayfa.aspx içindeki yorumlanmış sonuç etiketlerini (lbSifresiz, lbEcbTek vb.) geri açın.
+        // Dashboard.aspx içindeki yorumlanmış sonuç etiketlerini (lbSifresiz, lbEcbTek vb.) geri açın.
         //private void PeformansTesti()
         //{
         //    try
