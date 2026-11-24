@@ -85,7 +85,7 @@
                             <thead>
                                 <tr>
                                     <th>Sütun Adı</th>
-                                    <th>Şifrelensin Mi</th>
+                                    <th>Şifrelensin mi</th>
                                     <th class="col-actions">Sil</th>
                                     <th class="col-actions">Düzenle</th>
                                 </tr>

@@ -145,6 +145,9 @@
     <Content Include="DataEditNew.aspx" />
     <Content Include="DataEditList.aspx" />
     <Content Include="DataView.aspx" />
+    <Content Include="Controls\CreditFooter.ascx" />
+    <Content Include="Errors\NotFound.aspx" />
+    <Content Include="Errors\ServerError.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="Personel.aspx" />
     <Content Include="Register.aspx" />
@@ -221,6 +224,7 @@
     <Compile Include="Class\Aes256Encrypter.cs" />
     <Compile Include="Class\DataIslemleri.cs" />
     <Compile Include="Common\AssetVersion.cs" />
+    <Compile Include="Security\DatasetLink.cs" />
     <Compile Include="Common\ClsMessage.cs" />
     <Compile Include="Security\ValidateControl.cs" />
     <Compile Include="Logging\AppLog.cs" />

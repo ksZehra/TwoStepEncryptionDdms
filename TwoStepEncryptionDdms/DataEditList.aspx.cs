@@ -23,15 +23,14 @@ namespace TwoStepEncryptionDdms
         {
             try
             {
-                tblAd = Request.QueryString["tblAd"];
+                DatasetLink link = DatasetLink.Read(Request);
+                tblAd = link.TblAd;
                 int tblIdSayi;
-                tblId = int.TryParse(Request.QueryString["tblId"], out tblIdSayi) ? tblIdSayi.ToString() : "";
+                tblId = int.TryParse(link.TblId, out tblIdSayi) ? tblIdSayi.ToString() : "";
+                type = (link.Type == "edit" || link.Type == "delete") ? link.Type : "";
 
-                string gelenType = Request.QueryString["type"];
-                type = (gelenType == "edit" || gelenType == "delete") ? gelenType : "";
-
-                // Key URL'de taşınmaz; k=1 ise bu session'da verify edilip hatırlanan key kullanılır.
-                if (Request.QueryString["k"] == "1" && !string.IsNullOrWhiteSpace(tblAd))
+                // Key URL'de taşınmaz; RecallKey ise bu session'da verify edilip hatırlanan key kullanılır.
+                if (link.RecallKey && !string.IsNullOrWhiteSpace(tblAd))
                 {
                     parKey = TableKeyService.Recall(Context, tblAd) ?? "";
                 }
@@ -138,11 +137,11 @@ namespace TwoStepEncryptionDdms
                 html.Append("<tr>");
 
                 string actionButton = "";
-                string urlString = "tblId=" + HttpUtility.UrlEncode(tblId) + "&tblAd=" + HttpUtility.UrlEncode(tblAd) + "&satirId=" + HttpUtility.UrlEncode(cells[0]) + "&k=1";
+                string editUrl = DatasetLink.Build("DataEditNew.aspx", tblId, tblAd, satirId: cells[0], recallKey: true);
 
                 if (type == "edit")
                 {
-                    actionButton = "<button type='button' class='btn btn-xs btn-default action-icon icon-edit redirect' title='Düzenle' aria-label='Düzenle' redirect='" + HttpUtility.HtmlAttributeEncode("DataEditNew.aspx?" + urlString) + "'>Düzenle</button>";
+                    actionButton = "<button type='button' class='btn btn-xs btn-default action-icon icon-edit redirect' title='Düzenle' aria-label='Düzenle' redirect='" + HttpUtility.HtmlAttributeEncode(editUrl) + "'>Düzenle</button>";
                 }
                 else if (type == "delete")
                 {

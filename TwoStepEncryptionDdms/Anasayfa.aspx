@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Anasayfa" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Anasayfa.aspx.cs" Inherits="TwoStepEncryptionDdms.Anasayfa" %>
+﻿<%@ Page Title="Ana Sayfa" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Anasayfa.aspx.cs" Inherits="TwoStepEncryptionDdms.Anasayfa" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -11,7 +11,8 @@
         <div class="page-actions">
             <a class="btn btn-default <%= CanList ? "" : "hidden" %>" href="TabloSchemaList.aspx">Veri Kümeleri</a>
             <a class="btn btn-primary <%= CanCreate ? "" : "hidden" %>" href="TabloNew.aspx">
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                    <line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 Yeni Veri Kümesi Oluştur
             </a>
         </div>
@@ -100,25 +101,25 @@
     <div class="dashboard-grid">
         <div class="card">
             <div class="card-header">
-                <h2 class="card-title">İki adımlı şifreleme akışı</h2>
+                <h2 class="card-title">İki Adımlı Şifreleme Akışı</h2>
                 <span class="card-note">AES-256 + RSA-2048</span>
             </div>
             <div class="card-body">
                 <div class="flow-list">
                     <div class="flow-step">
                         <span class="flow-number">01</span>
-                        <h3 class="flow-title">AES ile şifrele</h3>
-                        <p class="flow-text">Şifrelenecek her alan, 256 bit anahtarla AES kullanılarak şifrelenir. Varsayılan mod CFB'dir.</p>
+                        <h3 class="flow-title">AES ile Şifreleme</h3>
+                        <p class="flow-text">Şifrelenecek her alan, 256 bit anahtarla AES kullanılarak şifrelenir.</p>
                     </div>
                     <div class="flow-step">
                         <span class="flow-number">02</span>
-                        <h3 class="flow-title">RSA ile ikinci katman</h3>
-                        <p class="flow-text">AES çıktısı, SQL Server tarafında ENCRYPTBYASYMKEY ve RSA-2048 anahtarıyla yeniden şifrelenir.</p>
+                        <h3 class="flow-title">RSA ile İkinci Katman Şifreleme</h3>
+                        <p class="flow-text">AES çıktısı, veritabanı katmanında RSA-2048 anahtarıyla yeniden şifrelenir.</p>
                     </div>
                     <div class="flow-step">
                         <span class="flow-number">03</span>
-                        <h3 class="flow-title">Geri çöz</h3>
-                        <p class="flow-text">Okuma sırasında önce DECRYPTBYASYMKEY, ardından AES çözme uygulanır. Anahtar olmadan veri okunamaz.</p>
+                        <h3 class="flow-title">Geri Çözme</h3>
+                        <p class="flow-text">Okuma sırasında önce veritabanı katmanında şifre çözülür, ardından uygulama katmanında AES çözme uygulanır. Anahtar olmadan veri okunamaz.</p>
                     </div>
                 </div>
             </div>
@@ -131,43 +132,45 @@
             <div class="card-body">
                 <ul class="quick-list">
                     <li class="<%= CanCreate ? "" : "hidden" %>">
-                        <a href="TabloNew.aspx">
-                            Yeni veri kümesi oluştur
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+                        <a href="TabloNew.aspx">Yeni veri kümesi oluştur
+                           
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="m9 18 6-6-6-6"></path></svg>
                         </a>
                     </li>
                     <li class="<%= CanList ? "" : "hidden" %>">
-                        <a href="TabloSchemaList.aspx">
-                            Veri kümelerini yönet
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+                        <a href="TabloSchemaList.aspx">Veri kümelerini yönet
+                           
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="m9 18 6-6-6-6"></path></svg>
                         </a>
                     </li>
                     <li class="<%= CanList ? "" : "hidden" %>">
-                        <a href="TabloDataList.aspx">
-                            Kayıtları görüntüle
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+                        <a href="TabloDataList.aspx">Kayıtları görüntüle
+                           
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="m9 18 6-6-6-6"></path></svg>
                         </a>
                     </li>
                     <li>
-                        <a href="Personel.aspx">
-                            Hesap bilgilerim
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+                        <a href="Personel.aspx">Hesap bilgilerim
+                           
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="m9 18 6-6-6-6"></path></svg>
                         </a>
                     </li>
                 </ul>
 
                 <div class="system-chips" aria-label="Şifreleme bileşenleri">
                     <span class="system-chip">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="m5 12 4 4L19 6"></path></svg>
                         AES-256
                     </span>
                     <span class="system-chip">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="m5 12 4 4L19 6"></path></svg>
                         RSA-2048
-                    </span>
-                    <span class="system-chip">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
-                        SQL Server
                     </span>
                 </div>
             </div>

@@ -144,3 +144,14 @@ Forms Authentication ve sunucu tarafı yetki kontrolü, parametreli sorgular ve 
 - ECB modu karşılaştırma için bulunur; aynı düz metin aynı şifreli metni üretir, gerçek kullanımda önerilmez.
 - `Web.config` içinde `debug="true"` bulunur: Smart App Control açık makinelerde dinamik derleme engellenmesin diye local ortamda böyle bırakılmıştır. Release yayınında kaldırılmalıdır.
 - Örnek kullanıcı parolaları herkese açıktır; yalnızca local ortamda kullanın.
+
+## Geliştirici
+
+<img src="TwoStepEncryptionDdms/Content/img/zk-logo.svg" alt="ZK logosu" width="64" align="left" />
+
+**Zehra Nur Köse**  
+Bu uygulama, Sakarya Üniversitesi'ndeki yüksek lisans tez çalışmamın uygulama bölümü olarak 2023 yılında geliştirilmiştir.
+
+<br clear="left" />
+
+© 2023 Zehra Nur Köse. Tüm hakları saklıdır.

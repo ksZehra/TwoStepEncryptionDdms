@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Web;
 using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
 using TwoStepEncryptionDdms.Logging;
 
 namespace TwoStepEncryptionDdms.Common
@@ -10,17 +9,12 @@ namespace TwoStepEncryptionDdms.Common
     {
         private static void ShowToast(string message, string type, HtmlForm form, string scriptMessage = "")
         {
-            try
-            {
-                Label myLabel = new Label();
-                string encoded = HttpUtility.JavaScriptStringEncode(message ?? "");
-                myLabel.Text = "<script type='text/javascript'> $(function(){";
-                myLabel.Text += "iqwerty.toast.toast('" + encoded + "', { type: '" + type + "' });";
-                myLabel.Text += !string.IsNullOrWhiteSpace(scriptMessage) ? "\n " + scriptMessage : "";
-                myLabel.Text += "});</script>";
-                form.Controls.Add(myLabel);
-            }
-            catch { }
+            // Controls.Add yerine startup script kullanılır; form içinde <%= %> code block varsa Controls değiştirilemez.
+            string encoded = HttpUtility.JavaScriptStringEncode(message ?? "");
+            string script = "$(function(){ iqwerty.toast.toast('" + encoded + "', { type: '" + type + "' });"
+                + (string.IsNullOrWhiteSpace(scriptMessage) ? "" : "\n " + scriptMessage)
+                + "});";
+            form.Page.ClientScript.RegisterStartupScript(typeof(ClsMessage), Guid.NewGuid().ToString("N"), script, true);
         }
 
         public static void ShowSuccess(string message, HtmlForm form, string scriptMessage = "")

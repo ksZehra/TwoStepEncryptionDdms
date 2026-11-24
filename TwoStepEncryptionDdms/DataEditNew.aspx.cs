@@ -22,14 +22,15 @@ namespace TwoStepEncryptionDdms
         {
             try
             {
-                tblAd = Request.QueryString["tblAd"];
+                DatasetLink link = DatasetLink.Read(Request);
+                tblAd = link.TblAd;
                 int tblIdSayi;
-                tblId = int.TryParse(Request.QueryString["tblId"], out tblIdSayi) ? tblIdSayi.ToString() : "";
+                tblId = int.TryParse(link.TblId, out tblIdSayi) ? tblIdSayi.ToString() : "";
 
-                if (Request.QueryString["satirId"] != null)
+                if (!string.IsNullOrEmpty(link.SatirId))
                 {
                     int gelenSatirId;
-                    satirId = int.TryParse(Request.QueryString["satirId"], out gelenSatirId) ? gelenSatirId.ToString() : "";
+                    satirId = int.TryParse(link.SatirId, out gelenSatirId) ? gelenSatirId.ToString() : "";
                     btnKayitGir.Text = "Güncelle";
 
                     if (!string.IsNullOrWhiteSpace(tblAd))
@@ -199,7 +200,7 @@ namespace TwoStepEncryptionDdms
                     if (!string.IsNullOrWhiteSpace(satirId))
                     {
                         Session["SuccessToast"] = "Kayıt güncellendi.";
-                        Response.Redirect("DataEditList.aspx?tblId=" + HttpUtility.UrlEncode(tblId) + "&tblAd=" + HttpUtility.UrlEncode(tblAd) + "&type=edit&k=1");
+                        Response.Redirect(DatasetLink.Build("DataEditList.aspx", tblId, tblAd, "edit", recallKey: true));
                     }
                     else
                     {

@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Register.aspx.cs" Inherits="TwoStepEncryptionDdms.Register" %>
+<%@ Register Src="~/Controls/CreditFooter.ascx" TagPrefix="uc" TagName="CreditFooter" %>
 
 <!DOCTYPE html>
 <html lang="tr">
@@ -88,6 +89,8 @@
             </form>
         </div>
     </div>
+
+    <uc:CreditFooter runat="server" />
 
     <script type="text/javascript">
         $('#btnKayitOl').click(function (event) {

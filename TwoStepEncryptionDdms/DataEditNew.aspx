@@ -19,7 +19,7 @@
             </svg>
         </div>
         <div class="key-card-body">
-            <h2 class="key-card-title">Bu veri kümesi şifreli</h2>
+            <h2 class="key-card-title">Bu Veri Kümesi Şifreli</h2>
             <p class="key-card-text">Kayıt eklemek için 32 karakterlik anahtarı girin.</p>
             <div class="key-form">
                 <asp:TextBox class="form-control" ID="tbKey" TextMode="Password" MaxLength="32" placeholder="32 karakterlik anahtar" runat="server" ClientIDMode="Static" autocomplete="new-password"></asp:TextBox>

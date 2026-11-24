@@ -159,7 +159,7 @@ const toast = (() => {
             width: '100%',
             transformOrigin: 'left',
             transform: 'scaleX(1)',
-            transition: 'transform ' + (_options.duration / 1000) + 'ms linear',
+            transition: 'transform ' + _options.duration + 'ms linear',
         });
         toastEl.appendChild(progressEl);
 

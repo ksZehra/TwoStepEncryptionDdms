@@ -21,7 +21,7 @@ namespace TwoStepEncryptionDdms
         {
             try
             {
-                tblAd = Request.QueryString["tblAd"];
+                tblAd = DatasetLink.Read(Request).TblAd;
 
                 if (string.IsNullOrWhiteSpace(tblAd))
                 {

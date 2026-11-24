@@ -18,6 +18,15 @@
     <script src="Scripts/bootstrap.min.js"></script>
     <script src="Themes/js/twostep-toast.min.js"></script>
 
+    <script>
+        // Head'de çalışır ki sayfa açılırken menü bir anlığına görünüp kaybolmasın.
+        try {
+            if (localStorage.getItem("sidebarCollapsed") === "1") {
+                document.documentElement.classList.add("sidebar-collapsed");
+            }
+        } catch (e) { }
+    </script>
+
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
@@ -27,18 +36,27 @@
 
         <div class="app-shell">
             <aside class="app-sidebar" id="appSidebar">
-                <a class="brand" href="Anasayfa.aspx">
-                    <span class="brand-mark" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="4" y="10" width="16" height="10" rx="2"></rect>
-                            <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+                <div class="sidebar-head">
+                    <a class="brand" href="Anasayfa.aspx">
+                        <span class="brand-mark" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="4" y="10" width="16" height="10" rx="2"></rect>
+                                <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+                            </svg>
+                        </span>
+                        <span class="brand-text">
+                            <span class="brand-name">Veri Kayıt Sistemi</span>
+                            <span class="brand-note">İki Adımlı Şifreleme</span>
+                        </span>
+                    </a>
+                    <button type="button" class="sidebar-collapse" id="sidebarCollapse" aria-label="Menüyü gizle" title="Menüyü gizle" aria-controls="appSidebar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                            <path d="M9 4v16"></path>
+                            <path d="m16 10-2 2 2 2"></path>
                         </svg>
-                    </span>
-                    <span class="brand-text">
-                        <span class="brand-name">Veri Kayıt Sistemi</span>
-                        <span class="brand-note">İki adımlı şifreleme</span>
-                    </span>
-                </a>
+                    </button>
+                </div>
 
                 <nav class="app-nav" aria-label="Ana menü">
                     <div class="nav-label">Çalışma Alanı</div>
@@ -51,7 +69,7 @@
                                     <rect x="4" y="13" width="7" height="7" rx="1"></rect>
                                     <rect x="13" y="13" width="7" height="7" rx="1"></rect>
                                 </svg>
-                                Genel Bakış
+                                Ana Sayfa
                             </a>
                         </li>
                         <li runat="server" id="liTablolar" visible="false">
@@ -79,8 +97,12 @@
                 </nav>
 
                 <div class="sidebar-foot">
-                    <span class="status-dot" aria-hidden="true"></span>
-                    <span>AES-256 / RSA-2048</span>
+                    <div class="sidebar-credit">
+                        <asp:PlaceHolder runat="server">
+                            <img src="<%= TwoStepEncryptionDdms.Common.AssetVersion.Url("~/Content/img/zk-logo.svg") %>" alt="" aria-hidden="true" />
+                        </asp:PlaceHolder>
+                        <span>© 2023 <strong>Zehra Nur Köse</strong></span>
+                    </div>
                 </div>
             </aside>
 
@@ -89,7 +111,7 @@
             <div class="app-main">
                 <header class="app-topbar">
                     <div class="topbar-inner">
-                        <button type="button" class="nav-toggle" id="sidebarToggle" aria-label="Menüyü aç" aria-controls="appSidebar" aria-expanded="false">
+                        <button type="button" class="nav-toggle" id="sidebarToggle" aria-label="Menüyü göster" title="Menüyü göster" aria-controls="appSidebar" aria-expanded="false">
                             <span></span>
                             <span></span>
                             <span></span>
@@ -147,51 +169,88 @@
     </form>
 
     <script type="text/javascript">
-        (function () {
-            var sidebar = document.getElementById("appSidebar");
-            var overlay = document.getElementById("sidebarOverlay");
-            var toggle = document.getElementById("sidebarToggle");
+(function () {
+    var sidebar = document.getElementById("appSidebar");
+    var overlay = document.getElementById("sidebarOverlay");
+    var toggle = document.getElementById("sidebarToggle");
+    var collapseBtn = document.getElementById("sidebarCollapse");
 
-            if (!sidebar || !overlay || !toggle) {
-                return;
-            }
+    if (!sidebar || !overlay || !toggle || !collapseBtn) {
+        return;
+    }
 
-            function setOpen(open) {
-                sidebar.classList.toggle("is-open", open);
-                overlay.classList.toggle("is-visible", open);
-                toggle.setAttribute("aria-expanded", open ? "true" : "false");
-            }
+    var root = document.documentElement;
+    var desktopQuery = window.matchMedia("(min-width: 992px)");
 
-            toggle.addEventListener("click", function () {
-                setOpen(!sidebar.classList.contains("is-open"));
-            });
+    function isCollapsed() {
+        return root.classList.contains("sidebar-collapsed");
+    }
 
-            overlay.addEventListener("click", function () {
-                setOpen(false);
-            });
+    function syncExpanded() {
+        var expanded = desktopQuery.matches ? !isCollapsed() : sidebar.classList.contains("is-open");
+        toggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+    }
 
-            window.addEventListener("resize", function () {
-                if (window.innerWidth > 991) {
-                    setOpen(false);
-                }
-            });
-        })();
+    function setOpen(open) {
+        sidebar.classList.toggle("is-open", open);
+        overlay.classList.toggle("is-visible", open);
+        syncExpanded();
+    }
 
-        (function () {
-            var links = document.querySelectorAll(".data-table .col-actions a");
-            Array.prototype.forEach.call(links, function (link) {
-                var label = (link.textContent || "").trim();
-                if (!label) {
-                    return;
-                }
-                if (!link.title) {
-                    link.title = label;
-                }
-                if (!link.getAttribute("aria-label")) {
-                    link.setAttribute("aria-label", link.title || label);
-                }
-            });
-        })();
-    </script>
+    function setCollapsed(collapsed) {
+        root.classList.toggle("sidebar-collapsed", collapsed);
+        try {
+            localStorage.setItem("sidebarCollapsed", collapsed ? "1" : "0");
+        } catch (e) { }
+        syncExpanded();
+        (collapsed ? toggle : collapseBtn).focus();
+    }
+
+    toggle.addEventListener("click", function () {
+        if (desktopQuery.matches) {
+            setCollapsed(false);
+        } else {
+            setOpen(!sidebar.classList.contains("is-open"));
+        }
+    });
+
+    collapseBtn.addEventListener("click", function () {
+        if (desktopQuery.matches) {
+            setCollapsed(true);
+        } else {
+            setOpen(false);
+        }
+    });
+
+    overlay.addEventListener("click", function () {
+        setOpen(false);
+    });
+
+    window.addEventListener("resize", function () {
+        if (desktopQuery.matches) {
+            setOpen(false);
+        }
+        syncExpanded();
+    });
+
+    syncExpanded();
+})();
+
+(function () {
+    var links = document.querySelectorAll(".data-table .col-actions a");
+    Array.prototype.forEach.call(links, function (link) {
+        var label = (link.textContent || "").trim();
+        if (!label) {
+            return;
+        }
+        if (!link.title) {
+            link.title = label;
+        }
+        if (!link.getAttribute("aria-label")) {
+            link.setAttribute("aria-label", link.title || label);
+        }
+    });
+})();
+</script>
 </body>
 </html>

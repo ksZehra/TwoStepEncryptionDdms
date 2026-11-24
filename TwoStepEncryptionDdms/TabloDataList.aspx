@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Tablo" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TabloDataList.aspx.cs" Inherits="TwoStepEncryptionDdms.TabloDataList" %>
+﻿<%@ Page Title="Kayıtlar" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TabloDataList.aspx.cs" Inherits="TwoStepEncryptionDdms.TabloDataList" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -20,63 +20,63 @@
 
     <div class="card">
         <div class="card-header">
-            <h2 class="card-title">Veri kümesi kayıtları</h2>
+            <h2 class="card-title">Veri Kümeleri</h2>
             <span class="card-note">Sayfa boyutu: 10</span>
         </div>
         <div class="table-responsive">
-    <asp:GridView ID="GridTbl" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" OnSorting="GridTbl_Sorting" OnRowDataBound="GridTbl_RowDataBound" PageSize="10"
-        DataKeyNames="TBLAD" OnPageIndexChanging="GridTbl_PageIndexChanging"
-        CssClass="data-table" GridLines="None" EmptyDataText="Kayıt bulunamadı."
-        PagerSettings-Position="Bottom" PagerStyle-CssClass="grid-pager">
-        <Columns>
-            <asp:TemplateField HeaderText="Id" SortExpression="TBLID" ItemStyle-Width="6%" ItemStyle-Height="30px" HeaderStyle-Height="35px">
-                <ItemTemplate>
-                    <asp:Label ID="lbTblId" runat="server" Text='<%# Eval("TBLID") %>'></asp:Label>
-                </ItemTemplate>
-            </asp:TemplateField>
-            <asp:TemplateField HeaderText="Görüntüle" ItemStyle-Width="7%" ItemStyle-CssClass="col-actions" HeaderStyle-CssClass="col-actions" Visible="false">
-                <ItemTemplate>
-                    <asp:HyperLink ID="Hlink1" runat="server" CssClass="action-link action-icon icon-view" ToolTip="Kayıtları görüntüle"
-                        NavigateUrl='<%# "~/DataView.aspx?tblAd="+HttpUtility.UrlEncode(DataBinder.Eval(Container.DataItem, "TBLAD").ToString()) %>'>Görüntüle</asp:HyperLink>
-                </ItemTemplate>
-            </asp:TemplateField>
-            <asp:TemplateField HeaderText="Ekle" ItemStyle-Width="5%" ItemStyle-CssClass="col-actions" HeaderStyle-CssClass="col-actions" Visible="false">
-                <ItemTemplate>
-                    <asp:HyperLink ID="Hlink2" runat="server" CssClass="action-link action-icon icon-add" ToolTip="Yeni kayıt ekle"
-                        NavigateUrl='<%# "~/DataEditNew.aspx?tblId="+HttpUtility.UrlEncode(DataBinder.Eval(Container.DataItem, "TBLID").ToString())+"&tblAd="+HttpUtility.UrlEncode(DataBinder.Eval(Container.DataItem, "TBLAD").ToString()) %>'>Ekle</asp:HyperLink>
-                </ItemTemplate>
-            </asp:TemplateField>
-            <asp:TemplateField HeaderText="Güncelle" ItemStyle-Width="7%" ItemStyle-CssClass="col-actions" HeaderStyle-CssClass="col-actions" Visible="false">
-                <ItemTemplate>
-                    <asp:HyperLink ID="Hlink3" runat="server" CssClass="action-link action-icon icon-edit" ToolTip="Kayıt güncelle"
-                        NavigateUrl='<%# "~/DataEditList.aspx?tblId="+HttpUtility.UrlEncode(DataBinder.Eval(Container.DataItem, "TBLID").ToString())+"&tblAd="+HttpUtility.UrlEncode(DataBinder.Eval(Container.DataItem, "TBLAD").ToString())+"&type="+HttpUtility.UrlEncode("edit") %>'>Güncelle</asp:HyperLink>
-                </ItemTemplate>
-            </asp:TemplateField>
-            <asp:TemplateField HeaderText="Sil" ItemStyle-Width="5%" ItemStyle-CssClass="col-actions" HeaderStyle-CssClass="col-actions" Visible="false">
-                <ItemTemplate>
-                    <asp:HyperLink ID="Hlink4" runat="server" CssClass="action-link action-danger action-icon icon-delete" ToolTip="Kayıt sil"
-                        NavigateUrl='<%# "~/DataEditList.aspx?tblId="+HttpUtility.UrlEncode(DataBinder.Eval(Container.DataItem, "TBLID").ToString())+"&tblAd="+HttpUtility.UrlEncode(DataBinder.Eval(Container.DataItem, "TBLAD").ToString())+"&type="+HttpUtility.UrlEncode("delete") %>'>Sil</asp:HyperLink>
-                </ItemTemplate>
-            </asp:TemplateField>
-            <asp:BoundField DataField="TBLAD" HeaderText="Veri Kümesi" SortExpression="TBLAD"></asp:BoundField>
-            <asp:TemplateField HeaderText="Şifreli Mi" SortExpression="ISENCRYPT" ItemStyle-Width="10%">
-                <ItemTemplate>
-                    <asp:Label ID="lbSifreliMi" runat="server" CssClass='<%# Convert.ToString(Eval("ISENCRYPT")) == "Evet" ? "badge badge-encrypted" : "badge badge-plain" %>' Text='<%# Eval("ISENCRYPT") %>'></asp:Label>
-                </ItemTemplate>
-            </asp:TemplateField>
-            <asp:TemplateField HeaderText="Oluşturan" SortExpression="OLUSTURAN" ItemStyle-Width="10%">
-                <ItemTemplate>
-                    <asp:Label ID="lbOlusturan" runat="server" Text='<%# Eval("OLUSTURAN") %>'></asp:Label>
-                </ItemTemplate>
-            </asp:TemplateField>
-            <asp:TemplateField HeaderText="Oluşturma Tarihi" SortExpression="OLUSTURMATARIHI_SIRA" ItemStyle-Width="10%">
-                <ItemTemplate>
-                    <asp:Label ID="lbOlusturmaTar" runat="server" Text='<%# Eval("OLUSTURMATARIHI") %>'></asp:Label>
-                </ItemTemplate>
-            </asp:TemplateField>
-        </Columns>
-        <PagerSettings Mode="Numeric" FirstPageText="İlk" LastPageText="Son" />
-    </asp:GridView>
+            <asp:GridView ID="GridTbl" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" OnSorting="GridTbl_Sorting" OnRowDataBound="GridTbl_RowDataBound" PageSize="10"
+                DataKeyNames="TBLAD" OnPageIndexChanging="GridTbl_PageIndexChanging"
+                CssClass="data-table" GridLines="None" EmptyDataText="Kayıt bulunamadı."
+                PagerSettings-Position="Bottom" PagerStyle-CssClass="grid-pager">
+                <Columns>
+                    <asp:TemplateField HeaderText="ID" SortExpression="TBLID" ItemStyle-Width="6%" ItemStyle-Height="30px" HeaderStyle-Height="35px">
+                        <ItemTemplate>
+                            <asp:Label ID="lbTblId" runat="server" Text='<%# Eval("TBLID") %>'></asp:Label>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Görüntüle" ItemStyle-Width="7%" ItemStyle-CssClass="col-actions" HeaderStyle-CssClass="col-actions" Visible="false">
+                        <ItemTemplate>
+                            <asp:HyperLink ID="Hlink1" runat="server" CssClass="action-link action-icon icon-view" ToolTip="Kayıtları görüntüle"
+                                NavigateUrl='<%# TwoStepEncryptionDdms.Security.DatasetLink.Build("~/DataView.aspx", DataBinder.Eval(Container.DataItem, "TBLID"), DataBinder.Eval(Container.DataItem, "TBLAD")) %>'>Görüntüle</asp:HyperLink>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Ekle" ItemStyle-Width="5%" ItemStyle-CssClass="col-actions" HeaderStyle-CssClass="col-actions" Visible="false">
+                        <ItemTemplate>
+                            <asp:HyperLink ID="Hlink2" runat="server" CssClass="action-link action-icon icon-add" ToolTip="Yeni kayıt ekle"
+                                NavigateUrl='<%# TwoStepEncryptionDdms.Security.DatasetLink.Build("~/DataEditNew.aspx", DataBinder.Eval(Container.DataItem, "TBLID"), DataBinder.Eval(Container.DataItem, "TBLAD")) %>'>Ekle</asp:HyperLink>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Güncelle" ItemStyle-Width="7%" ItemStyle-CssClass="col-actions" HeaderStyle-CssClass="col-actions" Visible="false">
+                        <ItemTemplate>
+                            <asp:HyperLink ID="Hlink3" runat="server" CssClass="action-link action-icon icon-edit" ToolTip="Kayıt güncelle"
+                                NavigateUrl='<%# TwoStepEncryptionDdms.Security.DatasetLink.Build("~/DataEditList.aspx", DataBinder.Eval(Container.DataItem, "TBLID"), DataBinder.Eval(Container.DataItem, "TBLAD"), "edit") %>'>Güncelle</asp:HyperLink>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Sil" ItemStyle-Width="5%" ItemStyle-CssClass="col-actions" HeaderStyle-CssClass="col-actions" Visible="false">
+                        <ItemTemplate>
+                            <asp:HyperLink ID="Hlink4" runat="server" CssClass="action-link action-danger action-icon icon-delete" ToolTip="Kayıt sil"
+                                NavigateUrl='<%# TwoStepEncryptionDdms.Security.DatasetLink.Build("~/DataEditList.aspx", DataBinder.Eval(Container.DataItem, "TBLID"), DataBinder.Eval(Container.DataItem, "TBLAD"), "delete") %>'>Sil</asp:HyperLink>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:BoundField DataField="TBLAD" HeaderText="Veri Kümesi" SortExpression="TBLAD"></asp:BoundField>
+                    <asp:TemplateField HeaderText="Şifreli mi" SortExpression="ISENCRYPT" ItemStyle-Width="10%">
+                        <ItemTemplate>
+                            <asp:Label ID="lbSifreliMi" runat="server" CssClass='<%# Convert.ToString(Eval("ISENCRYPT")) == "Evet" ? "badge badge-encrypted" : "badge badge-plain" %>' Text='<%# Eval("ISENCRYPT") %>'></asp:Label>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Oluşturan" SortExpression="OLUSTURAN" ItemStyle-Width="10%">
+                        <ItemTemplate>
+                            <asp:Label ID="lbOlusturan" runat="server" Text='<%# Eval("OLUSTURAN") %>'></asp:Label>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Oluşturma Tarihi" SortExpression="OLUSTURMATARIHI_SIRA" ItemStyle-Width="10%">
+                        <ItemTemplate>
+                            <asp:Label ID="lbOlusturmaTar" runat="server" Text='<%# Eval("OLUSTURMATARIHI") %>'></asp:Label>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                </Columns>
+                <PagerSettings Mode="Numeric" FirstPageText="İlk" LastPageText="Son" />
+            </asp:GridView>
         </div>
     </div>
 </asp:Content>

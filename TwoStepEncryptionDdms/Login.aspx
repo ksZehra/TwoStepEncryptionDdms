@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="TwoStepEncryptionDdms.Login" %>
+<%@ Register Src="~/Controls/CreditFooter.ascx" TagPrefix="uc" TagName="CreditFooter" %>
 
 <!DOCTYPE html>
 <html lang="tr">
@@ -70,10 +71,7 @@
         </div>
     </div>
 
-    <footer class="auth-credit">
-        <img class="auth-credit-mark" src="<%= TwoStepEncryptionDdms.Common.AssetVersion.Url("~/Content/img/zk-logo.svg") %>" alt="" aria-hidden="true" />
-        <span class="auth-credit-copy">© 2023 <span class="auth-credit-owner">Zehra Nur Köse</span>. Tüm hakları saklıdır.</span>
-    </footer>
+    <uc:CreditFooter runat="server" />
 
     <script type="text/javascript">
         $('#btnGirisYap').click(function () {
