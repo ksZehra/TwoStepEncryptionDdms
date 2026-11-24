@@ -1,0 +1,10 @@
+# Third-party kütüphaneler GitHub dil istatistiğine katılmaz.
+TwoStepEncryptionDdms/Scripts/WebForms/** linguist-vendored
+TwoStepEncryptionDdms/Scripts/jquery-* linguist-vendored
+TwoStepEncryptionDdms/Scripts/bootstrap* linguist-vendored
+TwoStepEncryptionDdms/Scripts/modernizr-* linguist-vendored
+TwoStepEncryptionDdms/Content/bootstrap* linguist-vendored
+
+# Minified dosyalar kaynağın kopyasıdır, iki kez sayılmaz.
+*.min.js linguist-generated
+*.min.css linguist-generated
